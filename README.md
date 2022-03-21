@@ -5,5 +5,5 @@ Code for Innoprojekt competition at ETHZ.
 
 Use instructions: 
 - Windows installation through zip.
-- .ino code for arduino uno, electrical components in the kit
+- `.ino` code for arduino uno, electrical components in the kit
 
