@@ -2,9 +2,9 @@
 Code for Innoprojekt competition at ETHZ.
 
 #ip22
-Code for a plotter device.
+Code for our plotter device.
 
 Use instructions: 
 Windows installation through zip.
-.ino code for arduino uno, electrical components in kit
+.ino code for arduino uno, electrical components in the kit
 
