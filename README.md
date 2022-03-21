@@ -7,4 +7,4 @@ Use instructions:
 - Windows installation through zip.
 - `.ino` code for arduino uno, electrical components in the kit
 
-Main goal is to create a user-friendly, smothh experience to encourage young teens interest in engineering.
+Main goal is to create a user-friendly, smooth experience to encourage young teens interest in engineering.
