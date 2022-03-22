@@ -1,22 +1,19 @@
 import socket
+import time
 
-address = "4C:87:5D:D0:1A:00" #define address
+address = "98:da:60:01:ab:e0" #define address
+#Vikis address: 98:da:60:01:ab:3c
+#Vojtas address: 98:da:60:01:ab:e0
 #better way would be to scan for addresses, look into that if possible
-
-def test(port):
-    try:
-        sock.connect((address, port)) #attempt connection
-        print("Connected to", address, "using port", port)
-        return True
-    except:
-        print("Could not connect to", address, "using port", port)
-        return False
-
+port = 1 #the port appears to always be 1
 
 sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM) #initialize sock as a BT socket
+sock.connect((address, port))
 
-for p in range(10): #check the first 10 ports
-    if test(p): #if the connection could be initialized, great
-        break
+while True:
+    msg = input("Message:  ") #get message and input
+    bytes, address = sock.recvfrom(100)
+    sock.send(msg.encode()) #.encode() method ona string converts it to bytes
+    print("Recieved:", bytes.decode()) #slice notation allows us to ignore the "\n" character sent by the arduino
 
-#sock.sendfiile() #needs investigation, alternatively test with sock.send()
+#sock.sendfile() #needs investigation, alternatively test with sock.send()
