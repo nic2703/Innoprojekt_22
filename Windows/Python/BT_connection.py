@@ -1,6 +1,7 @@
 import socket
+import time
 
-address = "4C:87:5D:D0:1A:00" #define address
+address = "98:da:60:01:ab:3c" #define address
 #better way would be to scan for addresses, look into that if possible
 
 def test(port):
@@ -19,4 +20,10 @@ for p in range(10): #check the first 10 ports
     if test(p): #if the connection could be initialized, great
         break
 
-#sock.sendfiile() #needs investigation, alternatively test with sock.send()
+
+while True:
+    sock.send("Hello\n".encode())
+    print("Sent Hello")
+    time.sleep(2)
+
+#sock.sendfile() #needs investigation, alternatively test with sock.send()
