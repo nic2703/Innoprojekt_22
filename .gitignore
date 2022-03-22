@@ -32,4 +32,4 @@
 *.app
 .vscode/
 ArduinoOutput/
-compile_test/debug_test.cpp
+compile_test/
