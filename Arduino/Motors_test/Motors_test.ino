@@ -1,11 +1,12 @@
 void setup() {
+
   //Moror A
-  pinMode(12, OUTPUT);
-  pinMode(9, OUTPUT);
+  pinMode(12, OUTPUT); // direction pin 
+  pinMode(9, OUTPUT); // brake
 
   //Moror B
-  pinMode(13, OUTPUT);
-  pinMode(8, OUTPUT);
+  pinMode(13, OUTPUT); // direction pin
+  pinMode(8, OUTPUT); // brake
   
   digitalWrite(9, HIGH);
   digitalWrite(8, LOW);
