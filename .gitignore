@@ -30,5 +30,10 @@
 *.exe
 *.out
 *.app
+<<<<<<< HEAD
 .vscode/tasks.json
 debug_test.cpp
+=======
+.vscode/
+ArduinoOutput/
+>>>>>>> 734bb11163fc5199e1e119ce4aa21f7dc718f499
