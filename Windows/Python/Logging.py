@@ -13,7 +13,7 @@ PORT = 1 #the port appears to always be 1
 sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM) #initialize sock as a BT socket
 sock.connect((ADDRESS, PORT)) #connect to the specified address using the specified port
 
-with open("Log.csv", "w") as file:
+with open("./Log_Files/Log.csv", "w") as file:
     writer = csv.writer(file)
 
     while True:

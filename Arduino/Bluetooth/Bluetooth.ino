@@ -4,7 +4,9 @@
 // The HC-06 defaults to AT mode when first powered on.
 // The default baud rate is 9600
 // The Hc-06 requires all AT commands to be in uppercase. NL+CR should not be added to the command string
-
+//
+ 
+ 
 #include <SoftwareSerial.h> // not in current path but included in the arduino environment
 SoftwareSerial BTserial(2, 3); // RX | TX
 
