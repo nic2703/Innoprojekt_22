@@ -11,7 +11,7 @@ ADDRESS = "98:da:60:01:ab:e0" #define address
 PORT = 1 #the port appears to always be 1
 
 sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM) #initialize sock as a BT socket
-sock.connect((ADDRESS, PORT))
+sock.connect((ADDRESS, PORT)) #connect to the specified address using the specified port
 
 while True:
     BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
