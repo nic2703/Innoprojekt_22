@@ -15,7 +15,7 @@ sock.connect((ADDRESS, PORT)) #connect to the specified address using the specif
 
 print("Received Data:")
 
-with open("./Log_Files/Log.csv", "w") as file:
+with open(r"Windows\Python\Logging\Log_Files\Log.csv", 'w+', newline='') as file:
     writer = csv.writer(file)
 
     while True:
@@ -27,10 +27,10 @@ with open("./Log_Files/Log.csv", "w") as file:
             break
 
         if text:
+            in_list = text.split(",")
+            print("Received: ", text)
             try: 
-                in_list = text.split()
-                PROCESSED_LIST = [int(x.strip()) for x in in_list].append(RECEIVED_ADDRESS)
-
+                PROCESSED_LIST = [float(x.strip()) for x in in_list]
                 writer.writerow(PROCESSED_LIST)
                 sock.send("r".encode())
             except:
@@ -38,4 +38,5 @@ with open("./Log_Files/Log.csv", "w") as file:
         else:
             sock.send("n".encode())
 
+file.close()
 sock.close()
