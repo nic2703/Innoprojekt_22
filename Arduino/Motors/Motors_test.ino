@@ -1,17 +1,59 @@
+# define brakePin1 8
+# define brakePin2 9
+
 void setup() {
 
   //Moror A
   pinMode(12, OUTPUT); // direction pin 
-  pinMode(9, OUTPUT); // brake pin
+  pinMode(brakePin2, OUTPUT); // brake pin
   //speedpin of motor A is pin 3
 
   //Moror B
   pinMode(13, OUTPUT); // direction pin
-  pinMode(8, OUTPUT); // brake pin
+  pinMode(brakePin1, OUTPUT); // brake pin
+  //speedpin of motor B is 11
   
-  digitalWrite(9, HIGH); //engage both brakes
-  digitalWrite(8, LOW); 
+  breakingProcedure(brakePin1, HIGH); //engage both brakes
+  breakingProcedure(brakePin2, HIGH); 
 
+    /***********************************************
+     *                                             *
+     *   code for individual and combinerd test    *
+     *                                             *
+     * *********************************************/
+
+    dualMotorTest();
+
+    }//}
+
+void dualMotorTest() {
+    const int SPEEDBIT = 180;
+
+    breakingProcedure(brakePin2, LOW);
+    setSpeed(3, 12, HIGH, SPEEDBIT); // speed motor a to 180
+    delay(500);
+
+    breakingProcedure(brakePin2, HIGH);
+
+    breakingProcedure(brakePin1, LOW);
+    setSpeed(11, 13, LOW, SPEEDBIT);
+    
+    delay(500);
+
+    breakingProcedure(brakePin1, HIGH);
+}
+
+void setSpeed(int motorPin, int directionPin, int direction, int speed){
+    digitalWrite(directionPin, direction);
+    analogWrite(motorPin, speed);
+}
+void breakingProcedure(int pin, int state){
+  digitalWrite(pin, state);
+}
+
+void loop(){};
+
+/*
     for (int i = 0; i < 5; i++){
     digitalWrite(13, HIGH); //set motor B to go forward
     digitalWrite(8, LOW); //release brakes for motor B
@@ -43,6 +85,5 @@ void setup() {
     digitalWrite(9, HIGH);
 
     delay(500); //wait
-    }}
-
-void loop(){};
+    */ 
+    // legacy code for motor test
