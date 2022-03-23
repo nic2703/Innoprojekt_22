@@ -1,19 +1,23 @@
 import socket
-import time
 
-address = "98:da:60:01:ab:e0" #define address
+STRING_LENGTH_LIMIT = 1000
+#python constants who dis?
+
+ADDRESS = "98:da:60:01:ab:e0" #define address
 #Vikis address: 98:da:60:01:ab:3c
 #Vojtas address: 98:da:60:01:ab:e0
 #better way would be to scan for addresses, look into that if possible
-port = 1 #the port appears to always be 1
+
+PORT = 1 #the port appears to always be 1
 
 sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM) #initialize sock as a BT socket
-sock.connect((address, port))
+sock.connect((ADDRESS, PORT))
 
 while True:
-    msg = input("Message:  ") #get message and input
-    bytes, address = sock.recvfrom(100)
-    sock.send(msg.encode()) #.encode() method ona string converts it to bytes
-    print("Recieved:", bytes.decode()) #slice notation allows us to ignore the "\n" character sent by the arduino
+    BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
+    print("Recieved:", BYTES.decode()) #slice notation allows us to ignore the "\n" character sent by the arduino
 
-#sock.sendfile() #needs investigation, alternatively test with sock.send()
+    MSG = input("Message:  ")+"\r\n" #get message, make sure that it skips to the next line (gud for serialport formatting)
+    sock.send(MSG.encode()) #.encode() method ona string converts it to bytes
+
+#sock.sendfile() #needs investigation
