@@ -1,5 +1,6 @@
 #ifndef MOTORC_H_
 #define MOTORC_H_
+#include <time.h>
 
 class MotorC{
     private:
@@ -77,11 +78,4 @@ bool MotorC::motorcoord(float posnew, float time){
     position = posnew;
     return true;    
 }
-
-
-
-
-
-
-
 #endif
