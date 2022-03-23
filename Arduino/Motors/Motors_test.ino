@@ -22,25 +22,35 @@ void setup() {
      *                                             *
      * *********************************************/
 
-    dualMotorTest();
 
     }//}
 
 void dualMotorTest() {
-    const int SPEEDBIT = 180;
+    const int SPEEDBIT = 255;
 
     breakingProcedure(brakePin2, LOW);
     setSpeed(3, 12, HIGH, SPEEDBIT); // speed motor a to 180
-    delay(500);
+    delay(2000);
 
     breakingProcedure(brakePin2, HIGH);
 
     breakingProcedure(brakePin1, LOW);
     setSpeed(11, 13, LOW, SPEEDBIT);
-    
-    delay(500);
+
+    delay(2000);
 
     breakingProcedure(brakePin1, HIGH);
+
+    breakingProcedure(brakePin1, LOW);
+    breakingProcedure(brakePin2, LOW);
+    setSpeed(3, 12, HIGH, SPEEDBIT);
+    setSpeed(3, 12, HIGH, SPEEDBIT);
+
+    delay(2000);
+
+    breakingProcedure(brakePin1, HIGH);
+    breakingProcedure(brakePin2, HIGH);
+
 }
 
 void setSpeed(int motorPin, int directionPin, int direction, int speed){
@@ -51,7 +61,9 @@ void breakingProcedure(int pin, int state){
   digitalWrite(pin, state);
 }
 
-void loop(){};
+void loop(){
+  dualMotorTest();
+};
 
 /*
     for (int i = 0; i < 5; i++){
