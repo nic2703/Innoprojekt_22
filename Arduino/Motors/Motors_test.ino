@@ -49,15 +49,14 @@ void dualMotorTest() {
     delay(2000);
 
     breakingProcedure(brakePin1, HIGH);
-    breakingProcedure(brakePin2, HIGH);
-
+    breakingProcedure(brakePin2, HIGH); 
 }
 
 void setSpeed(int motorPin, int directionPin, int direction, int speed){
     digitalWrite(directionPin, direction);
     analogWrite(motorPin, speed);
 }
-void breakingProcedure(int pin, int state){
+void breakingProcedure(int pin, int state){ // sets brakes
   digitalWrite(pin, state);
 }
 
