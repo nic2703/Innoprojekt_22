@@ -28,7 +28,7 @@ with open("./Log_Files/Log.csv", "w") as file:
             try: 
                 in_list = text.split()
                 sock.send("r".encode())
-                writer.writerow([int(x.strip()) for x in in_list])
+                writer.writerow([int(x.strip()) for x in in_list].append(RECEIVED_ADDRESS))
             except:
                 sock.send("w".encode())
         else:
