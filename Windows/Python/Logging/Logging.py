@@ -13,7 +13,9 @@ PORT = 1 #the port appears to always be 1
 sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM) #initialize sock as a BT socket
 sock.connect((ADDRESS, PORT)) #connect to the specified address using the specified port
 
-with open("./Log_Files/Log.csv", "w") as file:
+print("Received Data:")
+
+with open(r"Windows\Python\Logging\Log_Files\Log.csv", 'w+', newline='') as file:
     writer = csv.writer(file)
 
     while True:
@@ -25,13 +27,16 @@ with open("./Log_Files/Log.csv", "w") as file:
             break
 
         if text:
+            in_list = text.split(",")
+            print("Received: ", text)
             try: 
-                in_list = text.split()
+                PROCESSED_LIST = [float(x.strip()) for x in in_list]
+                writer.writerow(PROCESSED_LIST)
                 sock.send("r".encode())
-                writer.writerow([int(x.strip()) for x in in_list].append(RECEIVED_ADDRESS))
             except:
                 sock.send("w".encode())
         else:
             sock.send("n".encode())
 
+file.close()
 sock.close()

@@ -1,15 +1,16 @@
 # define brakePin1 8
 # define brakePin2 9
 
+#include "MT2_header.h"
 
 void setup() {
 
-  //Moror A
+  //Mordor A
   pinMode(12, OUTPUT); // direction pin 
   pinMode(brakePin2, OUTPUT); // brake pin
   //speedpin of motor A is pin 3
 
-  //Moror B
+  //Mordor B
   pinMode(13, OUTPUT); // direction pin
   pinMode(brakePin1, OUTPUT); // brake pin
   //speedpin of motor B is 11
@@ -22,9 +23,9 @@ void setup() {
      *   code for individual and combinerd test    *
      *                                             *
      * *********************************************/
+    Plotter plotter = Plotter(3.2, 6.5); // there exists an object
 
-
-    }//}
+    }
 
 void dualMotorTest() {
     const int SPEEDBIT = 255;
@@ -64,38 +65,3 @@ void breakingProcedure(int pin, int state){ // sets brakes
 void loop(){
   dualMotorTest();
 };
-
-/*
-    for (int i = 0; i < 5; i++){
-    digitalWrite(13, HIGH); //set motor B to go forward
-    digitalWrite(8, LOW); //release brakes for motor B
-    analogWrite(11, 180); //set speed of motor B
-    delay(1000); //wait a second
-
-    digitalWrite(8, HIGH);
-
-    delay(500); //wait
-
-    digitalWrite(12, HIGH); //set motor A to go forward
-    digitalWrite(9, LOW); //release brakes for motor A
-    analogWrite(3, 180); //set speed of motor A
-    delay(1000); //wait a second
-
-    digitalWrite(9, HIGH);
-
-    delay(500); //wait
-
-    digitalWrite(13, HIGH);
-    digitalWrite(12, HIGH);
-    digitalWrite(8, LOW);
-    digitalWrite(9, LOW);
-    analogWrite(11, 180); //set speed of motor B
-    analogWrite(3, 180); //set speed of motor A 
-    delay(1000); //wait a second
-
-    digitalWrite(8, HIGH);
-    digitalWrite(9, HIGH);
-
-    delay(500); //wait
-    */ 
-    // legacy code for motor test
