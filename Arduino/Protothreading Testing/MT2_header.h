@@ -104,9 +104,11 @@ class Plotter{
                     straightliney(ydelta);      //technically smaller than the MINDIST value
                 } else {
                     //here comes the incredibly difficult zigzag pattern
-                    int numiterations = xdelta/msx;
+                    int numiterations = (xdelta-msx)/(2*msx);
+                    straightlinex(msx);
+                    straightliney(MINDIST);
                     for (int i = 0; i  < numiterations; i++){
-                        straightlinex(msx);
+                        straightlinex(2*msx);
                         straightliney(MINDIST);
                     }
                     straightlinex(xdelta-numiterations*msx);
@@ -119,9 +121,11 @@ class Plotter{
                     straightlinex(xdelta);      //technically smaller than the MINDIST value
                 } else {
                     //here comes the incredibly difficult zigzag pattern
-                    int numiterations = ydelta/msy;
+                    int numiterations = (ydelta-msy)/(2*msy);
+                    straightliney(msy);
+                    straightlinex(MINDIST);
                     for (int i = 0; i  < numiterations; i++){
-                        straightliney(msy);
+                        straightliney(2*msy);
                         straightlinex(MINDIST);
                     }
                     straightliney(ydelta-numiterations*msy);
