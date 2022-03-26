@@ -1,15 +1,17 @@
 #ifndef MT2_H_
 #define MT2_H_
 #include <HardwareSerial.h>
+
+//global variables and definitions
 typedef unsigned int pin;
-float MINDIST = 1.0f;               //minimum distance the motor can turn in mm
+const float MINDIST = 1.0f;               //minimum distance the motor can turn in mm, immutable for safety
 
 class Plotter{
     private:
-        float xpos = 0.0f, ypos = 0.0f;
-        pin xpspd = 0, xpbrk = 0, xpdir = 0;
-        pin ypspd = 0, ypbrk = 0, ypdir = 0;
-        pin zpspd = 0, zpbrk = 0, zpdir = 0;
+        float xpos = 0.0f, ypos = 0.0f;             
+        pin xpspd = 0, xpbrk = 0, xpdir = 0;        //x: {pinspeed, brakestate, direction}
+        pin ypspd = 0, ypbrk = 0, ypdir = 0;        //y: {pinspeed, brakestate, direction}
+        pin zpspd = 0, zpbrk = 0, zpdir = 0;        //TODO: update for servo
         bool islifted = false;
         float radiusx = 0.0f, radiusy = 0.0f;
 

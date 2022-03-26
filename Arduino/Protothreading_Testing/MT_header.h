@@ -3,6 +3,8 @@
 
 typedef int pin;
 
+//Old motor header
+//DOES THIS USE PROTOTHREADING? - Ask Nic
 
 class Motor{
     private:
