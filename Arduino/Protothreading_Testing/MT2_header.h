@@ -141,8 +141,11 @@ class Plotter{
         bool setpinX(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0);
         bool setpinY(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0);
         bool setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0);
+        //set radii_cogwheels
         bool resetpos(float xposition, float yposition);
         bool moveline(float posx = 0.0f, float posy = 0.0f, float speed = 100);
+        //implement lift pen
+        //implement set pen
 
 };
 
