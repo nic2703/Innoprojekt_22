@@ -2,5 +2,5 @@
 #include "MT2_header.h"
 
 int main(void){
-    Plotter 
+    Plotter davinky = Plotter(0.0f, 0.0f);
 }

@@ -15,7 +15,7 @@ sock.connect((ADDRESS, PORT)) #connect to the specified address using the specif
 
 print("Received Data:")
 
-with open(r"Windows\Python\Logging\Log_Files\Log.csv", 'w+', newline='') as file:
+with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
     writer = csv.writer(file)
 
     while True:
