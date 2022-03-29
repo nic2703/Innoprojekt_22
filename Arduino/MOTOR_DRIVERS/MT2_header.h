@@ -1,6 +1,5 @@
 #ifndef MT2_H_
 #define MT2_H_
-#include <HardwareSerial.h>
 
 #define TIME_MAX 10000
 
