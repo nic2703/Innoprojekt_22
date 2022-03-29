@@ -1,6 +1,10 @@
 #include "Arduino.h"
 #include "MT2_header.h"
 
+/*
+Constructor
+@param x and y position, default to 0
+*/
 Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f)
 {
     xpos = xposition;
@@ -10,6 +14,11 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f)
 Plotter::~Plotter(){}; // no destructor
 
 
+/*
+set pins
+@param x and y output pins (headers) on Arduino, default to 0
+@return boolean value true if operation succeeded, else false
+*/
 bool Plotter::setpinX(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
 {
     if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // available pins
@@ -49,10 +58,13 @@ bool Plotter::setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) 
 // reset private positions of motors
 bool Plotter::resetpos(float xposition, float yposition)
 {
-    xpos = xposition;
-    ypos = yposition;
-    // can add condition for coords to be in plane later
-    return true;
+    if (xposition > X_BOUNDARY || yposition > Y_BOUNDARY || xposition < 0 || yposition < 0) // condition for coords to be in plane
+    {
+        xpos = xposition;
+        ypos = yposition;
+        return true;
+    }
+    return false;
 }
 
 // line fn for deciding which line to make

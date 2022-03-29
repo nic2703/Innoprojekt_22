@@ -9,6 +9,7 @@ void setup() {
   pinMode(12, OUTPUT); // direction pin 
   pinMode(brakePin2, OUTPUT); // brake pin
   //speedpin of motor A is pin 3
+  Serial.begin(9600);
 
   //Mordor B
   pinMode(13, OUTPUT); // direction pin
