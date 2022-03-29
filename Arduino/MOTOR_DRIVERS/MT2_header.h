@@ -1,6 +1,6 @@
 #ifndef MT2_H_
 #define MT2_H_
-
+#include "Arduino.h"
 #define TIME_MAX 10000
 
 // global variables and definitions
