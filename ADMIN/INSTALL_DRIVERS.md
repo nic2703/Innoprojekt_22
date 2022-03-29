@@ -5,4 +5,4 @@
 
 files should run fine if `--placeholder.h--`is included
 
-# placeholdern should be roboticaInno.h?
+placeholder should be roboticaInno?
