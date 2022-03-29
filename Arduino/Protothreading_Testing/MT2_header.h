@@ -118,14 +118,14 @@ private:
         {
             // welcome to the waiting line
         }
-        
+
         digitalWrite(xpbrk, HIGH);
         digitalWrite(ypbrk, HIGH);
-        Serial.println("Normal line move complete!");
+        Serial.println("Normal_line move complete!");
         return true;
     } 
-
-    bool specialline(float xdelta, float ydelta)
+// TODO: decide whether it wouldn't make just as much sense implementing this as a safety in normal_line
+    bool special_line(float xdelta, float ydelta)
     {
         xdelta > 0 ? digitalWrite(xpdir, HIGH) : digitalWrite(xpdir, LOW); //FIXME: Fix this
         ydelta > 0 ? digitalWrite(ypdir, HIGH) : digitalWrite(ypdir, LOW);
@@ -144,7 +144,7 @@ private:
                 int numiterations = (xdelta - msx) / (2 * msx);
                 straight_line_x(msx);
                 straight_line_y(MINDIST);
-                for (int i = 0; i < numiterations; i++)
+                for (int i = 0; i < numiterations; ++i)
                 {
                     straight_line_x(2 * msx);
                     straight_line_y(MINDIST);
@@ -177,7 +177,7 @@ private:
             }
         }
     }
-
+// is there a return home?
 public:
     Plotter(float xposition = 0.0f, float yposition = 0.0f);
     ~Plotter();
@@ -197,11 +197,11 @@ Plotter::Plotter(float xposition, float yposition)
     ypos = yposition;
 }
 
-Plotter::~Plotter(){};
+Plotter::~Plotter(){}; // no destructor
 
 bool Plotter::setpinX(pin pinspeed, pin pinbreak, pin pindirection)
 {
-    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30)
+    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // available pins
     {
         return false;
     }
@@ -213,7 +213,7 @@ bool Plotter::setpinX(pin pinspeed, pin pinbreak, pin pindirection)
 
 bool Plotter::setpinY(pin pinspeed, pin pinbreak, pin pindirection)
 {
-    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30)
+    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // TODO: if pins are taken (say by x or  servo), complain
     {
         return false;
     }
@@ -223,7 +223,7 @@ bool Plotter::setpinY(pin pinspeed, pin pinbreak, pin pindirection)
     return true;
 }
 
-bool Plotter::setpinZ(pin pinspeed, pin pinbreak, pin pindirection)
+bool Plotter::setpinZ(pin pinspeed, pin pinbreak, pin pindirection) // FIXME: modify for servo
 {
     if (pinspeed > 30 || pinbreak > 30 || pindirection > 30)
     {
@@ -234,7 +234,7 @@ bool Plotter::setpinZ(pin pinspeed, pin pinbreak, pin pindirection)
     zpdir = pindirection;
     return true;
 }
-
+// reset private positions of motors
 bool Plotter::resetpos(float xposition, float yposition)
 {
     xpos = xposition;
@@ -243,7 +243,8 @@ bool Plotter::resetpos(float xposition, float yposition)
     return true;
 }
 
-bool Plotter::moveline(float xposnew, float yposnew, float speed)
+// line fn for deciding which line to make
+bool Plotter::moveline(float xposnew, float yposnew, float speed) // TODO: modify for normal_line handling both noral and special lines?
 {
     float xdelta = xposnew - xpos;
     float ydelta = yposnew - ypos;
@@ -273,7 +274,7 @@ bool Plotter::moveline(float xposnew, float yposnew, float speed)
     else
     {
         // use special line
-        if (specialline(xdelta, ydelta))
+        if (special_line(xdelta, ydelta))
         {
             xpos += xdelta;
             ypos += ydelta;
@@ -286,5 +287,5 @@ bool Plotter::moveline(float xposnew, float yposnew, float speed)
         }
     }
 }
-
+// YAY, COMMENTS DONE!!!!!!!!!!!! well now i only actually have to implement the stuff i've written
 #endif
