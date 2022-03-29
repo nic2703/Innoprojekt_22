@@ -58,7 +58,9 @@ void setSpeed(int motorPin, int directionPin, int direction, int speed){
     digitalWrite(directionPin, direction);
     analogWrite(motorPin, speed);
 }
-void breakingProcedure(int pin, int state){ // sets brakes
+
+//sets brakes
+void breakingProcedure(int pin, int state){ 
   digitalWrite(pin, state);
 }
 
