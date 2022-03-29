@@ -69,7 +69,7 @@ bool MotorC::motorcoord(float posnew, float time){
     if (distance/(60*radius*PI)>time){
         return false;
     } else {
-        setspeed(45.0f/8.0f(distance/(2*PI*radius*time)-15));
+        setspeed(45.0f/8.0f*(distance/(2*PI*radius*time)-15));
     }
     digitalWrite(pbrk, LOW);
     analogWrite(pspd, speedval);
