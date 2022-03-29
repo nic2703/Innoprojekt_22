@@ -11,6 +11,8 @@ class Plotter
 {
 private:
 
+//TODO: add map_speed for mapping byte input to acutal vals 30-255
+
     float xpos = 0.0f, ypos = 0.0f;
     pin xpspd = 0, xpbrk = 0, xpdir = 0; // x: {pinspeed, brakestate, direction}
     pin ypspd = 0, ypbrk = 0, ypdir = 0; // y: {pinspeed, brakestate, direction}
