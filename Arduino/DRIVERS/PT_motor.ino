@@ -16,8 +16,8 @@ void setup() {
   pinMode(brakePin1, OUTPUT); // brake pin
   //speedpin of motor B is 11
   
-  breakingProcedure(brakePin1, HIGH); //engage both brakes
-  breakingProcedure(brakePin2, HIGH); 
+  set_brakes(brakePin1, HIGH); //engage both brakes
+  set_brakes(brakePin2, HIGH); 
 
     /***********************************************
      *                                             *
@@ -31,38 +31,28 @@ void setup() {
 void dualMotorTest() {
     const int SPEEDBIT = 255;
 
-    breakingProcedure(brakePin2, LOW);
-    setSpeed(3, 12, HIGH, SPEEDBIT); // speed motor a to 180
+    set_brakes(brakePin2, LOW);
+    set_speed(3, 12, HIGH, SPEEDBIT); // speed motor a to 180
     delay(2000);
 
-    breakingProcedure(brakePin2, HIGH);
+    set_brakes(brakePin2, HIGH);
 
-    breakingProcedure(brakePin1, LOW);
-    setSpeed(11, 13, LOW, SPEEDBIT);
-
-    delay(2000);
-
-    breakingProcedure(brakePin1, HIGH);
-
-    breakingProcedure(brakePin1, LOW);
-    breakingProcedure(brakePin2, LOW);
-    setSpeed(3, 12, HIGH, SPEEDBIT);
-    setSpeed(3, 12, HIGH, SPEEDBIT);
+    set_brakes(brakePin1, LOW);
+    set_speed(11, 13, LOW, SPEEDBIT);
 
     delay(2000);
 
-    breakingProcedure(brakePin1, HIGH);
-    breakingProcedure(brakePin2, HIGH); 
-}
+    set_brakes(brakePin1, HIGH);
 
-void setSpeed(int motorPin, int directionPin, int direction, int speed){
-    digitalWrite(directionPin, direction);
-    analogWrite(motorPin, speed);
-}
+    set_brakes(brakePin1, LOW);
+    set_brakes(brakePin2, LOW);
+    set_speed(3, 12, HIGH, SPEEDBIT);
+    set_speed(3, 12, HIGH, SPEEDBIT);
 
-//sets brakes
-void breakingProcedure(int pin, int state){ 
-  digitalWrite(pin, state);
+    delay(2000);
+
+    set_brakes(brakePin1, HIGH);
+    set_brakes(brakePin2, HIGH); 
 }
 
 void loop(){
