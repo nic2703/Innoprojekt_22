@@ -45,6 +45,7 @@ bool Plotter::setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) 
     zpdir = pindirection;
     return true;
 }
+
 // reset private positions of motors
 bool Plotter::resetpos(float xposition, float yposition)
 {
