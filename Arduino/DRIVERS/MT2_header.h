@@ -15,17 +15,7 @@ const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immuta
 
 class Plotter
 {
-public:
-    Plotter(float, float);
-    ~Plotter();
-    
-    bool setpinX(pin, pin, pin);
-    bool setpinY(pin, pin, pin);
-    bool setpinZ(pin, pin, pin);     
-    bool resetpos(float, float);
-    bool moveline(float, float, float);
-
-private:
+    private:
     float xpos = 0.0f, ypos = 0.0f;
     pin xpspd = 0, xpbrk = 0, xpdir = 0; // x: {pinspeed, brakestate, direction}
     pin ypspd = 0, ypbrk = 0, ypdir = 0; // y: {pinspeed, brakestate, direction}
@@ -37,6 +27,18 @@ private:
     bool straight_line_y(float);
     bool special_line(float, float);
     bool normal_line(float, float);
+    
+    public:
+    Plotter(float, float);
+    ~Plotter();
+    
+    bool setpinX(pin, pin, pin);
+    bool setpinY(pin, pin, pin);
+    bool setpinZ(pin, pin, pin);     
+    bool resetpos(float, float);
+    bool moveline(float, float, float);
+
+
 };
 
 
