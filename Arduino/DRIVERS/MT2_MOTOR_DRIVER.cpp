@@ -212,11 +212,10 @@ bool Plotter::normal_line(float xdelta, float ydelta)
     return true;
 } 
 // TODO: decide whether it wouldn't make just as much sense implementing this as a safety in normal_line
-bool Plotter::special_line(float xdelta, float ydelta)
+bool Plotter::special_line(float xdelta, float ydelta) //FIXME: Fix this
 {
-    xdelta > 0 ? digitalWrite(xpdir, HIGH) : digitalWrite(xpdir, LOW); //FIXME: Fix this
-    ydelta > 0 ? digitalWrite(ypdir, HIGH) : digitalWrite(ypdir, LOW);
-
+    set_dir(xdelta, xpdir); 
+    set_dir(ydelta, ypdir);
     if (abs(xdelta) > abs(ydelta))
     {
         float msx = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx); // distance in order to achieve a 1mm rise through the theoretical perfect rise
