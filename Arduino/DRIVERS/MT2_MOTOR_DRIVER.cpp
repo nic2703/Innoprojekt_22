@@ -115,10 +115,7 @@ bool Plotter::moveline(float xposnew = 0.0f, float yposnew = 0.0f, float speed =
 // throws error if length of move is > 10 s
 bool Plotter::straight_line_x(float xdelta) 
 {
-    if (xdelta > 0)
-        digitalWrite(xpdir, HIGH);
-    else
-        digitalWrite(xpdir, LOW); // set direction
+    set_dir(xdelta, xpdir); // set direction
 
     float ms = 1000.0f * (xdelta) / (2 * PI * radiusx);
     uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
@@ -147,10 +144,7 @@ bool Plotter::straight_line_x(float xdelta)
     //same as straight_line_x
 bool Plotter::straight_line_y(float ydelta)
 {
-    if (ydelta > 0)
-        digitalWrite(ypdir, HIGH);
-    else
-        digitalWrite(ypdir, LOW); // set direction
+    set_dir(ydelta, ypdir); // set direction
 
     float ms = 1000.0f * (ydelta) / (2 * PI * radiusy);
     float duedate = millis() + (uint64_t) ms;
@@ -178,8 +172,8 @@ bool Plotter::straight_line_y(float ydelta)
 bool Plotter::normal_line(float xdelta, float ydelta)
 {
     // higher delta always has the maximum speed of 255
-    xdelta > 0 ? digitalWrite(xpdir, HIGH) : digitalWrite(xpdir, LOW); //TODO: set_direction() function needed
-    ydelta > 0 ? digitalWrite(ypdir, HIGH) : digitalWrite(ypdir, LOW);
+    set_dir(xdelta, xpdir); //TODO: set_direction() function needed
+    set_dir(ydelta, ypdir);
 
     float duedate = millis();
     if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move

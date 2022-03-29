@@ -6,8 +6,10 @@
 #define TIME_MAX 10000
 
 // global variables and definitions
+#define set_dir(a, p_dir) (a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW))
 typedef unsigned int pin;
 typedef unsigned int bit_speed;
+
 const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
 //add macros,constexpr and fn signatures 
 // is there a return home?
