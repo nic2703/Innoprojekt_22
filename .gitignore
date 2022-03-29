@@ -35,3 +35,5 @@
 .vscode/
 ArduinoOutput/
 compile_test/
+# Personal test/debug files
+Windows/cpp/test.cpp
