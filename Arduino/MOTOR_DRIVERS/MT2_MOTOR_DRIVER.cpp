@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "MT2_header.h"
 
-Plotter::Plotter(float xposition, float yposition)
+Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f)
 {
     xpos = xposition;
     ypos = yposition;
@@ -10,7 +10,7 @@ Plotter::Plotter(float xposition, float yposition)
 Plotter::~Plotter(){}; // no destructor
 
 
-bool Plotter::setpinX(pin pinspeed, pin pinbreak, pin pindirection)
+bool Plotter::setpinX(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
 {
     if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // available pins
     {
@@ -22,7 +22,7 @@ bool Plotter::setpinX(pin pinspeed, pin pinbreak, pin pindirection)
     return true;
 }
 
-bool Plotter::setpinY(pin pinspeed, pin pinbreak, pin pindirection)
+bool Plotter::setpinY(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
 {
     if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // TODO: if pins are taken (say by x or  servo), complain
     {
@@ -34,7 +34,7 @@ bool Plotter::setpinY(pin pinspeed, pin pinbreak, pin pindirection)
     return true;
 }
 
-bool Plotter::setpinZ(pin pinspeed, pin pinbreak, pin pindirection) // FIXME: modify for servo
+bool Plotter::setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) // FIXME: modify for servo
 {
     if (pinspeed > 30 || pinbreak > 30 || pindirection > 30)
     {
@@ -55,7 +55,7 @@ bool Plotter::resetpos(float xposition, float yposition)
 }
 
 // line fn for deciding which line to make
-bool Plotter::moveline(float xposnew, float yposnew, float speed) // TODO: modify for normal_line handling both noral and special lines?
+bool Plotter::moveline(float xposnew = 0.0f, float yposnew = 0.0f, float speed = 100.0f) // TODO: modify for normal_line handling both noral and special lines?
 {
     float xdelta = xposnew - xpos;
     float ydelta = yposnew - ypos;
@@ -108,7 +108,7 @@ bool Plotter::straight_line_x(float xdelta)
         digitalWrite(xpdir, LOW); // set direction
 
     float ms = 1000.0f * (xdelta) / (2 * PI * radiusx);
-    uint64_t duedate = millis() + (uint64_t)ms; // do the decimal points actually make a diffference
+    uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
                                                 // millis is unsigned long mate
 
     digitalWrite(xpbrk, LOW); // release the hamdbrake
@@ -257,7 +257,5 @@ bool Plotter::special_line(float xdelta, float ydelta)
         }
     }
 }
-
-    // implement lift pen
-    // implement set pen
-
+// implement lift pen
+// implement set pen

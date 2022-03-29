@@ -9,18 +9,21 @@ const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immuta
 //add macros,constexpr and fn signatures 
 // is there a return home?
 //TODO: add map_speed for mapping byte input to acutal vals 30-255
+// set radii_cogwheels
+
+// throws error if length of move is > 10 s
 
 class Plotter
 {
 public:
-    Plotter(float xposition = 0.0f, float yposition = 0.0f);
+    Plotter(float, float);
     ~Plotter();
-    bool setpinX(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0);
-    bool setpinY(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0);
-    bool setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0);     
-    bool resetpos(float xposition, float yposition);
-    bool moveline(float posx = 0.0f, float posy = 0.0f, float speed = 100);
-    // set radii_cogwheels
+    
+    bool setpinX(pin, pin, pin);
+    bool setpinY(pin, pin, pin);
+    bool setpinZ(pin, pin, pin);     
+    bool resetpos(float, float);
+    bool moveline(float, float, float);
 
 private:
     float xpos = 0.0f, ypos = 0.0f;
@@ -30,11 +33,10 @@ private:
     bool islifted = false;
     float radiusx = 0.0f, radiusy = 0.0f;
 
-    // throws error if length of move is > 10 s
-    bool straight_line_x(float xdelta);
-    bool straight_line_y(float ydelta);
-    bool special_line(float xdelta, float ydelta);
-    bool normal_line(float xdelta, float ydelta);
+    bool straight_line_x(float);
+    bool straight_line_y(float);
+    bool special_line(float, float);
+    bool normal_line(float, float);
 };
 
 
