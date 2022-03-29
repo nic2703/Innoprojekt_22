@@ -172,13 +172,13 @@ bool Plotter::straight_line_y(float ydelta)
 bool Plotter::normal_line(float xdelta, float ydelta)
 {
     // higher delta always has the maximum speed of 255
-    set_dir(xdelta, xpdir); //TODO: set_direction() function needed
+    set_dir(xdelta, xpdir); 
     set_dir(ydelta, ypdir);
 
     float duedate = millis();
     if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
     {
-        float ms = 1000.0f * (xdelta) / (2 * PI * radiusx); // TODO: convert_speed as macro or constexpr
+        float ms = convert_to_time(xdelta, radiusx);
         duedate += ms;
         digitalWrite(xpbrk, LOW); // release the handbrake
         analogWrite(xpspd, 255);    // full speed line, x
