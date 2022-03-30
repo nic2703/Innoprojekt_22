@@ -22,25 +22,34 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
     START_TIME = time.time()
 
     while True:
-        BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
-        text = BYTES.decode().strip()
+        try:
+            BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
+            text = BYTES.decode().strip()
+        except:
+            sock.send("1".encode())
 
         if text == "q":
-            sock.send("t".encode())
+            sock.send("-1".encode())
             break
 
-        if text:
-            in_list = text.split(",")
-            in_list[2] -= scipy.g
+        if text != "":
             print("Received: ", text)
+
             try: 
+                in_list = text.split(",")
+                in_list[2] -= scipy.g
+            except:
+                sock.send("2".encode())
+
+            try:
                 PROCESSED_LIST = ["", time.time()-START_TIME]+[float(x.strip()) for x in in_list]
                 writer.writerow(PROCESSED_LIST)
-                sock.send("r".encode())
+                sock.send("0".encode())
             except:
-                sock.send("w".encode())
+                sock.send("3".encode())
+
         else:
-            sock.send("n".encode())
+            sock.send("4".encode())
 
 file.close()
 sock.close()
