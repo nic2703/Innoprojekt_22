@@ -177,8 +177,7 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
     set_dir(xdelta, xpdir); 
     set_dir(ydelta, ypdir);
 
-
-     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
+    if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
         float duedate = millis();
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
