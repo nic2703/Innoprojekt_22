@@ -1,7 +1,9 @@
 import socket
 import csv
+import time
 
 STRING_LENGTH_LIMIT = 1000
+START_TIME = time.time()
 
 ADDRESS = "98:da:60:01:ab:e0" #define address
 #Vikis address: 98:da:60:01:ab:3c
@@ -30,7 +32,7 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
             in_list = text.split(",")
             print("Received: ", text)
             try: 
-                PROCESSED_LIST = [float(x.strip()) for x in in_list]
+                PROCESSED_LIST = ["", time.time()-START_TIME]+[float(x.strip()) for x in in_list]
                 writer.writerow(PROCESSED_LIST)
                 sock.send("r".encode())
             except:
