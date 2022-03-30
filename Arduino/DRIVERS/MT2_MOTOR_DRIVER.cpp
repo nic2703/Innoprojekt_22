@@ -103,8 +103,8 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
         // use normal line
         if (normal_line(xdelta, ydelta))
         {
-            xpos += xdelta; // TODO: update_pos
-            ypos += ydelta;
+            update_pos(xpos, xdelta);
+            update_pos(ypos, ydelta);
             return true;
         }
         else
