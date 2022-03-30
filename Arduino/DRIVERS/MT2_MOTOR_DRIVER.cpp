@@ -65,7 +65,11 @@ bool Plotter::setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) 
     return true;
 }
 
-// reset private positions of motors
+/*
+reset private positions of motors
+@param x and y current positions, sets to input parameters
+@return boolean value true if operation succeeded, else false
+*/
 bool Plotter::resetpos(float xposition, float yposition)
 {
     if (xposition > X_BOUNDARY || yposition > Y_BOUNDARY || xposition < 0 || yposition < 0) // condition for coords to be in plane
@@ -77,8 +81,12 @@ bool Plotter::resetpos(float xposition, float yposition)
     return false;
 }
 
-// line fn for deciding which line to make
-bool Plotter::moveline(float xposnew = 0.0f, float yposnew = 0.0f, float speed = 100.0f) // TODO: modify for normal_line handling both noral and special lines?
+/*
+draw lines, function decides which type of line to make
+@param desired new positions of x and y coordinates, speed at which tho execute move
+@return boolean value true if operation succeeded, else false
+*/
+bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed = 100.0f) // TODO: modify for normal_line handling both noral and special lines?
 {
     float xdelta = xposnew - xpos;
     float ydelta = yposnew - ypos;
