@@ -1,5 +1,7 @@
 import socket
 import csv
+import matplotlib.pyplot as plt
+import time
 
 STRING_LENGTH_LIMIT = 1000
 
@@ -15,28 +17,42 @@ sock.connect((ADDRESS, PORT)) #connect to the specified address using the specif
 
 print("Received Data:")
 
+#plt.ion()
+#fig = plt.figure()
+
 with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
     writer = csv.writer(file)
+    START_TIME = time.time()
 
     while True:
-        BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
-        text = BYTES.decode().strip()
+        try:
+            BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
+            text = BYTES.decode().strip()
+            
+            if text == "q":
+                sock.send("-1".encode())
+                break
 
-        if text == "q":
-            sock.send("t".encode())
-            break
+            if text:
+                print("Received: ", text)
 
-        if text:
-            in_list = text.split(",")
-            print("Received: ", text)
-            try: 
-                PROCESSED_LIST = [float(x.strip()) for x in in_list]
-                writer.writerow(PROCESSED_LIST)
-                sock.send("r".encode())
-            except:
-                sock.send("w".encode())
-        else:
-            sock.send("n".encode())
+                try: 
+                    in_list = text.split(",")
+                except:
+                    sock.send("2".encode())
+
+                try:
+                    PROCESSED_LIST = ["", time.time()-START_TIME]+[float(x.strip()) for x in in_list]
+                    writer.writerow(PROCESSED_LIST)
+                    sock.send("0".encode())
+                except:
+                    sock.send("3".encode())
+
+            else:
+                sock.send("4".encode())
+
+        except:
+            sock.send("1".encode())
 
 file.close()
 sock.close()
