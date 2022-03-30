@@ -98,7 +98,7 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
     {
         straight_line_x(xdelta);
     }
-    else if (normal_line(xdelta, ydelta))
+    else if (diagonal_line(xdelta, ydelta))
     {
             update_pos(xpos, xdelta);
             update_pos(ypos, ydelta);
