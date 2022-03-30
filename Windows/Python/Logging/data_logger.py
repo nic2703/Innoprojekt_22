@@ -1,6 +1,6 @@
 import socket
 import csv
-import scipy
+import matplotlib.pyplot as plt
 import time
 
 STRING_LENGTH_LIMIT = 1000
@@ -17,6 +17,9 @@ sock.connect((ADDRESS, PORT)) #connect to the specified address using the specif
 
 print("Received Data:")
 
+#plt.ion()
+#fig = plt.figure()
+
 with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
     writer = csv.writer(file)
     START_TIME = time.time()
@@ -25,17 +28,16 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
         try:
             BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
             text = BYTES.decode().strip()
-
+            
             if text == "q":
                 sock.send("-1".encode())
                 break
 
             if text:
-                #print("Received: ", text)
+                print("Received: ", text)
 
                 try: 
                     in_list = text.split(",")
-                    in_list[2] -= scipy.g
                 except:
                     sock.send("2".encode())
 
