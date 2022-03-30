@@ -174,45 +174,44 @@ bool Plotter::normal_line(float xdelta, float ydelta)
     set_dir(xdelta, xpdir); 
     set_dir(ydelta, ypdir);
 
-
-
      if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
-    float duedate = millis();
-    if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
-    {
-        float ms = convert_to_time(xdelta, radiusx);
-        duedate += ms;
-        digitalWrite(xpbrk, LOW); // release the handbrake
-        analogWrite(xpspd, 255);    // full speed line, x
-        digitalWrite(ypbrk, LOW); // release the handbrake
-        analogWrite(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
-    } else {
-        float ms = (ydelta) / (2 * PI * radiusy); // same here
-        duedate += ms;
-        digitalWrite(ypbrk, LOW); // release the handbrake
-        analogWrite(ypspd, 255);    // full speed line, y 
-        digitalWrite(xpbrk, LOW); // release the handbrake
-        analogWrite(xpspd, (xdelta / ydelta) * 255.0f); // make diagonal
-    }
+        float duedate = millis();
+        if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
+        {
+            float ms = convert_to_time(xdelta, radiusx);
+            duedate += ms;
+            digitalWrite(xpbrk, LOW); // release the handbrake
+            analogWrite(xpspd, 255);    // full speed line, x
+            digitalWrite(ypbrk, LOW); // release the handbrake
+            analogWrite(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
+        } else {
+            float ms = (ydelta) / (2 * PI * radiusy); // same here
+            duedate += ms;
+            digitalWrite(ypbrk, LOW); // release the handbrake
+            analogWrite(ypspd, 255);    // full speed line, y 
+            digitalWrite(xpbrk, LOW); // release the handbrake
+            analogWrite(xpspd, (xdelta / ydelta) * 255.0f); // make diagonal
+        }
 
-    float currenttime = millis();
-    if (duedate - currenttime > TIME_MAX){
-        Serial.println("Overran 10 second limit for normal line move!");
+        float currenttime = millis();
+        if (duedate - currenttime > TIME_MAX){
+            Serial.println("Overran 10 second limit for normal line move!");
+            digitalWrite(xpbrk, HIGH);
+            digitalWrite(ypbrk, HIGH);
+            return false;
+        }
+
+        while (millis() < duedate)
+        {
+            // welcome to the waiting line
+        }
+
         digitalWrite(xpbrk, HIGH);
         digitalWrite(ypbrk, HIGH);
-        return false;
+        Serial.println("Normal_line move complete!");
+        return true;
     }
-
-    while (millis() < duedate)
-    {
-        // welcome to the waiting line
-    }
-
-    digitalWrite(xpbrk, HIGH);
-    digitalWrite(ypbrk, HIGH);
-    Serial.println("Normal_line move complete!");
-    return true;
 } 
 // TODO: decide whether it wouldn't make just as much sense implementing this as a safety in normal_line
 bool Plotter::special_line(float xdelta, float ydelta) //FIXME: Fix this
