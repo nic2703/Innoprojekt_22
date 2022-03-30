@@ -118,7 +118,7 @@ bool Plotter::straight_line_x(float xdelta)
 {
     set_dir(xdelta, xpdir); // set direction
 
-    float ms = 1000.0f * (xdelta) / (2 * PI * radiusx);
+    float ms = convert_to_time(xdelta, radiusx);
     uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
                                                 // millis is unsigned long mate
 
@@ -147,14 +147,14 @@ bool Plotter::straight_line_y(float ydelta)
 {
     set_dir(ydelta, ypdir); // set direction 
 
-    float ms = 1000.0f * (ydelta) / (2 * PI * radiusy);
+    float ms = convert_to_time(ydelta, radiusy);
     float duedate = millis() + (uint64_t) ms;
     
     digitalWrite(ypbrk, LOW); // release the handbrake
     analogWrite(ypspd, 255);
     //TODO: replace with braking fn
 
-    if (TIME_MAX > ms)
+    if (TIME_MAX < ms)
     {
         Serial.println("Overran 10 second limit for straight line Y move!");
         digitalWrite(ypbrk, HIGH);
