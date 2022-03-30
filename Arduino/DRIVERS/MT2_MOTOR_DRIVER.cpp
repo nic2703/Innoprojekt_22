@@ -98,35 +98,16 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
     {
         straight_line_x(xdelta);
     }
-    else if (abs(ydelta / xdelta) < 1.0f / 3.0f || abs(ydelta / xdelta) > 3.0f)
+    else if (normal_line(xdelta, ydelta))
     {
-        // use normal line
-        if (normal_line(xdelta, ydelta))
-        {
             update_pos(xpos, xdelta);
             update_pos(ypos, ydelta);
             return true;
-        }
-        else
-        {
-            Serial.println("Encoder error, x-y-positions may be incorrect");
-            return false;
-        }
     }
     else
     {
-        // use special line
-        if (special_line(xdelta, ydelta))
-        {
-            xpos += xdelta;
-            ypos += ydelta;
-            return true;
-        }
-        else
-        {
             Serial.println("Encoder error, x-y-positions may be incorrect");
             return false;
-        }
     }
 }
 
@@ -193,6 +174,10 @@ bool Plotter::normal_line(float xdelta, float ydelta)
     set_dir(xdelta, xpdir); 
     set_dir(ydelta, ypdir);
 
+
+
+     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
+    {
     float duedate = millis();
     if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
     {
