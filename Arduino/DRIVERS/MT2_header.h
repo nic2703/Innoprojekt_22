@@ -13,7 +13,7 @@
 // global variables and definitions
 typedef unsigned int pin;
 typedef unsigned int bit_speed;
-
+//update
 const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
 const int X_BOUNDARY = 100;
 const int Y_BOUNDARY = 100;
