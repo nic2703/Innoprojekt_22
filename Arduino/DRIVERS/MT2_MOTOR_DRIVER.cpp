@@ -90,7 +90,10 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
 {
     float xdelta = xposnew - xpos;
     float ydelta = yposnew - ypos;
-    if (abs(xdelta) <= MINDIST) //TODO: macro this
+    if (abs(xdelta) <= MINDIST && abs(ydelta) <= MINDIST){
+        Serial.println("Line too short!");
+    } 
+    else if (abs(xdelta) <= MINDIST) //TODO: macro this
     {
         straight_line_y(ydelta);
     }
