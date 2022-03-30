@@ -176,8 +176,7 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
     set_dir(xdelta, xpdir); 
     set_dir(ydelta, ypdir);
 
-
-     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
+    if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
         float duedate = millis();
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
@@ -214,16 +213,22 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
         digitalWrite(ypbrk, HIGH);
         Serial.println("Normal_line move complete!");
         return true;
+
     } else { // approximate line
-        approximate_line(xdelta, ydelta);
+
+        if (approximate_line(xdelta, ydelta)) 
+        return true;
+        else 
+        return false;
     }
 } 
 
-void approximate_line(float xdelta, float ydelta){
+bool approximate_line(float xdelta, float ydelta) {
+
     if (abs(xdelta) > abs(ydelta))
         {
-            float msx = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx); // distance in order to achieve a 1mm rise through the theoretical perfect rise
-            if (msx > xdelta)
+            float millis_x = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx); // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            if (millis_x > xdelta)
             {
                 straight_line_x(xdelta);
                 straight_line_y(ydelta); // technically smaller than the MINDIST value
@@ -231,22 +236,22 @@ void approximate_line(float xdelta, float ydelta){
             else
             {
                 // here comes the incredibly difficult zigzag pattern
-                int numiterations = (xdelta - msx) / (2 * msx);
-                straight_line_x(msx);
+                int numiterations = (xdelta - millis_x) / (2 * millis_x);
+                straight_line_x(millis_x);
                 straight_line_y(MINDIST);
                 for (int i = 0; i < numiterations; ++i)
                 {
-                    straight_line_x(2 * msx);
+                    straight_line_x(2 * millis_x);
                     straight_line_y(MINDIST);
                 }
-                straight_line_x(xdelta - numiterations * msx);
+                straight_line_x(xdelta - numiterations * millis_x);
                 straight_line_y(ydelta - numiterations * MINDIST);
             }
         }
         else
         {
-            float msy = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * radiusy); // distance in order to achieve a 1mm rise through the theoretical perfect rise
-            if (msy > xdelta)
+            float millis_y = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * radiusy); // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            if (millis_y > xdelta)
             {
                 straight_line_y(ydelta);
                 straight_line_x(xdelta); // technically smaller than the MINDIST value
@@ -254,15 +259,15 @@ void approximate_line(float xdelta, float ydelta){
             else
             {
                 // here comes the incredibly difficult zigzag pattern
-                int numiterations = (ydelta - msy) / (2 * msy);
-                straight_line_y(msy);
+                int numiterations = (ydelta - millis_y) / (2 * millis_y);
+                straight_line_y(millis_y);
                 straight_line_x(MINDIST);
                 for (int i = 0; i < numiterations; i++)
                 {
-                    straight_line_y(2 * msy);
+                    straight_line_y(2 * millis_y);
                     straight_line_x(MINDIST);
                 }
-                straight_line_y(ydelta - numiterations * msy);
+                straight_line_y(ydelta - numiterations * millis_y);
                 straight_line_x(xdelta - numiterations * MINDIST);
             }
         }
