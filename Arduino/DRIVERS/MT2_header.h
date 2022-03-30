@@ -5,21 +5,26 @@
 #include "Arduino.h"
 #define TIME_MAX 10000
 
-// global variables and definitions
+//macros
 #define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
 #define convert_to_time(delta, radius) 1000.0f * (delta) / (2 * PI * radius)
+#define update_pos(pos, delta) pos += delta
 
+// global variables and definitions
 typedef unsigned int pin;
 typedef unsigned int bit_speed;
 
 const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
-//add macros,constexpr and fn signatures 
+const int X_BOUNDARY = 100;
+const int Y_BOUNDARY = 100;
+
+
 // is there a return home?
 //TODO: add map_speed for mapping byte input to acutal vals 30-255
 // set radii_cogwheels
 
 void set_speed(pin, int);
-void set_brakes(pin, pin, int, bit_speed)
+void set_brakes(pin, pin, int, bit_speed);
 
 class Plotter{
     private:
