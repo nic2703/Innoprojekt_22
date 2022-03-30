@@ -38,8 +38,7 @@ class Plotter
 
     bool straight_line_x(float);
     bool straight_line_y(float);
-    bool special_line(float, float);
-    bool normal_line(float, float);
+    bool diagonal_line(float, float);
     
     public:
     Plotter(float, float);
@@ -49,7 +48,7 @@ class Plotter
     bool setpinY(pin, pin, pin);
     bool setpinZ(pin, pin, pin);     
     bool resetpos(float, float);
-    bool moveline(float, float, float);
+    bool draw_line(float, float, float);
 
 
 };

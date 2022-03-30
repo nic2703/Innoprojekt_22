@@ -168,11 +168,12 @@ bool Plotter::straight_line_y(float ydelta)
     return true;
 }
 
-bool Plotter::normal_line(float xdelta, float ydelta)
+bool Plotter::diagonal_line(float xdelta, float ydelta)
 {
     // higher delta always has the maximum speed of 255
     set_dir(xdelta, xpdir); 
     set_dir(ydelta, ypdir);
+
 
      if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
@@ -211,59 +212,54 @@ bool Plotter::normal_line(float xdelta, float ydelta)
         digitalWrite(ypbrk, HIGH);
         Serial.println("Normal_line move complete!");
         return true;
+    } else {
+        if (abs(xdelta) > abs(ydelta))
+        {
+            float msx = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx); // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            if (msx > xdelta)
+            {
+                straight_line_x(xdelta);
+                straight_line_y(ydelta); // technically smaller than the MINDIST value
+            }
+            else
+            {
+                // here comes the incredibly difficult zigzag pattern
+                int numiterations = (xdelta - msx) / (2 * msx);
+                straight_line_x(msx);
+                straight_line_y(MINDIST);
+                for (int i = 0; i < numiterations; ++i)
+                {
+                    straight_line_x(2 * msx);
+                    straight_line_y(MINDIST);
+                }
+                straight_line_x(xdelta - numiterations * msx);
+                straight_line_y(ydelta - numiterations * MINDIST);
+            }
+        }
+        else
+        {
+            float msy = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * radiusy); // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            if (msy > xdelta)
+            {
+                straight_line_y(ydelta);
+                straight_line_x(xdelta); // technically smaller than the MINDIST value
+            }
+            else
+            {
+                // here comes the incredibly difficult zigzag pattern
+                int numiterations = (ydelta - msy) / (2 * msy);
+                straight_line_y(msy);
+                straight_line_x(MINDIST);
+                for (int i = 0; i < numiterations; i++)
+                {
+                    straight_line_y(2 * msy);
+                    straight_line_x(MINDIST);
+                }
+                straight_line_y(ydelta - numiterations * msy);
+                straight_line_x(xdelta - numiterations * MINDIST);
+            }
+        }
     }
 } 
-// TODO: decide whether it wouldn't make just as much sense implementing this as a safety in normal_line
-bool Plotter::special_line(float xdelta, float ydelta) //FIXME: Fix this
-{
-    set_dir(xdelta, xpdir); 
-    set_dir(ydelta, ypdir);
-    if (abs(xdelta) > abs(ydelta))
-    {
-        float msx = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx); // distance in order to achieve a 1mm rise through the theoretical perfect rise
-        if (msx > xdelta)
-        {
-            straight_line_x(xdelta);
-            straight_line_y(ydelta); // technically smaller than the MINDIST value
-        }
-        else
-        {
-            // here comes the incredibly difficult zigzag pattern
-            int numiterations = (xdelta - msx) / (2 * msx);
-            straight_line_x(msx);
-            straight_line_y(MINDIST);
-            for (int i = 0; i < numiterations; ++i)
-            {
-                straight_line_x(2 * msx);
-                straight_line_y(MINDIST);
-            }
-            straight_line_x(xdelta - numiterations * msx);
-            straight_line_y(ydelta - numiterations * MINDIST);
-        }
-    }
-    else
-    {
-        float msy = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * radiusy); // distance in order to achieve a 1mm rise through the theoretical perfect rise
-        if (msy > xdelta)
-        {
-            straight_line_y(ydelta);
-            straight_line_x(xdelta); // technically smaller than the MINDIST value
-        }
-        else
-        {
-            // here comes the incredibly difficult zigzag pattern
-            int numiterations = (ydelta - msy) / (2 * msy);
-            straight_line_y(msy);
-            straight_line_x(MINDIST);
-            for (int i = 0; i < numiterations; i++)
-            {
-                straight_line_y(2 * msy);
-                straight_line_x(MINDIST);
-            }
-            straight_line_y(ydelta - numiterations * msy);
-            straight_line_x(xdelta - numiterations * MINDIST);
-        }
-    }
-}
 // implement lift pen
 // implement set pen
