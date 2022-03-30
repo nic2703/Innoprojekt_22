@@ -1,5 +1,4 @@
 #ifndef MT2_H_
-
 #define MT2_H_
 
 #include "Arduino.h"
@@ -24,11 +23,10 @@ const int Y_BOUNDARY = 100;
 // set radii_cogwheels
 
 void set_speed(pin, int);
-void set_brakes(pin, pin, int, bit_speed);
+void set_brakes(pin, bit_speed);
 
 class Plotter{
     private:
-<<<<<<< HEAD
     float xpos = 0.0f, ypos = 0.0f;
     pin xpspd = 0, xpbrk = 0, xpdir = 0; // x: {pinspeed, brakestate, direction}
     pin ypspd = 0, ypbrk = 0, ypdir = 0; // y: {pinspeed, brakestate, direction}
@@ -39,25 +37,11 @@ class Plotter{
     bool straight_line_x(float);
     bool straight_line_y(float);
     bool diagonal_line(float, float);
-=======
-        float xpos = 0.0f, ypos = 0.0f;
-        pin xpspd = 0, xpbrk = 0, xpdir = 0; // x: {pinspeed, brakestate, direction}
-        pin ypspd = 0, ypbrk = 0, ypdir = 0; // y: {pinspeed, brakestate, direction}
-        pin zpspd = 0, zpbrk = 0, zpdir = 0; // TODO: update for servo
-        bool islifted = false;
-        float radiusx = 0.0f, radiusy = 0.0f;
-
-        bool straight_line_x(float);
-        bool straight_line_y(float);
-        bool special_line(float, float);
-        bool normal_line(float, float);
->>>>>>> 834171516b394815cdd23bf163483e3f58e2db45
     
     public:
         Plotter(float, float);
         ~Plotter();
     
-<<<<<<< HEAD
     bool setpinX(pin, pin, pin);
     bool setpinY(pin, pin, pin);
     bool setpinZ(pin, pin, pin);     
@@ -65,13 +49,6 @@ class Plotter{
     bool draw_line(float, float, float);
 
 
-=======
-        bool setpinX(pin, pin, pin);
-        bool setpinY(pin, pin, pin);
-        bool setpinZ(pin, pin, pin);     
-        bool resetpos(float, float);
-        bool moveline(float, float, float);
->>>>>>> 834171516b394815cdd23bf163483e3f58e2db45
 };
 
 

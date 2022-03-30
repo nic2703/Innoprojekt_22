@@ -1,8 +1,7 @@
 #include "Arduino.h"
 #include "MT2_header.h"
 
-void set_speed(pin motorPin, pin directionPin, int direction, bit_speed speed){
-    digitalWrite(directionPin, direction);
+void set_speed(pin motorPin, bit_speed speed){
     analogWrite(motorPin, speed);
 }
 
@@ -66,7 +65,7 @@ bool Plotter::setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) 
 }
 
 /*
-reset private positions of motors
+resets private positions of motors
 @param x and y current positions, sets to input parameters
 @return boolean value true if operation succeeded, else false
 */
@@ -215,8 +214,13 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
         digitalWrite(ypbrk, HIGH);
         Serial.println("Normal_line move complete!");
         return true;
-    } else {
-        if (abs(xdelta) > abs(ydelta))
+    } else { // approximate line
+        approximate_line(xdelta, ydelta);
+    }
+} 
+
+void approximate_line(float xdelta, float ydelta){
+    if (abs(xdelta) > abs(ydelta))
         {
             float msx = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx); // distance in order to achieve a 1mm rise through the theoretical perfect rise
             if (msx > xdelta)
@@ -263,6 +267,6 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
             }
         }
     }
-} 
+}
 // implement lift pen
 // implement set pen
