@@ -21,7 +21,7 @@ print("Received Data:")
 #fig = plt.figure()
 
 with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
-    writer = csv.writer(file)
+    writer = csv.writer(file, delimiter=";")
     START_TIME = time.time()
 
     while True:
