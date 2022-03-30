@@ -223,7 +223,7 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
     }
 } 
 
-bool approximate_line(float xdelta, float ydelta) {
+bool Plotter::approximate_line(float xdelta, float ydelta) {
 
     if (abs(xdelta) > abs(ydelta))
         {
@@ -271,7 +271,6 @@ bool approximate_line(float xdelta, float ydelta) {
                 straight_line_x(xdelta - numiterations * MINDIST);
             }
         }
-    }
 }
 // implement lift pen
 // implement set pen
