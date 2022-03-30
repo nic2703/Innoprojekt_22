@@ -1,9 +1,9 @@
 import socket
 import csv
+import scipy
 import time
 
 STRING_LENGTH_LIMIT = 1000
-START_TIME = time.time()
 
 ADDRESS = "98:da:60:01:ab:e0" #define address
 #Vikis address: 98:da:60:01:ab:3c
@@ -19,6 +19,7 @@ print("Received Data:")
 
 with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
     writer = csv.writer(file)
+    START_TIME = time.time()
 
     while True:
         BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
@@ -30,6 +31,7 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
 
         if text:
             in_list = text.split(",")
+            in_list[2] -= scipy.g
             print("Received: ", text)
             try: 
                 PROCESSED_LIST = ["", time.time()-START_TIME]+[float(x.strip()) for x in in_list]
