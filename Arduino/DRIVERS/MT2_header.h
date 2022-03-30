@@ -6,7 +6,7 @@
 #define TIME_MAX 10000
 
 // global variables and definitions
-#define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW)
+#define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
 #define convert_to_time(delta, radius) 1000.0f * (delta) / (2 * PI * radius)
 
 typedef unsigned int pin;

@@ -1,6 +1,16 @@
 #include "Arduino.h"
 #include "MT2_header.h"
 
+void set_speed(pin motorPin, pin directionPin, int direction, bit_speed speed){
+    digitalWrite(directionPin, direction);
+    analogWrite(motorPin, speed);
+}
+
+//sets brakes
+void set_brakes(pin pin, int state){ 
+  digitalWrite(pin, state);
+}
+
 /*
 Constructor
 @param x and y position, default to 0
@@ -72,7 +82,7 @@ bool Plotter::moveline(float xposnew = 0.0f, float yposnew = 0.0f, float speed =
 {
     float xdelta = xposnew - xpos;
     float ydelta = yposnew - ypos;
-    if (abs(xdelta) <= MINDIST)
+    if (abs(xdelta) <= MINDIST) //TODO: macro this
     {
         straight_line_y(ydelta);
     }
@@ -85,7 +95,7 @@ bool Plotter::moveline(float xposnew = 0.0f, float yposnew = 0.0f, float speed =
         // use normal line
         if (normal_line(xdelta, ydelta))
         {
-            xpos += xdelta;
+            xpos += xdelta; // TODO: update_pos
             ypos += ydelta;
             return true;
         }
@@ -144,7 +154,7 @@ bool Plotter::straight_line_x(float xdelta)
     //same as straight_line_x
 bool Plotter::straight_line_y(float ydelta)
 {
-    set_dir(ydelta, ypdir); // set direction
+    set_dir(ydelta, ypdir); // set direction 
 
     float ms = 1000.0f * (ydelta) / (2 * PI * radiusy);
     float duedate = millis() + (uint64_t) ms;
