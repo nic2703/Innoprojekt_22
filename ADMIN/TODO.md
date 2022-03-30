@@ -1,6 +1,7 @@
 # TODO
 ## Coding
 - JSON --> arduino, is it possible to store json data on an arduino so it can be read later, depending on an input
+ -> might be doable
 - Motor Control -->reliability Test
 - Data Trandmission from arduino for data logging
   - comma separated floating point values
