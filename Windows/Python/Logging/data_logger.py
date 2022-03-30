@@ -25,31 +25,32 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
         try:
             BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
             text = BYTES.decode().strip()
+
+            if text == "q":
+                sock.send("-1".encode())
+                break
+
+            if text:
+                print("Received: ", text)
+
+                try: 
+                    in_list = text.split(",")
+                    in_list[2] -= scipy.g
+                except:
+                    sock.send("2".encode())
+
+                try:
+                    PROCESSED_LIST = ["", time.time()-START_TIME]+[float(x.strip()) for x in in_list]
+                    writer.writerow(PROCESSED_LIST)
+                    sock.send("0".encode())
+                except:
+                    sock.send("3".encode())
+
+            else:
+                sock.send("4".encode())
+
         except:
             sock.send("1".encode())
-
-        if text == "q":
-            sock.send("-1".encode())
-            break
-
-        if text != "":
-            print("Received: ", text)
-
-            try: 
-                in_list = text.split(",")
-                in_list[2] -= scipy.g
-            except:
-                sock.send("2".encode())
-
-            try:
-                PROCESSED_LIST = ["", time.time()-START_TIME]+[float(x.strip()) for x in in_list]
-                writer.writerow(PROCESSED_LIST)
-                sock.send("0".encode())
-            except:
-                sock.send("3".encode())
-
-        else:
-            sock.send("4".encode())
 
 file.close()
 sock.close()
