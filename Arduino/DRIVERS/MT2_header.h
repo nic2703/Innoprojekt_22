@@ -37,6 +37,7 @@ class Plotter{
     bool straight_line_x(float);
     bool straight_line_y(float);
     bool diagonal_line(float, float);
+    bool approximate_line(float xdelta, float ydelta);
     
     public:
         Plotter(float, float);
