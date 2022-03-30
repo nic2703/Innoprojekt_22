@@ -1,5 +1,4 @@
 #ifndef MT2_H_
-
 #define MT2_H_
 
 #include "Arduino.h"
@@ -24,7 +23,7 @@ const int Y_BOUNDARY = 100;
 // set radii_cogwheels
 
 void set_speed(pin, int);
-void set_brakes(pin, pin, int, bit_speed);
+void set_brakes(pin, bit_speed);
 
 class Plotter{
     private:
