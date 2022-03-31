@@ -227,49 +227,53 @@ bool Plotter::approximate_line(float xdelta, float ydelta) {
 
     if (abs(xdelta) > abs(ydelta))
         {
-            float millis_x = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx); // distance in order to achieve a 1mm rise through the theoretical perfect rise
-            if (millis_x > xdelta)
+            float ms_x = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx);  // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            if (ms_x > xdelta) // if desired distance is smaller than possible distance, draw a line parallel to x or y axis
             {
                 straight_line_x(xdelta);
                 straight_line_y(ydelta); // technically smaller than the MINDIST value
+                return true;
             }
-            else
+            else   // here comes the incredibly difficult zigzag pattern
             {
-                // here comes the incredibly difficult zigzag pattern
-                int numiterations = (xdelta - millis_x) / (2 * millis_x);
-                straight_line_x(millis_x);
+                int numiterations = (xdelta - ms_x) / (2 * ms_x);
+                straight_line_x(ms_x);
                 straight_line_y(MINDIST);
                 for (int i = 0; i < numiterations; ++i)
                 {
-                    straight_line_x(2 * millis_x);
+                    straight_line_x(2 * ms_x);
                     straight_line_y(MINDIST);
                 }
-                straight_line_x(xdelta - numiterations * millis_x);
+                straight_line_x(xdelta - numiterations * ms_x);
                 straight_line_y(ydelta - numiterations * MINDIST);
+                return true;
             }
         }
         else
         {
-            float millis_y = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * radiusy); // distance in order to achieve a 1mm rise through the theoretical perfect rise
-            if (millis_y > xdelta)
+            float ms_y = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * radiusy); // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            if (ms_y > ydelta) //
             {
                 straight_line_y(ydelta);
                 straight_line_x(xdelta); // technically smaller than the MINDIST value
+                return true;
             }
             else
             {
                 // here comes the incredibly difficult zigzag pattern
-                int numiterations = (ydelta - millis_y) / (2 * millis_y);
-                straight_line_y(millis_y);
+                int numiterations = (ydelta - ms_y) / (2 * ms_y);
+                straight_line_y(ms_y);
                 straight_line_x(MINDIST);
                 for (int i = 0; i < numiterations; i++)
                 {
-                    straight_line_y(2 * millis_y);
+                    straight_line_y(2 * ms_y);
                     straight_line_x(MINDIST);
                 }
-                straight_line_y(ydelta - numiterations * millis_y);
+                straight_line_y(ydelta - numiterations * ms_y);
                 straight_line_x(xdelta - numiterations * MINDIST);
+                return true;
             }
+            return false;
         }
 }
 // implement lift pen
