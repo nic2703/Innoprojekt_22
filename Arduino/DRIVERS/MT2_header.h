@@ -48,8 +48,6 @@ class Plotter{
     bool setpinZ(pin, pin, pin);     
     bool resetpos(float, float);
     bool draw_line(float, float, float);
-
-
 };
 
 
