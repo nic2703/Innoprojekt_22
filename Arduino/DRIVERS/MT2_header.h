@@ -16,6 +16,8 @@ typedef unsigned int bit_speed;
 const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
 const int X_BOUNDARY = 100;
 const int Y_BOUNDARY = 100;
+const int radius_x; //TODO: UPDATE RADIUS
+const int radius_y; //TODO: UPDATE RADIUS
 
 
 // is there a return home?
