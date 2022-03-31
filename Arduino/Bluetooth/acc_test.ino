@@ -25,7 +25,7 @@ bool start = false;
 
 void loop() {
 
-  while (i < 1500) {
+  if(i < 1500) {
     Wire.beginTransmission(MPU_addr);
     Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
     Wire.endTransmission(false);
@@ -34,17 +34,21 @@ void loop() {
     AcY = Wire.read() << 8 | Wire.read(); // 0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
     AcZ = Wire.read() << 8 | Wire.read(); // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
 
+    /*convert to strings fro better communication*/
     String Ax = String(AcX);
     String Ay = String(AcX);
     String Az = String(AcZ);
+
     if (Serial.available() || start == true) {
       start = true;
+      /*output data to the serial monitor*/
       Serial.print(AcX); Serial.print(", ");
       Serial.print(AcY); Serial.print(", ");
       Serial.println(AcZ); Serial.print(" ");
 
       if (BTserial.available())
       {
+        /*send python compatible data*/
         BTserial.print(Ax); BTserial.print(", ");
         BTserial.print(Ay); BTserial.print(", ");
         BTserial.print(Az);
@@ -54,13 +58,9 @@ void loop() {
 
     delay(10);
     ++i;
-  }
+  }else BTserial.write("q"); //after the determined period, send "q" to terminate python connection
 
-
-  if (i == 1500) {
-    BTserial.write("q");
-  }
-  i = 1511;
+  i = 1511; //why?
 
 }
 
