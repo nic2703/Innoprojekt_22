@@ -34,7 +34,7 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
                 break
 
             if text:
-                print("Received: ", text)
+                #print("Received: ", text)
 
                 try: 
                     in_list = text.split(",")
