@@ -2,6 +2,7 @@ import socket
 import csv
 import matplotlib.pyplot as plt
 import time
+import msvcrt
 
 STRING_LENGTH_LIMIT = 1000
 
@@ -14,27 +15,30 @@ PORT = 1 #the port appears to always be 1
 
 sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM) #initialize sock as a BT socket
 sock.connect((ADDRESS, PORT)) #connect to the specified address using the specified port
+sock.setblocking(0)
 
-print("Received Data:")
+print("Ready to receive")
 
-#plt.ion()
-#fig = plt.figure()
+inform = True
 
 with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
     writer = csv.writer(file, delimiter=";")
     START_TIME = time.time()
 
     while True:
+        if msvcrt.kbhit():
+            sock.send("-2".encode())
+            break
+
         try:
             BYTES, RECEIVED_ADDRESS = sock.recvfrom(STRING_LENGTH_LIMIT) #is there a better alternative?
             text = BYTES.decode().strip()
             
-            if text == "q":
+            if "q" in text:
                 sock.send("-1".encode())
                 break
 
             if text:
-                #print("Received: ", text)
 
                 try: 
                     in_list = text.split(",")
@@ -45,6 +49,9 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
                     PROCESSED_LIST = ["", time.time()-START_TIME]+[float(x.strip()) for x in in_list]
                     writer.writerow(PROCESSED_LIST)
                     sock.send("0".encode())
+                    if inform:
+                        print("Started Recieving")
+                        inform = False
                 except:
                     sock.send("3".encode())
 
@@ -53,6 +60,11 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
 
         except:
             sock.send("1".encode())
+        
+        time.sleep(0.001)
 
+print("Done")
 file.close()
+
+print("Closing Connection")
 sock.close()
