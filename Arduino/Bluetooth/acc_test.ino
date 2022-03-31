@@ -1,6 +1,3 @@
-// MPU-6050 Short Example Sketch
-//www.elegoo.com
-//2016.12.9
 #include <SoftwareSerial.h> // not in current path but included in the arduino environment
 SoftwareSerial BTserial(2, 3); // RX | TX
 
@@ -36,7 +33,7 @@ void loop() {
 
     /*convert to strings fro better communication*/
     String Ax = String(AcX);
-    String Ay = String(AcX);
+    String Ay = String(AcY);
     String Az = String(AcZ);
 
     if (Serial.available() || start == true) {
