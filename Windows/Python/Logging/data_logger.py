@@ -61,7 +61,7 @@ with open(r"Log_Files\Log.csv", 'w+', newline='') as file:
         except:
             sock.send("1".encode())
         
-        time.sleep(0.001)
+        time.sleep(0.005)
 
 print("Done")
 file.close()
