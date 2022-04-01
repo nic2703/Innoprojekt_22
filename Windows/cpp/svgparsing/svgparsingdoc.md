@@ -25,3 +25,4 @@ TODO/ERRORS:
 - Output directly to a python file
 - Reading directly from an SVG
 - Accounting for letters/interpolating Bezier curves from letters
+- Multiple path statement
