@@ -17,7 +17,6 @@ void setup() {
   BTserial.begin(9600);
 }
 
-unsigned int i = 0;
 bool start = false;
 
 void loop() {
@@ -31,9 +30,9 @@ void loop() {
   AcZ = Wire.read() << 8 | Wire.read(); // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
 
   /*convert to strings fro better communication*/
-  String Ax = String(AcX);
-  String Ay = String(AcY);
-  String Az = String(AcZ);
+  String Ax = String(AcX / 2048.0);
+  String Ay = String(AcY / 2048.0);
+  String Az = String(AcZ / 2048.0);
 
   if (Serial.available() || start) {
     start = true;
@@ -50,9 +49,9 @@ void loop() {
       BTserial.print(Ay); BTserial.print(", ");
       BTserial.print(Az);
     }
-    
+
   }
-  
+
 
   delay(100);
 }
