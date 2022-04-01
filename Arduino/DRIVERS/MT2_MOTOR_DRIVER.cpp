@@ -12,7 +12,7 @@ void set_brakes(pin pin, int state){
 
 /*
 Constructor
-@param x and y position, default to 0
+@param x,y position, default to 0
 */
 Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f)
 {
@@ -25,7 +25,7 @@ Plotter::~Plotter(){}; // no destructor
 
 /*
 set pins
-@param x and y output pins (headers) on Arduino, default to 0
+@param x,y output pins (headers) on Arduino, default to 0
 @return boolean value true if operation succeeded, else false
 */
 bool Plotter::setpinX(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
@@ -66,7 +66,7 @@ bool Plotter::setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) 
 
 /*
 resets private positions of motors
-@param x and y current positions, sets to input parameters
+@param x,y current positions, sets to input parameters
 @return boolean value true if operation succeeded, else false
 */
 bool Plotter::resetpos(float xposition, float yposition)
@@ -82,7 +82,7 @@ bool Plotter::resetpos(float xposition, float yposition)
 
 /*
 draw lines, function decides which type of line to make
-@param desired new positions of x and y coordinates, speed at which tho execute move
+@param xposnew,yposnew,speed desired new positions of x and y coordinates, speed at which to execute move
 @return boolean value true if operation succeeded, else false
 */
 bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed = 100.0f) // TODO: modify for normal_line handling both noral and special lines?
@@ -114,6 +114,10 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
 }
 
 // throws error if length of move is > 10 s
+/*
+@param xdelta distance in x to draw - forward if positive, backwards if negative
+@return t/f boolen values; true if operation was successful, else false
+*/
 bool Plotter::straight_line_x(float xdelta) 
 {
     set_dir(xdelta, xpdir); // set direction
@@ -142,7 +146,7 @@ bool Plotter::straight_line_x(float xdelta)
     return true;
 }
 
-    //same as straight_line_x
+//same as straight_line_x
 bool Plotter::straight_line_y(float ydelta)
 {
     set_dir(ydelta, ypdir); // set direction 
@@ -223,6 +227,12 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
     }
 } 
 
+/*
+Some lines have a too steep angle to draw accurately; the speed at which one of the two motors 
+needs to rotate is less than the minimum achievable speed. This is fixed by approximating the line with a zig.-zag pattern.
+@param xdelta,ydelta the relative coordinates to plotter carriage to draw the line to
+@return t/f boolena values; true if operation succeded, false if it failed
+*/
 bool Plotter::approximate_line(float xdelta, float ydelta) {
 
     if (abs(xdelta) > abs(ydelta))
