@@ -17,8 +17,10 @@ The program will look for coordinate pairs, delimited by a comma or minus sign. 
 "Q" or "T": Quadratic Bezier curve
 "V": Draws a vertical line to a location
 "H": Draws a horizontal line to a location
+"L": Draws a line to a coordinate
 
 TODO/ERRORS:
+- Write to csv
 - Include full list of SVG draw commands (Ellipse, Circle, etc...)
 - Offload different work to different functions (current everything is a nested if-statement mess)
 - Automatic idenfication of repeated coordinate pairs, better output
