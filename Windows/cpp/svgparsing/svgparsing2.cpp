@@ -72,7 +72,7 @@ bool pathanalysis(){
                 //CUBIC BEZIER
                 cout << command << " ";
                 for (int i = 0; i < 4; i++){
-                    cout << pairx[i] << " " << pairy[i] << " " << endl;
+                    cout << pairx[i] << ", " << pairy[i] << ", ";
                 }
             }
             command = ch;
@@ -87,7 +87,7 @@ bool pathanalysis(){
 }
 
 int main(void){
-    string filename = "Phi.svg";
+    string filename = "Phi.txt";
     fin.open(filename);
     if (!fin.is_open()){
         cout << "Could not open the file " << filename << endl;
