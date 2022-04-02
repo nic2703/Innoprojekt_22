@@ -61,6 +61,24 @@ bool pathanalysis(){
                 firstnum = true;
             }
         }
+        if (ch=='-'){
+            if (firstnum == true && temp == "\0"){
+                temp.push_back(ch);
+            } else if (firstnum == true && temp != "\0"){
+                pairx[i] = temp;
+                temp = "";
+                firstnum = false;
+                temp.push_back(ch);
+            } else if (firstnum == false && temp != "\0"){
+                pairy[i] = temp;
+                i++;
+                temp = "";
+                firstnum = true;
+                temp.push_back(ch);
+            }
+        }
+
+        
         if (ch == 'C' || ch == 'c' || ch == 'S' || ch == 's'){
             if (pairx[i]!="\0"){
                 pairy[i] = temp;
@@ -82,7 +100,25 @@ bool pathanalysis(){
                 }
                 i = 1;
             }
+            if (i == 3){
+                //QUADRATIC BEZIER
+                cout << "Q ";
+                for (int i = 0; i < 3; i++){
+                    cout << pairx[i] << ", " << pairy[i] << ", ";
+                }
+                cout << endl;
+                pairx[0] = pairx[2];
+                pairy[0] = pairy[2];
+                for (int i = 1; i <= 3; i++){
+                    pairx[i] = pairy[i] = "";
+                }
+                i = 1;
+            }
             command = ch;
+        }
+
+        if (ch == 'h' || ch == 'H'){
+
         }
 
 
