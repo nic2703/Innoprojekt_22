@@ -70,10 +70,17 @@ bool pathanalysis(){
             }
             if (i == 4){
                 //CUBIC BEZIER
-                cout << command << " ";
+                cout << "C ";
                 for (int i = 0; i < 4; i++){
                     cout << pairx[i] << ", " << pairy[i] << ", ";
                 }
+                cout << endl;
+                pairx[0] = pairx[3];
+                pairy[0] = pairy[3];
+                for (int i = 1; i <= 3; i++){
+                    pairx[i] = pairy[i] = "";
+                }
+                i = 1;
             }
             command = ch;
         }
