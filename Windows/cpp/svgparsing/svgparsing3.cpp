@@ -89,6 +89,8 @@ bool pathanalysis(){
                 temp = "";
                 firstnum = false;
                 temp.push_back(ch);
+            } else if (firstnum == false && temp == "\0"){
+                temp.push_back(ch);
             } else if (firstnum == false && temp != "\0"){
                 pairy[i] = temp;
                 i++;
@@ -154,6 +156,10 @@ bool pathanalysis(){
             if (command == 'M'){
                 cout << "Start of line reached." << endl;
             }
+            if (command == 'L'){
+                cout << "Heres all the info I have for you: " << pairx[0] << " and " << pairy[0] << endl;
+                break;
+            }
 
 
             //command = ch;         no, as must be normalized to uppercase in if statements below
@@ -177,6 +183,9 @@ bool pathanalysis(){
             if (ch == 'M' || ch == 'm'){                                //put down pen
                 command = 'M';
             }
+            if (ch == 'L' || ch == 'l'){                                //straight line, pairx[0] and pairy[0] shifted
+                command = 'L';
+            }
 
         }
 
@@ -186,7 +195,7 @@ bool pathanalysis(){
 }
 
 int main(void){
-    string filename = "Phi.svg";
+    string filename = "Phi.txt";
     fin.open(filename);
     if (!fin.is_open()){
         cout << "Could not open the file " << filename << endl;
