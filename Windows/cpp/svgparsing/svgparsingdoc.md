@@ -28,3 +28,10 @@ TODO/ERRORS:
 - Reading directly from an SVG
 - Accounting for letters/interpolating Bezier curves from letters
 - Multiple path statement
+
+DANGER:
+Different SVG files use different delimiters between coordinate pairs. Generally, between x and y in a pair, it always a comma. 
+Between pairs, it can be:
+ - A comma
+ - A minus sign (minus for the next number)
+ - Literally just a space
