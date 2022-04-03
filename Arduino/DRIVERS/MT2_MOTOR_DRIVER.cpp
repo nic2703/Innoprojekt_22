@@ -17,10 +17,20 @@ Servo myServo;
 Constructor
 @param x,y position, default to 0
 */
-Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f)
+Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, uint32_t _init_w_brakes)
 {
     xpos = xposition;
     ypos = yposition;
+    //Mordor A
+    pinMode(_DIR_A, OUTPUT); // direction pin  
+    pinMode(_BRAKE_A, OUTPUT); // brake pin
+    //Mordor B
+    pinMode(_DIR_B, OUTPUT); // direction pin
+    pinMode(_BRAKE_B, OUTPUT); // brake pin
+    if (_init_w_brakes){
+        set_brakes(_BRAKE_B, HIGH); //engage both brakes
+        set_brakes(_BRAKE_A, HIGH);
+    }
 }
 
 Plotter::~Plotter(){}; // no destructor

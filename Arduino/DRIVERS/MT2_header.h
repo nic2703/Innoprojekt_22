@@ -13,10 +13,11 @@ typedef unsigned int bit_speed;
 #define _BRAKE_A    9
 #define _BRAKE_B    8
 #define _SPEED_A    3 
+#define _SPEED_B     11
 #define _DIR_A      12
 #define _DIR_B      13
 
-#ifndef PI //HACK: should already be defined but gonna do it anyway
+/* #ifndef PI //HACK: should already be defined but gonna do it anyway
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
@@ -35,6 +36,7 @@ typedef unsigned int bit_speed;
 #define sq(x) ((x)*(x))
 
 #endif // PI and other constants
+*/
 
 //macros
 #define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
@@ -52,10 +54,9 @@ const int X_BOUNDARY = 100;
 const int Y_BOUNDARY = 100;
 
 // is there a return home?
-//TODO: add map_speed for mapping byte input to acutal vals 30-255
 
-void set_speed(pin, int);
-void set_brakes(pin, bit_speed);
+void set_speed(pin, bit_speed);
+void set_brakes(pin, int);
 
 class Plotter{
     private:
@@ -72,12 +73,12 @@ class Plotter{
     bool approximate_line(float xdelta, float ydelta);
     
     public:
-        Plotter(float, float);
+        Plotter(float, float, uint32_t);
         ~Plotter();
     
     bool setpinX(pin, pin, pin);
     bool setpinY(pin, pin, pin);
-    bool setpinZ(pin, pin, pin);     
+    bool initServo(pin, pin, pin);     
     bool resetpos(float, float);
     bool draw_line(float, float, float);
 };

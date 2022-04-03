@@ -7,7 +7,6 @@
 class BEZIER
 {
 private:
-    /* data */
     void _init_coords();
 public:
     BEZIER(/* args */);
