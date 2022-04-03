@@ -142,7 +142,7 @@ bool Plotter::straight_line_x(float xdelta)
 {
     SET_DIR(xdelta, xpdir); // set direction
 
-    float ms = TO_TIME(xdelta, radiusx);
+    float ms = TO_TIME(xdelta, RADIUS_PULLEY); //TODO: adjust for correct radius
     uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
                                                 // millis is unsigned long mate
 
@@ -171,7 +171,7 @@ bool Plotter::straight_line_y(float ydelta)
 {
     SET_DIR(ydelta, ypdir); // set direction 
 
-    float ms = TO_TIME(ydelta, radiusy);
+    float ms = TO_TIME(ydelta, RADIUS_RACK);
     float duedate = millis() + (uint64_t) ms;
     
     digitalWrite(ypbrk, LOW); // release the handbrake
@@ -205,14 +205,14 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
         float duedate = millis();
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
         {
-            float ms = TO_TIME(xdelta, radiusx);
+            float ms = TO_TIME(xdelta, RADIUS_PULLEY);
             duedate += ms;
             digitalWrite(xpbrk, LOW); // release the handbrake
             analogWrite(xpspd, 255);    // full speed line, x
             digitalWrite(ypbrk, LOW); // release the handbrake
             analogWrite(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
         } else {
-            float ms = (ydelta) / (2 * PI * radiusy); // same here
+            float ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
             duedate += ms;
             digitalWrite(ypbrk, LOW); // release the handbrake
             analogWrite(ypspd, 255);    // full speed line, y 
@@ -257,7 +257,7 @@ bool Plotter::approximate_line(float xdelta, float ydelta) {
 
     if (abs(xdelta) > abs(ydelta))
         {
-            float ms_x = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * radiusx);  // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            float ms_x = 1000.0f * (xdelta * (MINDIST / (2.0f * ydelta))) / (2 * PI * RADIUS_PULLEY);  // distance in order to achieve a 1mm rise through the theoretical perfect rise
             if (ms_x > xdelta) // if desired distance is smaller than possible distance, draw a line parallel to x or y axis
             {
                 straight_line_x(xdelta);
@@ -281,7 +281,7 @@ bool Plotter::approximate_line(float xdelta, float ydelta) {
         }
         else
         {
-            float ms_y = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * radiusy); // distance in order to achieve a 1mm rise through the theoretical perfect rise
+            float ms_y = 1000.0f * (ydelta * (MINDIST / (2.0f * xdelta))) / (2 * PI * RADIUS_RACK); // distance in order to achieve a 1mm rise through the theoretical perfect rise
             if (ms_y > ydelta) //
             {
                 straight_line_y(ydelta);

@@ -19,10 +19,12 @@ typedef unsigned int bit_speed;
 #define _SERVO_LATCH 10
 
 //macros
-#define SET_DIR(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
-#define TO_TIME(delta, radius) 1000.0f * (delta) / (2 * PI * radius)
-#define UPDATE_POS(pos, delta) pos += delta
-#define IS_TOO_SMALL(a) abs(a) <= MINDIST
+#define SET_DIR(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) //if delta is negative, go backwards, else go forwards
+#define TO_TIME(delta, radius) 1000.0f * (delta) / (2 * PI * radius) // converts distance to time 
+#define UPDATE_POS(pos, delta) pos += delta 
+#define IS_TOO_SMALL(a) abs(a) <= MINDIST // is the distance smaller than the minimum achievable distance?
+#define TO_ANGLE(bit_angle) map(bit_angle, 0, 1023, 0, 179) // maps a bit_angle between 0 and 1023 to an anoutput angle 
+// 0 t0 179 degrees
 
 /* reminder that these are yt your disposal
 
@@ -46,8 +48,8 @@ typedef unsigned int bit_speed;
 
 //TODO: Angles for servo state: pen_lifted, pen_down
 
-const int RADIUS_RACK = 0; //TODO: UPDATE RADIUS
-const int RADIUS_PULLEY = 0; //TODO: UPDATE RADIUS
+const int RADIUS_RACK = 0; //TODO: UPDATE RADIUS (y),
+const int RADIUS_PULLEY = 0; //TODO: UPDATE RADIUS (x)
 
 //update
 const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
@@ -61,13 +63,13 @@ void set_brakes(pin, int);
 
 class Plotter{
     private:
-    
+    //pins for components
     float xpos = 0.0f, ypos = 0.0f;
     pin xpspd = 0, xpbrk = 0, xpdir = 0; // x: {pinspeed, brakestate, direction}
     pin ypspd = 0, ypbrk = 0, ypdir = 0; // y: {pinspeed, brakestate, direction}
-    pin servo_p = 0; // TODO: update for servo
+    //servo pin and state
+    pin servo_p = 0; 
     bool islifted = false;
-    float radiusx = 0.0f, radiusy = 0.0f;
 
     bool straight_line_x(float);
     bool straight_line_y(float);
