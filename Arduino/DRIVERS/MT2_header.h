@@ -17,7 +17,13 @@ typedef unsigned int bit_speed;
 #define _DIR_A      12
 #define _DIR_B      13
 
-/* #ifndef PI //HACK: should already be defined but gonna do it anyway
+//macros
+#define SET_DIR(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
+#define TO_TIME(delta, radius) 1000.0f * (delta) / (2 * PI * radius)
+#define UPDATE_POS(pos, delta) pos += delta
+#define IS_TOO_SMALL(a) abs(a) <= MINDIST
+
+/* reminder that these are yt your disposal
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
@@ -35,13 +41,7 @@ typedef unsigned int bit_speed;
 #define degrees(rad) ((rad)*RAD_TO_DEG)
 #define sq(x) ((x)*(x))
 
-#endif // PI and other constants
 */
-
-//macros
-#define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
-#define convert_to_time(delta, radius) 1000.0f * (delta) / (2 * PI * radius)
-#define update_pos(pos, delta) pos += delta
 
 //TODO: Angles for servo state: pen_lifted, pen_down
 
@@ -73,7 +73,7 @@ class Plotter{
     bool approximate_line(float xdelta, float ydelta);
     
     public:
-        Plotter(float, float, uint32_t);
+        Plotter(float, float, int);
         ~Plotter();
     
     bool setpinX(pin, pin, pin);

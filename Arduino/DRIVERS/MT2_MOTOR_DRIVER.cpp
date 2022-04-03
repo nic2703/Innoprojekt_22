@@ -15,18 +15,21 @@ Servo myServo;
 
 /*
 Constructor
-@param x,y position, default to 0
+@param x,y,init_with_brakes positions default to 0; if thrid argument not 0, brakes are set to high
 */
-Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, uint32_t _init_w_brakes)
+Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes)
 {
     xpos = xposition;
     ypos = yposition;
     //Mordor A
+    pinMode(_SPEED_A, OUTPUT); // speed pin
     pinMode(_DIR_A, OUTPUT); // direction pin  
     pinMode(_BRAKE_A, OUTPUT); // brake pin
     //Mordor B
+    pinMode(_SPEED_A, OUTPUT); //speed pin
     pinMode(_DIR_B, OUTPUT); // direction pin
     pinMode(_BRAKE_B, OUTPUT); // brake pin
+
     if (_init_w_brakes){
         set_brakes(_BRAKE_B, HIGH); //engage both brakes
         set_brakes(_BRAKE_A, HIGH);
@@ -98,14 +101,14 @@ draw lines, function decides which type of line to make
 @param xposnew,yposnew,speed desired new positions of x and y coordinates, speed at which to execute move
 @return boolean value true if operation succeeded, else false
 */
-bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed = 100.0f) // TODO: modify for normal_line handling both noral and special lines?
+bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed = 100.0f)
 {
     float xdelta = xposnew - xpos;
     float ydelta = yposnew - ypos;
-    if (abs(xdelta) <= MINDIST && abs(ydelta) <= MINDIST){
+    if (IS_TOO_SMALL(xdelta) && IS_TOO_SMALL(ydelta)){
         Serial.println("Line too short!");
     } 
-    else if (abs(xdelta) <= MINDIST) //TODO: macro this
+    else if (IS_TOO_SMALL(ydelta)) //TODO: macro this
     {
         straight_line_y(ydelta);
     }
@@ -115,8 +118,8 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
     }
     else if (diagonal_line(xdelta, ydelta))
     {
-            update_pos(xpos, xdelta);
-            update_pos(ypos, ydelta);
+            UPDATE_POS(xpos, xdelta);
+            UPDATE_POS(ypos, ydelta);
             return true;
     }
     else
@@ -133,9 +136,9 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
 */
 bool Plotter::straight_line_x(float xdelta) 
 {
-    set_dir(xdelta, xpdir); // set direction
+    SET_DIR(xdelta, xpdir); // set direction
 
-    float ms = convert_to_time(xdelta, radiusx);
+    float ms = TO_TIME(xdelta, radiusx);
     uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
                                                 // millis is unsigned long mate
 
@@ -162,9 +165,9 @@ bool Plotter::straight_line_x(float xdelta)
 //same as straight_line_x
 bool Plotter::straight_line_y(float ydelta)
 {
-    set_dir(ydelta, ypdir); // set direction 
+    SET_DIR(ydelta, ypdir); // set direction 
 
-    float ms = convert_to_time(ydelta, radiusy);
+    float ms = TO_TIME(ydelta, radiusy);
     float duedate = millis() + (uint64_t) ms;
     
     digitalWrite(ypbrk, LOW); // release the handbrake
@@ -190,15 +193,15 @@ bool Plotter::straight_line_y(float ydelta)
 bool Plotter::diagonal_line(float xdelta, float ydelta)
 {
     // higher delta always has the maximum speed of 255
-    set_dir(xdelta, xpdir); 
-    set_dir(ydelta, ypdir);
+    SET_DIR(xdelta, xpdir); 
+    SET_DIR(ydelta, ypdir);
 
     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
         float duedate = millis();
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
         {
-            float ms = convert_to_time(xdelta, radiusx);
+            float ms = TO_TIME(xdelta, radiusx);
             duedate += ms;
             digitalWrite(xpbrk, LOW); // release the handbrake
             analogWrite(xpspd, 255);    // full speed line, x
