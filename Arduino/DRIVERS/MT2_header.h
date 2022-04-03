@@ -13,9 +13,10 @@ typedef unsigned int bit_speed;
 #define _BRAKE_A    9
 #define _BRAKE_B    8
 #define _SPEED_A    3 
-#define _SPEED_B     11
+#define _SPEED_B    11
 #define _DIR_A      12
 #define _DIR_B      13
+#define _SERVO_LATCH 10
 
 //macros
 #define SET_DIR(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
@@ -60,10 +61,11 @@ void set_brakes(pin, int);
 
 class Plotter{
     private:
+    
     float xpos = 0.0f, ypos = 0.0f;
     pin xpspd = 0, xpbrk = 0, xpdir = 0; // x: {pinspeed, brakestate, direction}
     pin ypspd = 0, ypbrk = 0, ypdir = 0; // y: {pinspeed, brakestate, direction}
-    pin zpspd = 0, zpbrk = 0, zpdir = 0; // TODO: update for servo
+    pin servo_p = 0; // TODO: update for servo
     bool islifted = false;
     float radiusx = 0.0f, radiusy = 0.0f;
 
@@ -78,7 +80,7 @@ class Plotter{
     
     bool setpinX(pin, pin, pin);
     bool setpinY(pin, pin, pin);
-    bool initServo(pin, pin, pin);     
+    bool initServo(pin);     
     bool resetpos(float, float);
     bool draw_line(float, float, float);
 };

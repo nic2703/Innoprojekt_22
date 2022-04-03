@@ -11,7 +11,7 @@ void set_brakes(pin pin, int state){
   digitalWrite(pin, state);
 }
 
-Servo myServo;
+Servo pen_servo;
 
 /*
 Constructor
@@ -36,47 +36,51 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_bra
     }
 }
 
-Plotter::~Plotter(){}; // no destructor
+Plotter::~Plotter(){}; // no destructor needed
 
 
 /*
 set pins
-@param x,y output pins (headers) on Arduino, default to 0
+@param x output pins (headers) on Arduino, default to 3, 9, 12
 @return boolean value true if operation succeeded, else false
 */
-bool Plotter::setpinX(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
+bool Plotter::setpinX(pin pin_speed = _SPEED_A, pin pin_brake = _BRAKE_A, pin pin_direction = _DIR_A)
 {
-    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // available pins
+    if (pin_speed > 30 || pin_brake > 30 || pin_direction > 30) // available pins
     {
         return false;
     }
-    xpspd = pinspeed;
-    xpbrk = pinbreak;
-    xpdir = pindirection;
+    xpspd = pin_speed;
+    xpbrk = pin_brake;
+    xpdir = pin_direction;
     return true;
 }
 
-bool Plotter::setpinY(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
+/*
+set pins
+@param y output pins (headers) on Arduino, default to 
+@return boolean value true if operation succeeded, else false
+*/
+bool Plotter::setpinY(pin pin_speed = _SPEED_B, pin pin_brake = _BRAKE_B, pin pin_direction = _DIR_B)
 {
-    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // if pins are taken (say by x or  servo), complain
+    if (pin_speed > 30 || pin_brake > 30 || pin_direction > 30) // IDEA: if pins are taken (say by x or  servo), complain
     {
         return false;
     }
-    ypspd = pinspeed;
-    ypbrk = pinbreak;
-    ypdir = pindirection;
+    ypspd = pin_speed;
+    ypbrk = pin_brake;
+    ypdir = pin_direction;
     return true;
 }
 
-bool Plotter::initServo(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) 
+bool Plotter::initServo(pin pin_servo = _SERVO_LATCH) 
 {
-    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30)
+    if (pin_servo > 30)
     {
         return false;
     }
-    zpspd = pinspeed;
-    zpbrk = pinbreak;
-    zpdir = pindirection;
+    servo_p = pin_servo;
+    pen_servo.attach(pin_servo);
     return true;
 }
 
