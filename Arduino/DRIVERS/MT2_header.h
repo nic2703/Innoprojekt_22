@@ -21,7 +21,7 @@ typedef unsigned int bit_speed;
 //macros
 #define SET_DIR(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) //if delta is negative, go backwards, else go forwards
 #define TO_TIME(delta, radius) 1000.0f * (delta) / (2 * PI * radius) // converts distance to time 
-#define UPDATE_POS(pos, delta) pos += delta 
+#define UPDATE_POS(pos, delta) pos += delta //doesn't need doc
 #define IS_TOO_SMALL(a) abs(a) <= MINDIST // is the distance smaller than the minimum achievable distance?
 #define TO_ANGLE(bit_angle) map(bit_angle, 0, 1023, 0, 179) // maps a bit_angle between 0 and 1023 to an anoutput angle 
 // 0 t0 179 degrees
@@ -46,8 +46,6 @@ typedef unsigned int bit_speed;
 
 */
 
-//TODO: Angles for servo state: pen_lifted, pen_down
-
 const int RADIUS_RACK = 0; //TODO: UPDATE RADIUS (y),
 const int RADIUS_PULLEY = 0; //TODO: UPDATE RADIUS (x)
 
@@ -56,7 +54,7 @@ const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immuta
 const int X_BOUNDARY = 100;
 const int Y_BOUNDARY = 100;
 
-// is there a return home?
+// TODO:is there a return home?
 
 void set_speed(pin, bit_speed);
 void set_brakes(pin, int);

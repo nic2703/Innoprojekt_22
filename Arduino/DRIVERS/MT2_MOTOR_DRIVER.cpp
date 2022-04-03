@@ -112,24 +112,24 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
     if (IS_TOO_SMALL(xdelta) && IS_TOO_SMALL(ydelta)){
         Serial.println("Line too short!");
     } 
-    else if (IS_TOO_SMALL(ydelta)) //TODO: macro this
+    else if (IS_TOO_SMALL(xdelta)) 
     {
         straight_line_y(ydelta);
     }
-    else if (abs(ydelta) <= MINDIST)
+    else if (IS_TOO_SMALL(ydelta))
     {
         straight_line_x(xdelta);
     }
     else if (diagonal_line(xdelta, ydelta))
     {
-            UPDATE_POS(xpos, xdelta);
-            UPDATE_POS(ypos, ydelta);
-            return true;
+        UPDATE_POS(xpos, xdelta);
+        UPDATE_POS(ypos, ydelta);
+        return true;
     }
     else
     {
-            Serial.println("Encoder error, x-y-positions may be incorrect");
-            return false;
+        Serial.println("Encoder error, x-y-positions may be incorrect");
+        return false;
     }
 }
 
@@ -142,7 +142,7 @@ bool Plotter::straight_line_x(float xdelta)
 {
     SET_DIR(xdelta, xpdir); // set direction
 
-    float ms = TO_TIME(xdelta, RADIUS_PULLEY); //TODO: adjust for correct radius
+    float ms = TO_TIME(xdelta, RADIUS_PULLEY); 
     uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
                                                 // millis is unsigned long mate
 
