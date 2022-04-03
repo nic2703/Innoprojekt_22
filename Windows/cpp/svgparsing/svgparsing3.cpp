@@ -10,6 +10,12 @@ bool searchforpath();
 bool ganalysis();
 bool pathanalysis();
 
+//IMPORTANT NOTICE
+//WHEN MODIFYING THIS FILE, PLEASE MAKE A SEPARATE COPY FIRST!!
+
+//IMPORTANT NOTICE
+
+
 bool isletter(char ch){
     if ((ch>='a' && ch<='z')||(ch>='A'&&ch<='Z')){
         return true;
@@ -153,19 +159,22 @@ bool pathanalysis(){
             //command = ch;         no, as must be normalized to uppercase in if statements below
 
             //POST
-            if (ch == 'C' || ch == 'c' || ch == 'S' || ch == 's'){
+            if (ch == 'C' || ch == 'c' || ch == 'S' || ch == 's'){      //cubic bezier, occasionally used for quadratic
                 command = 'C';
             }
-            if (ch == 'H' || ch == 'h'){
+            if (ch == 'Q' || ch == 'q' || ch == 'T' || ch == 't'){      //quadratic bezier
+                command = 'Q';
+            }
+            if (ch == 'H' || ch == 'h'){                                //horizontal line, pairx[0] shifted
                 command = 'H';
             }
-            if (ch == 'V' || ch == 'v'){
+            if (ch == 'V' || ch == 'v'){                                //vertical line, pairy[0] shifted
                 command = 'V';
             }
-            if (ch == 'Z' || ch == 'z'){
+            if (ch == 'Z' || ch == 'z'){                                //lift pen, pairx and pairy (all) reset
                 command = 'Z';
             }
-            if (ch == 'M' || ch == 'm'){
+            if (ch == 'M' || ch == 'm'){                                //put down pen
                 command = 'M';
             }
 
