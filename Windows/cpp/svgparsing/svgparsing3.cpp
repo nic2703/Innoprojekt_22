@@ -145,6 +145,15 @@ bool pathanalysis(){
                 temp = "";
                 i = 1;
             }
+            if (i == 2 && command == 'L'){
+                cout << command << " " << pairx[1] << ", " << pairy[1] << endl;
+                pairx[0] = to_string(stod(pairx[0])+stod(pairx[1]));
+                pairy[0] = to_string(stod(pairy[0])+stod(pairy[1]));
+                for (int i = 1; i <= 3; i++){
+                    pairx[i] = pairy[i] = "";
+                }
+                i = 1;
+            }
 
             if (command == 'Z'){
                 cout << "End of line reached." << endl;
@@ -155,10 +164,6 @@ bool pathanalysis(){
             }
             if (command == 'M'){
                 cout << "Start of line reached." << endl;
-            }
-            if (command == 'L'){
-                cout << "Heres all the info I have for you: " << pairx[0] << " and " << pairy[0] << endl;
-                break;
             }
 
 
