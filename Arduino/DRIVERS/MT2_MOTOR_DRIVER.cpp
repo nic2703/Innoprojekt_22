@@ -1,4 +1,5 @@
-#include "Arduino.h"
+#include <Arduino.h>
+#include <Servo.h>
 #include "MT2_header.h"
 
 void set_speed(pin motorPin, bit_speed speed){
@@ -9,6 +10,8 @@ void set_speed(pin motorPin, bit_speed speed){
 void set_brakes(pin pin, int state){ 
   digitalWrite(pin, state);
 }
+
+Servo myServo;
 
 /*
 Constructor
@@ -42,7 +45,7 @@ bool Plotter::setpinX(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
 
 bool Plotter::setpinY(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
 {
-    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // TODO: if pins are taken (say by x or  servo), complain
+    if (pinspeed > 30 || pinbreak > 30 || pindirection > 30) // if pins are taken (say by x or  servo), complain
     {
         return false;
     }
@@ -52,7 +55,7 @@ bool Plotter::setpinY(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0)
     return true;
 }
 
-bool Plotter::setpinZ(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) // FIXME: modify for servo
+bool Plotter::initServo(pin pinspeed = 0, pin pinbreak = 0, pin pindirection = 0) 
 {
     if (pinspeed > 30 || pinbreak > 30 || pindirection > 30)
     {

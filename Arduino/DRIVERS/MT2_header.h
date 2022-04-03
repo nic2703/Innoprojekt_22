@@ -1,14 +1,12 @@
 #ifndef MT2_H_
 #define MT2_H_
-#include "Arduino.h"
+
+#include <Arduino.h>
+#include <Servo.h>
 
 typedef unsigned int pin;
 typedef unsigned int bit_speed;
 
-//macros
-#define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
-#define convert_to_time(delta, radius) 1000.0f * (delta) / (2 * PI * radius)
-#define update_pos(pos, delta) pos += delta
 
 // global variables and definitions
 #define TIME_MAX    10000
@@ -18,10 +16,35 @@ typedef unsigned int bit_speed;
 #define _DIR_A      12
 #define _DIR_B      13
 
+#ifndef PI //HACK: should already be defined but gonna do it anyway
+
+#define PI 3.1415926535897932384626433832795
+#define HALF_PI 1.5707963267948966192313216916398
+#define TWO_PI 6.283185307179586476925286766559
+#define DEG_TO_RAD 0.017453292519943295769236907684886
+#define RAD_TO_DEG 57.295779513082320876798154814105
+#define EULER 2.718281828459045235360287471352
+
+//macros
+#define min(a,b) ((a)<(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
+#define abs(x) ((x)>0?(x):-(x))
+#define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#define radians(deg) ((deg)*DEG_TO_RAD)
+#define degrees(rad) ((rad)*RAD_TO_DEG)
+#define sq(x) ((x)*(x))
+
+#endif // PI and other constants
+
+//macros
+#define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
+#define convert_to_time(delta, radius) 1000.0f * (delta) / (2 * PI * radius)
+#define update_pos(pos, delta) pos += delta
+
 //TODO: Angles for servo state: pen_lifted, pen_down
 
-const int radius_x; //TODO: UPDATE RADIUS
-const int radius_y; //TODO: UPDATE RADIUS
+const int RADIUS_RACK = 0; //TODO: UPDATE RADIUS
+const int RADIUS_PULLEY = 0; //TODO: UPDATE RADIUS
 
 //update
 const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
