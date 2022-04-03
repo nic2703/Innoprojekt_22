@@ -1,8 +1,9 @@
 #ifndef MT2_H_
 #define MT2_H_
-
 #include "Arduino.h"
-#define TIME_MAX 10000
+
+typedef unsigned int pin;
+typedef unsigned int bit_speed;
 
 //macros
 #define set_dir(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) 
@@ -10,19 +11,25 @@
 #define update_pos(pos, delta) pos += delta
 
 // global variables and definitions
-typedef unsigned int pin;
-typedef unsigned int bit_speed;
+#define TIME_MAX    10000
+#define _BRAKE_A    9
+#define _BRAKE_B    8
+#define _SPEED_A    3 
+#define _DIR_A      12
+#define _DIR_B      13
+
+//TODO: Angles for servo state: pen_lifted, pen_down
+
+const int radius_x; //TODO: UPDATE RADIUS
+const int radius_y; //TODO: UPDATE RADIUS
+
 //update
 const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
 const int X_BOUNDARY = 100;
 const int Y_BOUNDARY = 100;
-const int radius_x; //TODO: UPDATE RADIUS
-const int radius_y; //TODO: UPDATE RADIUS
-
 
 // is there a return home?
 //TODO: add map_speed for mapping byte input to acutal vals 30-255
-// set radii_cogwheels
 
 void set_speed(pin, int);
 void set_brakes(pin, bit_speed);
