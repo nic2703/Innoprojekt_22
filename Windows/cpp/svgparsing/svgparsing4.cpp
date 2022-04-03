@@ -50,7 +50,14 @@ bool ganalysis(){
         counter++;
         if (tempstr == "<path"){
             cout << "PATH FOUND AT STR " << counter << endl;
-            pathanalysis();
+            char ch1, ch2;
+            while (fin>>std::noskipws>>ch1){
+                if (ch1 == '=' && ch2 == 'd'){
+                    cout << "D FOUND" << endl;
+                    pathanalysis();
+                }
+                ch2 = ch1;
+            }
         }
     }
     return true;
@@ -59,8 +66,8 @@ bool ganalysis(){
 bool pathanalysis(){
     char ch;
     while (fin>>ch && ch!='\"'){};              //skips until the actual line starts
-    string pairx[4];
-    string pairy[4];
+    string pairx[5];
+    string pairy[5];
     string temp;
     char command;
     int i = 0;                                  //current index for the x-y list
@@ -106,6 +113,12 @@ bool pathanalysis(){
             if (pairx[i]!="\0"){                            //finish the last pair, letter was delimiter
                 pairy[i] = temp;
                 i++;
+                temp = "";
+                firstnum = true;
+            }
+            if (pairx[i]=="\0" && i == 4){
+                cout << "this must be an ellipse" << endl;
+                pairx[i] = temp;
                 temp = "";
                 firstnum = true;
             }
@@ -157,8 +170,18 @@ bool pathanalysis(){
                 i = 1;
             }
 
+            if (i == 4 && command == 'A'){
+                cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << to_string(stod(pairx[0])+stod(pairy[3])) << ", " << to_string(stod(pairy[0])+stod(pairx[4])) << ", " << pairx[2] << ", " << pairy[2] << ", " << pairx[3] << ", " << endl;
+                pairx[0] = to_string(stod(pairx[0])+stod(pairy[3]));
+                pairy[0] = to_string(stod(pairy[0])+stod(pairx[4]));
+                for (int i = 1; i<=4; i++){
+                    pairx[i] = pairy[i] = "";
+                }
+                i = 1;
+                firstnum = true;
+            }
+
             if (command == 'Z'){
-                cout << "End of line reached." << endl;
                 for (int i = 0; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
@@ -186,6 +209,7 @@ bool pathanalysis(){
             }
             if (ch == 'Z' || ch == 'z'){                                //lift pen, pairx and pairy (all) reset
                 command = 'Z';
+                cout << "End of line reached." << endl;
             }
             if (ch == 'M' || ch == 'm'){                                //put down pen
                 command = 'M';
@@ -195,6 +219,11 @@ bool pathanalysis(){
             }
             if (ch == 'A' || ch == 'a'){
                 command = 'A';
+            }
+            if (ch == 'D' || ch == 'd'){                                //just for debugging
+                for (int j = 0; j <= 4; j++){
+                    cout << "     pairx[" << j << "]=" << pairx[j] << " | pairy[" << j << "]=" << pairy[j] << endl;
+                }
             }
 
         }
