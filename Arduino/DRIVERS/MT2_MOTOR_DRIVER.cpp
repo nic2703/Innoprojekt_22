@@ -17,7 +17,7 @@ Servo pen_servo;
 Constructor
 @param x,y,init_with_brakes positions default to 0; if thrid argument not 0, brakes are set to high
 */
-Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes)
+Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1)
 {
     xpos = xposition;
     ypos = yposition;
