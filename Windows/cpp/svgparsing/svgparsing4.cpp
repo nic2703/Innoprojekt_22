@@ -50,7 +50,14 @@ bool ganalysis(){
         counter++;
         if (tempstr == "<path"){
             cout << "PATH FOUND AT STR " << counter << endl;
-            pathanalysis();
+            char ch1, ch2;
+            while (fin>>std::noskipws>>ch1){
+                if (ch1 == '=' && ch2 == 'd'){
+                    cout << "D FOUND" << endl;
+                    pathanalysis();
+                }
+                ch2 = ch1;
+            }
         }
     }
     return true;
@@ -175,7 +182,6 @@ bool pathanalysis(){
             }
 
             if (command == 'Z'){
-                cout << "End of line reached." << endl;
                 for (int i = 0; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
@@ -203,6 +209,7 @@ bool pathanalysis(){
             }
             if (ch == 'Z' || ch == 'z'){                                //lift pen, pairx and pairy (all) reset
                 command = 'Z';
+                cout << "End of line reached." << endl;
             }
             if (ch == 'M' || ch == 'm'){                                //put down pen
                 command = 'M';
@@ -213,7 +220,7 @@ bool pathanalysis(){
             if (ch == 'A' || ch == 'a'){
                 command = 'A';
             }
-            if (ch == 'D' || ch == 'd'){
+            if (ch == 'D' || ch == 'd'){                                //just for debugging
                 for (int j = 0; j <= 4; j++){
                     cout << "     pairx[" << j << "]=" << pairx[j] << " | pairy[" << j << "]=" << pairy[j] << endl;
                 }
