@@ -117,14 +117,33 @@ bool pathanalysis(){
                 firstnum = true;
             }
             if (pairx[i]=="\0" && i == 4){
-                cout << "this must be an ellipse" << endl;
                 pairx[i] = temp;
                 temp = "";
                 firstnum = true;
             }
             if (i == 4 && (command == 'C')){
                 //CUBIC BEZIER
-                cout << command << " ";
+                cout << "C ";
+                for (int i = 0; i < 4; i++){
+                    cout << pairx[i] << ", " << pairy[i] << ", ";
+                }
+                cout << endl;
+                pairx[0] = pairx[3];
+                pairy[0] = pairy[3];
+                for (int i = 1; i <= 3; i++){
+                    pairx[i] = pairy[i] = "";
+                }
+                i = 1;
+            }
+            if (i == 4 && (command == 'c')){
+                //CUBIC BEZIER points shifted
+                cout << "C ";
+                pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
+                pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
+                pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
+                pairy[2] = to_string(stod(pairy[0])+stod(pairy[2]));
+                pairx[3] = to_string(stod(pairx[0])+stod(pairx[3]));
+                pairy[3] = to_string(stod(pairy[0])+stod(pairy[3]));
                 for (int i = 0; i < 4; i++){
                     cout << pairx[i] << ", " << pairy[i] << ", ";
                 }
@@ -150,20 +169,60 @@ bool pathanalysis(){
                 }
                 i = 1;
             }
+            if (i == 3 && (command == 'c' || command == 'q')){
+                //QUADRATIC BEZIER points shifted
+                cout << "Q ";
+                pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
+                pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
+                pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
+                pairy[2] = to_string(stod(pairy[0])+stod(pairy[2]));
+                for (int i = 0; i < 3; i++){
+                    cout << pairx[i] << ", " << pairy[i] << ", ";
+                }
+                cout << endl;
+                pairx[0] = pairx[2];
+                pairy[0] = pairy[2];
+                for (int i = 1; i <= 3; i++){
+                    pairx[i] = pairy[i] = "";
+                }
+                i = 1;
+            }
             if (i == 1 && (command == 'H' || command == 'V')){
                 cout << command << " " << temp << endl;
                 if (command == 'H'){
+                    pairx[0] = temp;
+                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                } else {
+                    pairy[0] = temp;
+                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                }
+                temp = "";
+                i = 1;
+            }
+            if (i == 1 && (command == 'h' || command == 'v')){
+                if (command == 'h'){
                     pairx[0] = to_string(stod(pairx[0])+stod(temp));
+                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
                 } else {
                     pairy[0] = to_string(stod(pairy[0])+stod(temp));
+                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
                 }
                 temp = "";
                 i = 1;
             }
             if (i == 2 && command == 'L'){
-                cout << command << " " << pairx[1] << ", " << pairy[1] << endl;
+                pairx[0] = pairx[1];
+                pairy[0] = pairy[1];
+                cout << command << " " << pairx[0] << ", " << pairy[0] << endl;
+                for (int i = 1; i <= 3; i++){
+                    pairx[i] = pairy[i] = "";
+                }
+                i = 1;
+            }
+            if (i == 2 && command == 'l'){
                 pairx[0] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[0] = to_string(stod(pairy[0])+stod(pairy[1]));
+                cout << command << " " << pairx[0] << ", " << pairy[0] << endl;
                 for (int i = 1; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
@@ -195,17 +254,29 @@ bool pathanalysis(){
             //command = ch;         no, as must be normalized to uppercase in if statements below
 
             //POST
-            if (ch == 'C' || ch == 'c' || ch == 'S' || ch == 's'){      //cubic bezier, occasionally used for quadratic
+            if (ch == 'C'){      //cubic bezier, occasionally used for quadratic
                 command = 'C';
+            }
+            if (ch == 'S'){
+                command = 'S';
+            }
+            if (ch == 'c' || ch == 's'){
+                command = 'c';
             }
             if (ch == 'Q' || ch == 'q' || ch == 'T' || ch == 't'){      //quadratic bezier
                 command = 'Q';
             }
-            if (ch == 'H' || ch == 'h'){                                //horizontal line, pairx[0] shifted
+            if (ch == 'H'){                                             //horizontal line, to x= temp
                 command = 'H';
             }
-            if (ch == 'V' || ch == 'v'){                                //vertical line, pairy[0] shifted
+            if (ch == 'h'){                                             //horizontal line, to pairx[0]+temp
+                command = 'h';
+            }
+            if (ch == 'V'){                                             //vertical line, to y=temp
                 command = 'V';
+            }
+            if (ch == 'v'){                                             //vertical line, to pairy[0]+temp
+                command = 'v';
             }
             if (ch == 'Z' || ch == 'z'){                                //lift pen, pairx and pairy (all) reset
                 command = 'Z';
@@ -214,8 +285,11 @@ bool pathanalysis(){
             if (ch == 'M' || ch == 'm'){                                //put down pen
                 command = 'M';
             }
-            if (ch == 'L' || ch == 'l'){                                //straight line, pairx[0] and pairy[0] shifted
+            if (ch == 'L'){                                             //straight line, to pairx[1] and pairy[1]
                 command = 'L';
+            }
+            if (ch == 'l'){                                             //straight line, pairx[0] and pairy[0] shifted by pairx[1] and pairy[1]
+                command = 'l';
             }
             if (ch == 'A' || ch == 'a'){
                 command = 'A';
@@ -234,7 +308,7 @@ bool pathanalysis(){
 }
 
 int main(void){
-    string filename = "Phi.txt";
+    string filename = "omega-svgrepo-com.svg";
     fin.open(filename);
     if (!fin.is_open()){
         cout << "Could not open the file " << filename << endl;
@@ -243,7 +317,7 @@ int main(void){
         exit(EXIT_FAILURE);
     }
 
-    if (searchforpath()){
+    if (ganalysis()){
         cout << "FILE READ SUCCESSFUL";
     } else {
         cout << "AN ERROR OCCURED";
