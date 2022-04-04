@@ -147,7 +147,7 @@ bool Plotter::straight_line_x(float xdelta)
 {
     SET_DIR(xdelta, xpdir); // set direction
 
-    uint32_t ms = TO_TIME(xdelta, RADIUS_PULLEY); //FIXME: does this need to be a float?
+    uint32_t ms = TO_TIME(xdelta, RADIUS_PULLEY); 
     
     if (TIME_MAX < ms)
     {
@@ -175,7 +175,7 @@ bool Plotter::straight_line_y(float ydelta)
 {
     SET_DIR(ydelta, ypdir); // set direction 
 
-    uint32_t ms = TO_TIME(ydelta, RADIUS_RACK); //FIXME: is float necessary
+    uint32_t ms = TO_TIME(ydelta, RADIUS_RACK);
     
     if (TIME_MAX < ms)
     {
