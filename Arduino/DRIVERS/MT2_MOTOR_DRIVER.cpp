@@ -2,6 +2,11 @@
 #include <Servo.h>
 #include "MT2_header.h"
 
+/*
+sets speed of moter in byte value from 0 to 255
+@param motorPin,speed latch at whiich motor is attached and byte value to write to pin
+
+*/
 void set_speed(pin motorPin, bit_speed speed){
     analogWrite(motorPin, speed);
 }
@@ -133,62 +138,57 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
     }
 }
 
-// throws error if length of move is > 10 s
 /*
+throws error if length of move is > 10 s
 @param xdelta distance in x to draw - forward if positive, backwards if negative
 @return t/f boolen values; true if operation was successful, else false
-*/
+*/ 
 bool Plotter::straight_line_x(float xdelta) 
 {
     SET_DIR(xdelta, xpdir); // set direction
 
-    float ms = TO_TIME(xdelta, RADIUS_PULLEY); 
-    uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
-                                                // millis is unsigned long mate
-
-    digitalWrite(xpbrk, LOW); // release the hamdbrake
-    // TODO: braking fn
-    analogWrite(xpspd, 255);
-
+    uint32_t ms = TO_TIME(xdelta, RADIUS_PULLEY); //FIXME: does this need to be a float?
+    
     if (TIME_MAX < ms)
     {
         Serial.println("Overran 10 second limit for straight line X move!");
         digitalWrite(xpbrk, HIGH);
         return false;   // returns before the while loop runs
     }
-    
-    while (millis() < duedate)
-    {
-        //delay(millis()); //please dont do this
-    }
+
+    set_brakes(xpbrk, LOW); // release the hamdbrake
+    set_speed(xpspd, 255);
+
+    delayMicroseconds(ms); 
+
     digitalWrite(xpbrk, HIGH);
     Serial.println("Straight line X move complete!");
     return true;
 }
 
 //same as straight_line_x
+/*
+@param xdelta distance in x to draw - forward if positive, backwards if negative
+@return t/f boolen values; true if operation was successful, else false
+*/
 bool Plotter::straight_line_y(float ydelta)
 {
     SET_DIR(ydelta, ypdir); // set direction 
 
-    float ms = TO_TIME(ydelta, RADIUS_RACK);
-    float duedate = millis() + (uint64_t) ms;
+    uint32_t ms = TO_TIME(ydelta, RADIUS_RACK); //FIXME: is float necessary
     
-    digitalWrite(ypbrk, LOW); // release the handbrake
-    analogWrite(ypspd, 255);
-    //TODO: replace with braking fn
-
     if (TIME_MAX < ms)
     {
         Serial.println("Overran 10 second limit for straight line Y move!");
         digitalWrite(ypbrk, HIGH);
         return false;
     }
+    
+    set_brakes(ypbrk, LOW); // release the brake
+    set_speed(ypspd, 255);
 
-    while (millis() < duedate)
-    {
-        // welcome to the waiting line
-    }
+    delayMicroseconds(ms);
+
     digitalWrite(ypbrk, HIGH);
     Serial.println("Straight line Y move complete!");
     return true;
@@ -199,20 +199,21 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
     // higher delta always has the maximum speed of 255
     SET_DIR(xdelta, xpdir); 
     SET_DIR(ydelta, ypdir);
+    float ms;
 
     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
         float duedate = millis();
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
         {
-            float ms = TO_TIME(xdelta, RADIUS_PULLEY);
+            ms = TO_TIME(xdelta, RADIUS_PULLEY);
             duedate += ms;
             digitalWrite(xpbrk, LOW); // release the handbrake
             analogWrite(xpspd, 255);    // full speed line, x
             digitalWrite(ypbrk, LOW); // release the handbrake
             analogWrite(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
         } else {
-            float ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
+            ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
             duedate += ms;
             digitalWrite(ypbrk, LOW); // release the handbrake
             analogWrite(ypspd, 255);    // full speed line, y 
@@ -227,11 +228,13 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
             digitalWrite(ypbrk, HIGH);
             return false;
         }
-
+/* 
         while (millis() < duedate)
         {
             // welcome to the waiting line
-        }
+        } */ //FIXME: should be a delay as well, there is no point in this loop
+
+        delay (ms);
 
         digitalWrite(xpbrk, HIGH);
         digitalWrite(ypbrk, HIGH);
