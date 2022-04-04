@@ -148,7 +148,7 @@ bool Plotter::straight_line_x(float xdelta)
     SET_DIR(xdelta, xpdir); // set direction
 
     uint32_t ms = TO_TIME(xdelta, RADIUS_PULLEY); 
-    
+
     if (TIME_MAX < ms)
     {
         Serial.println("Overran 10 second limit for straight line X move!");
@@ -199,32 +199,32 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
     // higher delta always has the maximum speed of 255
     SET_DIR(xdelta, xpdir); 
     SET_DIR(ydelta, ypdir);
-    float ms;
 
     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
-        if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
-        {
-            ms = TO_TIME(xdelta, RADIUS_PULLEY);
-            digitalWrite(xpbrk, LOW); // release the handbrake
-            analogWrite(xpspd, 255);    // full speed line, x
-            digitalWrite(ypbrk, LOW); // release the handbrake
-            analogWrite(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
-        } else {
-            ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
-            digitalWrite(ypbrk, LOW); // release the handbrake
-            analogWrite(ypspd, 255);    // full speed line, y 
-            digitalWrite(xpbrk, LOW); // release the handbrake
-            analogWrite(xpspd, (xdelta / ydelta) * 255.0f); // make diagonal
-        }
-
-        float currenttime = millis();
+        float ms; // no uneccesary memory waste
         if (TIME_MAX < ms) {
             Serial.println("Overran 10 second limit for normal line move!");
             digitalWrite(xpbrk, HIGH);
             digitalWrite(ypbrk, HIGH);
             return false;
         }
+
+        if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
+        {
+            ms = TO_TIME(xdelta, RADIUS_PULLEY);
+            set_brakes(xpbrk, LOW); // release the handbrake
+            set_speed(xpspd, 255);    // full speed line, x
+            set_brakes(ypbrk, LOW); // release the handbrake
+            set_speed(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
+        } else {
+            ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
+            set_brakes(ypbrk, LOW); // release the handbrake
+            set_speed(ypspd, 255);    // full speed line, y 
+            set_brakes(xpbrk, LOW); // release the handbrake
+            set_speed(xpspd, (xdelta / ydelta) * 255.0f); // make diagonal
+        }
+
 
         delay (ms);
 
