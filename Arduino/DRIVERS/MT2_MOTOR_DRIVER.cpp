@@ -141,7 +141,7 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
 bool Plotter::straight_line_x(float xdelta) 
 {
     SET_DIR(xdelta, xpdir); // set direction
-
+    //whats this owo
     float ms = TO_TIME(xdelta, RADIUS_PULLEY); 
     uint64_t duedate = millis() + (uint64_t) ms; // do the decimal points actually make a diffference
                                                 // millis is unsigned long mate
