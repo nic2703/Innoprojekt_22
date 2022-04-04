@@ -203,18 +203,15 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
 
     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
-        float duedate = millis();
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
         {
             ms = TO_TIME(xdelta, RADIUS_PULLEY);
-            duedate += ms;
             digitalWrite(xpbrk, LOW); // release the handbrake
             analogWrite(xpspd, 255);    // full speed line, x
             digitalWrite(ypbrk, LOW); // release the handbrake
             analogWrite(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
         } else {
             ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
-            duedate += ms;
             digitalWrite(ypbrk, LOW); // release the handbrake
             analogWrite(ypspd, 255);    // full speed line, y 
             digitalWrite(xpbrk, LOW); // release the handbrake
@@ -222,17 +219,12 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
         }
 
         float currenttime = millis();
-        if (duedate - currenttime > TIME_MAX){
+        if (TIME_MAX < ms) {
             Serial.println("Overran 10 second limit for normal line move!");
             digitalWrite(xpbrk, HIGH);
             digitalWrite(ypbrk, HIGH);
             return false;
         }
-/* 
-        while (millis() < duedate)
-        {
-            // welcome to the waiting line
-        } */ //FIXME: should be a delay as well, there is no point in this loop
 
         delay (ms);
 
