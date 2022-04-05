@@ -41,3 +41,7 @@ bool BEZIER::robotica_test()
     Plotter::draw_line(0, -50, 255);
 }
 
+bool BEZIER::circle_segment(){
+    
+}
+
