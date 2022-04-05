@@ -27,5 +27,3 @@ void BEZIER::_init_coords(){
     curve.y = 0;
 }
 
-
-

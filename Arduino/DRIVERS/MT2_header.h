@@ -9,7 +9,7 @@ typedef unsigned int bit_speed;
 
 
 // global variables and definitions
-#define TIME_MAX    10000
+#define TIME_MAX    10000000
 #define _BRAKE_A    9
 #define _BRAKE_B    8
 #define _SPEED_A    3 
@@ -20,13 +20,13 @@ typedef unsigned int bit_speed;
 
 //macros
 #define SET_DIR(a, p_dir) a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW) //if delta is negative, go backwards, else go forwards
-#define TO_TIME(delta, radius) 1000.0f * (delta) / (2 * PI * radius) // converts distance to time 
+#define TO_TIME(delta, radius) 1000000 * (delta) / (2 * PI * radius) // converts distance to time (microseconds)
 #define UPDATE_POS(pos, delta) pos += delta //doesn't need doc
 #define IS_TOO_SMALL(a) abs(a) <= MINDIST // is the distance smaller than the minimum achievable distance?
 #define TO_ANGLE(bit_angle) map(bit_angle, 0, 1023, 0, 179) // maps a bit_angle between 0 and 1023 to an anoutput angle 
 // 0 t0 179 degrees
 
-/* reminder that these are yt your disposal
+/* reminder that these are at your disposal
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
