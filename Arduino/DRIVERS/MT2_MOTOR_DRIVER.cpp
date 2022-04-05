@@ -225,7 +225,7 @@ bool Plotter::straight_line_x(float xdelta)
 {
     SET_DIR(xdelta, xpdir); // set direction
 
-    uint32_t ms = TO_REV(xdelta, RADIUS_PULLEY); 
+    uint32_t ms = to_micros(xdelta, 'x'); 
 
     if (TIME_MAX < ms)
     {
@@ -253,7 +253,7 @@ bool Plotter::straight_line_y(float ydelta)
 {
     SET_DIR(ydelta, ypdir); // set direction 
 
-    uint32_t ms = TO_REV(ydelta, RADIUS_RACK);
+    uint32_t ms = to_micros(ydelta, 'y');
     
     if (TIME_MAX < ms)
     {
@@ -284,13 +284,13 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
 
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
         {
-            ms = TO_REV(xdelta, RADIUS_PULLEY);
+            ms = to_micros(xdelta, 'x');
             set_brakes(xpbrk, LOW); // release the handbrake
             set_speed(xpspd, 255);    // full speed line, x
             set_brakes(ypbrk, LOW); // release the handbrake
             set_speed(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
         } else {
-            ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
+            ms = to_micros(ydelta, 'y'); // same here
             set_brakes(ypbrk, LOW); // release the handbrake
             set_speed(ypspd, 255);    // full speed line, y 
             set_brakes(xpbrk, LOW); // release the handbrake
