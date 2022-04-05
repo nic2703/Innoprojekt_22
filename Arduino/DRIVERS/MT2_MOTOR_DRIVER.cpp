@@ -56,7 +56,7 @@ double to_micros(double delta, char dir) {
         ms = TO_REV(delta, RADIUS_PULLEY) /  (map_to_speed(255) / RADIUS_PULLEY); // takes in speed in byte val and returns rps;
         break;
     case 'y':
-        ms = TO_REV(delta, RADIUS_PULLEY) /  (map_to_speed(255) / RADIUS_PULLEY);
+        ms = TO_REV(delta, RADIUS_RACK) /  (map_to_speed(255) / RADIUS_RACK);
         break;
     default:
         Serial.println("That is not a valid axis! Try x or y instead.");
@@ -79,7 +79,7 @@ double to_micros(double delta, char dir, double speed) {
         ms = TO_REV(delta, RADIUS_PULLEY) /  (map_to_speed(BYTE_SPEED(speed)) / RADIUS_PULLEY); // takes in speed in byte val and returns rps;
         break;
     case 'y':
-        ms = TO_REV(delta, RADIUS_PULLEY) /  (map_to_speed(BYTE_SPEED(speed)) / RADIUS_PULLEY);
+        ms = TO_REV(delta, RADIUS_RACK) /  (map_to_speed(BYTE_SPEED(speed)) / RADIUS_RACK);
         break;
     default:
         Serial.println("That is not a valid axis! Try x or y instead.");
