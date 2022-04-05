@@ -126,7 +126,7 @@ bool pathanalysis(){
 
             if (i == 4 && (command == 'C')){
                 //CUBIC BEZIER
-                cout << "C ";
+                cout << "C,";
                 for (int i = 0; i < 4; i++){
                     fout << pairx[i] << ", " << pairy[i] << ", ";
                 }
@@ -142,7 +142,7 @@ bool pathanalysis(){
             }
             if (i == 4 && (command == 'c')){
                 //CUBIC BEZIER points shifted
-                fout << "C ";
+                fout << "C,";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
@@ -164,7 +164,7 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 'S')){
                 //CUBIC SMOOTH BEZIER
-                fout << "C ";
+                fout << "C,";
                 fout << pairx[0] << ", " << pairy[0] << ", ";
                 fout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
                 fout << pairx[1] << ", " << pairy[1] << ", ";
@@ -181,7 +181,7 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 's')){
                 //CUBIC SMOOTH BEZIER POSITIONS SHIFTED
-                fout << "C ";
+                fout << "C,";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
@@ -202,7 +202,7 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 'C' || command == 'Q')){
                 //QUADRATIC BEZIER
-                fout << "Q ";
+                fout << "Q,";
                 for (int i = 0; i < 3; i++){
                     fout << pairx[i] << ", " << pairy[i] << ", ";
                 }
@@ -218,7 +218,7 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 'c' || command == 'q')){
                 //QUADRATIC BEZIER points shifted
-                fout << "Q ";
+                fout << "Q,";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
@@ -238,7 +238,7 @@ bool pathanalysis(){
             }
             if (i == 2 && (command == 'S' || command == 'T')){
                 //QUADRATIC SMOOTH BEZIER
-                fout << "Q ";
+                fout << "Q,";
                 fout << pairx[0] << ", " << pairy[0] << ", ";
                 fout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
                 fout << pairx[1] << ", " << pairy[1] << ", ";
@@ -254,7 +254,7 @@ bool pathanalysis(){
             }
             if (i == 2 && (command == 's' || command == 't')){
                 //QUADRATIC SMOOTH BEZIER
-                fout << "Q ";
+                fout << "Q,";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 fout << pairx[0] << ", " << pairy[0] << ", ";
@@ -276,10 +276,10 @@ bool pathanalysis(){
                 fout << command << " " << temp << endl;
                 if (command == 'H'){
                     pairx[0] = temp;
-                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << "," << pairx[0] << ", " << pairy[0] << ", " << endl;
                 } else {
                     pairy[0] = temp;
-                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << "," << pairx[0] << ", " << pairy[0] << ", " << endl;
                 }
                 pairxspecial = pairx[0];
                 pairyspecial = pairy[0];
@@ -290,10 +290,10 @@ bool pathanalysis(){
                 //h and v commands shifted
                 if (command == 'h'){
                     pairx[0] = to_string(stod(pairx[0])+stod(temp));
-                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << "," << pairx[0] << ", " << pairy[0] << ", " << endl;
                 } else {
                     pairy[0] = to_string(stod(pairy[0])+stod(temp));
-                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << "," << pairx[0] << ", " << pairy[0] << ", " << endl;
                 }
                 pairxspecial = pairx[0];
                 pairyspecial = pairy[0];
@@ -304,7 +304,7 @@ bool pathanalysis(){
                 //L command line
                 pairx[0] = pairx[1];
                 pairy[0] = pairy[1];
-                fout << command << " " << pairx[0] << ", " << pairy[0] << endl;
+                fout << command << "," << pairx[0] << ", " << pairy[0] << endl;
                 for (int i = 1; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
@@ -316,7 +316,7 @@ bool pathanalysis(){
                 //L command line shifted
                 pairx[0] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[0] = to_string(stod(pairy[0])+stod(pairy[1]));
-                fout << command << " " << pairx[0] << ", " << pairy[0] << endl;
+                fout << command << "," << pairx[0] << ", " << pairy[0] << endl;
                 for (int i = 1; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
@@ -327,7 +327,7 @@ bool pathanalysis(){
 
             if (i == 4 && command == 'A'){
                 //A ellipse command using dx dy
-                fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << to_string(stod(pairx[0])+stod(pairy[3])) << ", " << to_string(stod(pairy[0])+stod(pairx[4])) << ", " << pairx[1] << ", " << pairy[1] << ", " << pairx[2] << ", " << pairy[2] << ", " << pairx[3] << ", " << endl;
+                fout << command << "," << pairx[0] << ", " << pairy[0] << ", " << to_string(stod(pairx[0])+stod(pairy[3])) << ", " << to_string(stod(pairy[0])+stod(pairx[4])) << ", " << pairx[1] << ", " << pairy[1] << ", " << pairx[2] << ", " << pairy[2] << ", " << pairx[3] << ", " << endl;
                 pairx[0] = to_string(stod(pairx[0])+stod(pairy[3]));
                 pairy[0] = to_string(stod(pairy[0])+stod(pairx[4]));
                 for (int i = 1; i<=4; i++){
@@ -347,7 +347,7 @@ bool pathanalysis(){
                 i = 0;
             }
             if (command == 'M'){
-                fout << "M" << endl;
+                fout << "M," << endl;
                 cout << "Start of line reached." << endl;
             }
 
