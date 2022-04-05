@@ -128,9 +128,9 @@ bool pathanalysis(){
                 //CUBIC BEZIER
                 cout << "C ";
                 for (int i = 0; i < 4; i++){
-                    cout << pairx[i] << ", " << pairy[i] << ", ";
+                    fout << pairx[i] << ", " << pairy[i] << ", ";
                 }
-                cout << endl;
+                fout << endl;
                 pairx[0] = pairx[3];
                 pairy[0] = pairy[3];
                 pairxspecial = pairx[2];
@@ -142,7 +142,7 @@ bool pathanalysis(){
             }
             if (i == 4 && (command == 'c')){
                 //CUBIC BEZIER points shifted
-                cout << "C ";
+                fout << "C ";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
@@ -150,9 +150,9 @@ bool pathanalysis(){
                 pairx[3] = to_string(stod(pairx[0])+stod(pairx[3]));
                 pairy[3] = to_string(stod(pairy[0])+stod(pairy[3]));
                 for (int i = 0; i < 4; i++){
-                    cout << pairx[i] << ", " << pairy[i] << ", ";
+                    fout << pairx[i] << ", " << pairy[i] << ", ";
                 }
-                cout << endl;
+                fout << endl;
                 pairx[0] = pairx[3];
                 pairy[0] = pairy[3];
                 pairxspecial = pairx[2];
@@ -164,12 +164,12 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 'S')){
                 //CUBIC SMOOTH BEZIER
-                cout << "C ";
-                cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
-                cout << pairx[1] << ", " << pairy[1] << ", ";
-                cout << pairx[2] << ", " << pairy[2] << ", ";
-                cout << endl;
+                fout << "C ";
+                fout << pairx[0] << ", " << pairy[0] << ", ";
+                fout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
+                fout << pairx[1] << ", " << pairy[1] << ", ";
+                fout << pairx[2] << ", " << pairy[2] << ", ";
+                fout << endl;
                 pairx[0] = pairx[2];
                 pairy[0] = pairy[2];
                 pairxspecial = pairx[1];
@@ -181,16 +181,16 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 's')){
                 //CUBIC SMOOTH BEZIER POSITIONS SHIFTED
-                cout << "C ";
+                fout << "C ";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
                 pairy[2] = to_string(stod(pairy[0])+stod(pairy[2]));
-                cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";                cout << pairx[1] << ", " << pairy[1] << ", ";
-                cout << pairx[1] << ", " << pairy[1] << ", ";
-                cout << pairx[2] << ", " << pairy[2] << ", ";
-                cout << endl;
+                fout << pairx[0] << ", " << pairy[0] << ", ";
+                fout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";                fout << pairx[1] << ", " << pairy[1] << ", ";
+                fout << pairx[1] << ", " << pairy[1] << ", ";
+                fout << pairx[2] << ", " << pairy[2] << ", ";
+                fout << endl;
                 pairx[0] = pairx[2];
                 pairy[0] = pairy[2];
                 pairxspecial = pairx[1];
@@ -202,11 +202,11 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 'C' || command == 'Q')){
                 //QUADRATIC BEZIER
-                cout << "Q ";
+                fout << "Q ";
                 for (int i = 0; i < 3; i++){
-                    cout << pairx[i] << ", " << pairy[i] << ", ";
+                    fout << pairx[i] << ", " << pairy[i] << ", ";
                 }
-                cout << endl;
+                fout << endl;
                 pairx[0] = pairx[2];
                 pairy[0] = pairy[2];
                 pairxspecial = pairx[1];
@@ -218,15 +218,15 @@ bool pathanalysis(){
             }
             if (i == 3 && (command == 'c' || command == 'q')){
                 //QUADRATIC BEZIER points shifted
-                cout << "Q ";
+                fout << "Q ";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
                 pairy[2] = to_string(stod(pairy[0])+stod(pairy[2]));
                 for (int i = 0; i < 3; i++){
-                    cout << pairx[i] << ", " << pairy[i] << ", ";
+                    fout << pairx[i] << ", " << pairy[i] << ", ";
                 }
-                cout << endl;
+                fout << endl;
                 pairx[0] = pairx[2];
                 pairy[0] = pairy[2];
                 pairxspecial = pairx[1];
@@ -238,11 +238,11 @@ bool pathanalysis(){
             }
             if (i == 2 && (command == 'S' || command == 'T')){
                 //QUADRATIC SMOOTH BEZIER
-                cout << "Q ";
-                cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
-                cout << pairx[1] << ", " << pairy[1] << ", ";
-                cout << endl;
+                fout << "Q ";
+                fout << pairx[0] << ", " << pairy[0] << ", ";
+                fout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
+                fout << pairx[1] << ", " << pairy[1] << ", ";
+                fout << endl;
                 pairx[0] = pairx[1];
                 pairy[0] = pairy[1];
                 pairxspecial = pairx[1];
@@ -254,13 +254,13 @@ bool pathanalysis(){
             }
             if (i == 2 && (command == 's' || command == 't')){
                 //QUADRATIC SMOOTH BEZIER
-                cout << "Q ";
+                fout << "Q ";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
-                cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";                cout << pairx[1] << ", " << pairy[1] << ", ";
-                cout << pairx[1] << ", " << pairy[1] << ", ";
-                cout << endl;
+                fout << pairx[0] << ", " << pairy[0] << ", ";
+                fout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
+                fout << pairx[1] << ", " << pairy[1] << ", ";
+                fout << endl;
                 pairx[0] = pairx[1];
                 pairy[0] = pairy[1];
                 pairxspecial = pairx[1];
@@ -273,13 +273,13 @@ bool pathanalysis(){
             
             if (i == 1 && (command == 'H' || command == 'V')){
                 //H and V commands
-                cout << command << " " << temp << endl;
+                fout << command << " " << temp << endl;
                 if (command == 'H'){
                     pairx[0] = temp;
-                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
                 } else {
                     pairy[0] = temp;
-                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
                 }
                 pairxspecial = pairx[0];
                 pairyspecial = pairy[0];
@@ -290,10 +290,10 @@ bool pathanalysis(){
                 //h and v commands shifted
                 if (command == 'h'){
                     pairx[0] = to_string(stod(pairx[0])+stod(temp));
-                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
                 } else {
                     pairy[0] = to_string(stod(pairy[0])+stod(temp));
-                    cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
+                    fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << endl;
                 }
                 pairxspecial = pairx[0];
                 pairyspecial = pairy[0];
@@ -304,7 +304,7 @@ bool pathanalysis(){
                 //L command line
                 pairx[0] = pairx[1];
                 pairy[0] = pairy[1];
-                cout << command << " " << pairx[0] << ", " << pairy[0] << endl;
+                fout << command << " " << pairx[0] << ", " << pairy[0] << endl;
                 for (int i = 1; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
@@ -316,7 +316,7 @@ bool pathanalysis(){
                 //L command line shifted
                 pairx[0] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[0] = to_string(stod(pairy[0])+stod(pairy[1]));
-                cout << command << " " << pairx[0] << ", " << pairy[0] << endl;
+                fout << command << " " << pairx[0] << ", " << pairy[0] << endl;
                 for (int i = 1; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
@@ -327,7 +327,7 @@ bool pathanalysis(){
 
             if (i == 4 && command == 'A'){
                 //A ellipse command using dx dy
-                cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << to_string(stod(pairx[0])+stod(pairy[3])) << ", " << to_string(stod(pairy[0])+stod(pairx[4])) << ", " << pairx[1] << ", " << pairy[1] << ", " << pairx[2] << ", " << pairy[2] << ", " << pairx[3] << ", " << endl;
+                fout << command << " " << pairx[0] << ", " << pairy[0] << ", " << to_string(stod(pairx[0])+stod(pairy[3])) << ", " << to_string(stod(pairy[0])+stod(pairx[4])) << ", " << pairx[1] << ", " << pairy[1] << ", " << pairx[2] << ", " << pairy[2] << ", " << pairx[3] << ", " << endl;
                 pairx[0] = to_string(stod(pairx[0])+stod(pairy[3]));
                 pairy[0] = to_string(stod(pairy[0])+stod(pairx[4]));
                 for (int i = 1; i<=4; i++){
@@ -347,6 +347,7 @@ bool pathanalysis(){
                 i = 0;
             }
             if (command == 'M'){
+                fout << "M" << endl;
                 cout << "Start of line reached." << endl;
             }
 
@@ -408,6 +409,7 @@ bool pathanalysis(){
             }
             if (ch == 'Z' || ch == 'z'){                                //lift pen, pairx and pairy (all) reset
                 command = 'Z';
+                fout << "Z" << endl;
                 cout << "End of line reached." << endl;
             }
             if (ch == 'M' || ch == 'm'){                                //put down pen
@@ -436,12 +438,20 @@ bool pathanalysis(){
 }
 
 int main(void){
-    string filename = "Phi.txt";
+    string filename = "omega-svgrepo-com.svg";
     fin.open(filename);
     if (!fin.is_open()){
-        cout << "Could not open the file " << filename << endl;
+        cout << "Could not open the input file " << filename << endl;
         cout << "Program terminating...\n";
         fin.close();
+        exit(EXIT_FAILURE);
+    }
+
+    fout.open("output.csv");
+    if (!fin.is_open()){
+        cout << "Could not open the output file \"output.csv\"" << endl;
+        cout << "Program terminating...\n";
+        fout.close();
         exit(EXIT_FAILURE);
     }
 
@@ -451,4 +461,5 @@ int main(void){
         cout << "AN ERROR OCCURED";
     }
     fin.close();
+    fout.close();
 }
