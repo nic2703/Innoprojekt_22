@@ -42,6 +42,9 @@ bool BEZIER::robotica_test()
 }
 
 bool BEZIER::circle_segment(){
-    
+
 }
 
+bool BEZIER::random_curve(){
+    
+}

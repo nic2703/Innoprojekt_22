@@ -20,6 +20,7 @@ public:
 
     bool robotica_test();
     bool circle_segment();
+    bool random_curve();
 };
 
 #endif // !BEZIER_H
