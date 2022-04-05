@@ -6,7 +6,7 @@
 sets speed of moter in byte value from 0 to 255
 @param motorPin,speed latch at whiich motor is attached and byte value to write to pin
 */
-void set_speed(pin motorPin, bit_speed speed){
+inline void set_speed(pin motorPin, bit_speed speed){
     analogWrite(motorPin, speed);
 }
 
@@ -14,7 +14,7 @@ void set_speed(pin motorPin, bit_speed speed){
 sets speed of moter in byte value from 0 to 255
 @param brake_pin,state latch at whiich the brake for the motor is attached and wheter to switch brake on or off
 */
-void set_brakes(pin pin, int state){ 
+inline void set_brakes(pin pin, int state){ 
   digitalWrite(pin, state);
 }
 
@@ -26,7 +26,7 @@ converts a bytevalue speed to a mm/s
 @param in_speed double value of speed
 @return out_speed 
 */
-double map_to_speed(double in_speed_bits)
+inline double map_to_speed(double in_speed_bits)
 {
     double out_speed = 1.012e-5 * cube(in_speed_bits) - 6.19e-3 * sq(in_speed_bits) + 1.332 * in_speed_bits - 37.24;
     return out_speed;
@@ -37,7 +37,7 @@ converts a speed in mm/s to a bytevalue that can be written to the motor. this c
 @param in_speed double value of speed in mm/s
 @return out_speed a double value constrained to be between 40 and 255
 */
-double map_to_bitspeed(double in_speed){
+inline double map_to_bitspeed(double in_speed){
     double out_speed = 203.887 - 0.0658762 * pow(3718.33 * sqrt(2.1603e9 * sq(in_speed) - 2.71301e11 * in_speed + 8.52866e12) - 1.72824e8 * in_speed + 1.08521e10, 0.33333333) + 34970.7 / pow(3718.33 * sqrt(2.1603e9 * sq(in_speed) - 2.71301e11 * in_speed + 8.52866e12) - 1.72824e8 * in_speed + 1.08521e10, 0.33333333);
     return constrain(out_speed, 40.0, 255.0);
 } // ive done some testing and this seems to work quite reliably as the inverse of map_to_speed
@@ -60,7 +60,7 @@ double to_micros(double delta, char dir) {
         break;
     default:
         Serial.println("That is not a valid axis! Try x or y instead.");
-    }
+    };
 
     return 1000000.0 * ms;
 }
@@ -83,7 +83,7 @@ double to_micros(double delta, char dir, double speed) {
         break;
     default:
         Serial.println("That is not a valid axis! Try x or y instead.");
-    }
+    };
 
     return 1000000.0 * ms;
 }
