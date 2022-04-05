@@ -10,4 +10,16 @@ struct COORDS
     uint32_t y;
 } curve = {0,0};
 
+class BEZIER : public Plotter
+{
+private:
+    void _init_coords();
+public:
+    BEZIER(/* args */);
+    ~BEZIER();
+
+    bool robotica_test();
+    bool circle_segment();
+};
+
 #endif // !BEZIER_H

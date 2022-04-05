@@ -25,7 +25,9 @@ typedef unsigned int bit_speed;
 #define IS_TOO_SMALL(a) abs(a) <= MINDIST // is the distance smaller than the minimum achievable distance?
 #define TO_ANGLE(bit_angle) map(bit_angle, 0, 1023, 0, 179) // maps a bit_angle between 0 and 1023 to an anoutput angle 
 // 0 t0 179 degrees
+#define BIT_SPEED(nin_speed) map(nin_speed, 0, 255, 40, 255) // maps a byte speed to acutal achievable speed, (integer value)
 
+#define cube(x) ((x)*(x)*(x))
 /* reminder that these are at your disposal
 
 #define PI 3.1415926535897932384626433832795
@@ -69,6 +71,8 @@ class Plotter{
     pin servo_p = 0; 
     bool islifted = false;
 
+    double map_to_speed(double);
+    double map_to_bitspeed(double);
     bool straight_line_x(float);
     bool straight_line_y(float);
     bool diagonal_line(float, float);
