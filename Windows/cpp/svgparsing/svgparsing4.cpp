@@ -123,6 +123,7 @@ bool pathanalysis(){
                 temp = "";
                 firstnum = true;
             }
+
             if (i == 4 && (command == 'C')){
                 //CUBIC BEZIER
                 cout << "C ";
@@ -162,10 +163,10 @@ bool pathanalysis(){
                 i = 1;
             }
             if (i == 3 && (command == 'S')){
-                //QUADRATIC SMOOTH BEZIER
+                //CUBIC SMOOTH BEZIER
                 cout << "C ";
                 cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << pairxspecial << ", " << pairyspecial << ", ";
+                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
                 cout << pairx[1] << ", " << pairy[1] << ", ";
                 cout << pairx[2] << ", " << pairy[2] << ", ";
                 cout << endl;
@@ -179,14 +180,14 @@ bool pathanalysis(){
                 i = 1;
             }
             if (i == 3 && (command == 's')){
-                //QUADRATIC SMOOTH BEZIER POSITIONS SHIFTED
+                //CUBIC SMOOTH BEZIER POSITIONS SHIFTED
                 cout << "C ";
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 pairx[2] = to_string(stod(pairx[0])+stod(pairx[2]));
                 pairy[2] = to_string(stod(pairy[0])+stod(pairy[2]));
                 cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << pairxspecial << ", " << pairyspecial << ", ";
+                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";                cout << pairx[1] << ", " << pairy[1] << ", ";
                 cout << pairx[1] << ", " << pairy[1] << ", ";
                 cout << pairx[2] << ", " << pairy[2] << ", ";
                 cout << endl;
@@ -239,14 +240,11 @@ bool pathanalysis(){
                 //QUADRATIC SMOOTH BEZIER
                 cout << "Q ";
                 cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << pairxspecial << ", " << pairyspecial << ", ";
+                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";
                 cout << pairx[1] << ", " << pairy[1] << ", ";
-                for (int i = 0; i < 3; i++){
-                    cout << pairx[i] << ", " << pairy[i] << ", ";
-                }
                 cout << endl;
-                pairx[0] = pairx[2];
-                pairy[0] = pairy[2];
+                pairx[0] = pairx[1];
+                pairy[0] = pairy[1];
                 pairxspecial = pairx[1];
                 pairyspecial = pairy[1];
                 for (int i = 1; i <= 3; i++){
@@ -260,14 +258,11 @@ bool pathanalysis(){
                 pairx[1] = to_string(stod(pairx[0])+stod(pairx[1]));
                 pairy[1] = to_string(stod(pairy[0])+stod(pairy[1]));
                 cout << pairx[0] << ", " << pairy[0] << ", ";
-                cout << pairxspecial << ", " << pairyspecial << ", ";
+                cout << to_string(2*stod(pairx[0])-stod(pairxspecial)) << ", " << to_string(2*stod(pairy[0])-stod(pairyspecial)) << ", ";                cout << pairx[1] << ", " << pairy[1] << ", ";
                 cout << pairx[1] << ", " << pairy[1] << ", ";
-                for (int i = 0; i < 3; i++){
-                    cout << pairx[i] << ", " << pairy[i] << ", ";
-                }
                 cout << endl;
-                pairx[0] = pairx[2];
-                pairy[0] = pairy[2];
+                pairx[0] = pairx[1];
+                pairy[0] = pairy[1];
                 pairxspecial = pairx[1];
                 pairyspecial = pairy[1];
                 for (int i = 1; i <= 3; i++){
@@ -332,7 +327,7 @@ bool pathanalysis(){
 
             if (i == 4 && command == 'A'){
                 //A ellipse command using dx dy
-                cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << to_string(stod(pairx[0])+stod(pairy[3])) << ", " << to_string(stod(pairy[0])+stod(pairx[4])) << ", " << pairx[2] << ", " << pairy[2] << ", " << pairx[3] << ", " << endl;
+                cout << command << " " << pairx[0] << ", " << pairy[0] << ", " << to_string(stod(pairx[0])+stod(pairy[3])) << ", " << to_string(stod(pairy[0])+stod(pairx[4])) << ", " << pairx[1] << ", " << pairy[1] << ", " << pairx[2] << ", " << pairy[2] << ", " << pairx[3] << ", " << endl;
                 pairx[0] = to_string(stod(pairx[0])+stod(pairy[3]));
                 pairy[0] = to_string(stod(pairy[0])+stod(pairx[4]));
                 for (int i = 1; i<=4; i++){
@@ -348,6 +343,7 @@ bool pathanalysis(){
                 for (int i = 0; i <= 3; i++){
                     pairx[i] = pairy[i] = "";
                 }
+                pairxspecial = pairyspecial = "";
                 i = 0;
             }
             if (command == 'M'){
@@ -362,16 +358,41 @@ bool pathanalysis(){
                 command = 'C';
             }
             if (ch == 'S'){     //cubic smooth bezier
+                if (command != 'C' && command != 'c' && command != 'S' && command != 's'){
+                    pairxspecial = pairx[0];
+                    pairyspecial = pairy[0];
+                }
                 command = 'S';
             }
             if (ch == 'c'){     //cubic bezier, occasionally quadratic, relative positions
                 command = 'c';
             }
             if (ch == 's'){     //cubic smooth bezier, occasionally quadratic, relative positions
+                if (command != 'C' && command != 'c' && command != 'S' && command != 's'){
+                    pairxspecial = pairx[0];
+                    pairyspecial = pairy[0];
+                }
                 command = 's';
             }
-            if (ch == 'Q' || ch == 'q' || ch == 'T' || ch == 't'){      //quadratic bezier
+            if (ch == 'Q'){      //quadratic bezier
                 command = 'Q';
+            }
+            if (ch == 'q'){      //quadratic bezier
+                command = 'q';
+            }
+            if (ch == 'T'){      //quadratic bezier
+                if (command != 'Q' && command != 'q' && command != 'T' && command != 't'){
+                    pairxspecial = pairx[0];
+                    pairyspecial = pairy[0];
+                }
+                command = 'T';
+            }
+            if (ch == 't'){      //quadratic bezier
+                if (command != 'Q' && command != 'q' && command != 'T' && command != 't'){
+                    pairxspecial = pairx[0];
+                    pairyspecial = pairy[0];
+                }
+                command = 't';
             }
             if (ch == 'H'){                                             //horizontal line, to x= temp
                 command = 'H';
@@ -415,7 +436,7 @@ bool pathanalysis(){
 }
 
 int main(void){
-    string filename = "omega-svgrepo-com.svg";
+    string filename = "Phi.txt";
     fin.open(filename);
     if (!fin.is_open()){
         cout << "Could not open the file " << filename << endl;
