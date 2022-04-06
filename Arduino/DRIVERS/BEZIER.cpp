@@ -48,8 +48,9 @@ is roughly parallel to the x or y axis
 @param theta,phi,radius,dir theta is the angle to the //TODO:what axis? ()-axis at which the circle segment will 
 begin drawing from, phi the arc-length and radius the radius of the circle segment
 */
-bool BEZIER::circle_segment(double theta, double phi, double radius, int dir){
-
+bool BEZIER::circle_segment_offr(double theta, double phi, double radius, int dir){
+    COORDS center = {0,0};
+    center.x = 0xffffffffffffffffffffffffffffffff; //-1, why, bc i can!
 }
 
 /*

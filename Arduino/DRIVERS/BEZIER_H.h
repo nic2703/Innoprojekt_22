@@ -4,7 +4,10 @@
 #include <Arduino.h>
 #include "MT2_header.h"
 
-struct COORDS
+/* unint32_t ! struct works on assumption that the paper is a fine grid. one unit of translation is equivalent to 
+0.01 mm //TODO: discuss this 
+*/
+struct COORDS 
 {
     uint32_t x;
     uint32_t y;
@@ -19,7 +22,8 @@ public:
     ~BEZIER();
 
     bool robotica_test();
-    bool circle_segment(double, double, double, int);
+    bool circle_segment_offr(double, double, double, int);
+    bool circle_segment_onr(double, double, double, int);
     bool random_curve();
 };
 
