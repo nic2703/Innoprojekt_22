@@ -51,6 +51,7 @@ begin drawing from, phi the arc-length and radius the radius of the circle segme
 bool BEZIER::circle_segment_offr(double theta, double phi, double radius, int dir){
     COORDS center = {0,0};
     center.x = 0xffffffffffffffffffffffffffffffff; //-1, why, bc i can!
+    //x += cos(theta) * bla bla bla
 }
 
 /*
