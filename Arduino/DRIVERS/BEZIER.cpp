@@ -18,7 +18,6 @@ void BEZIER::_init_coords(){
     curve.y = 0;
 }
 
-
 //should plot an r
 bool BEZIER::robotica_test()
 {
@@ -42,16 +41,54 @@ bool BEZIER::robotica_test()
 }
 
 /*
-draws a circle segment. at too steep angles, the circle must be approximated, so 
+draws a circle segment, assuming the plotter head is aready on the radius. at too steep angles, the circle must be approximated, so 
 there will be zig-zag lines at the parts of the circle, where the tangent
 is roughly parallel to the x or y axis
-@param theta,phi,radius,dir theta is the angle to the //TODO:what axis? ()-axis at which the circle segment will 
+@param theta,phi,radius,dir (RADIANS!!!!!!!) theta is the angle to the //TODO:what axis? ()-axis at which the circle segment will 
 begin drawing from, phi the arc-length and radius the radius of the circle segment
 */
-bool BEZIER::circle_segment_offr(double theta, double phi, double radius, int dir){
-    COORDS center = {0,0};
-    center.x = 0xffffffffffffffffffffffffffffffff; //-1, why, bc i can!
-    //x += cos(theta) * bla bla bla
+bool BEZIER::circle_segment_onr(double theta, double phi, double radius){
+    const COORDS center = {cos(theta) * radius, sin(theta) * radius};
+    COORDS current = {0,0};
+    COORDS previous = {0,0};
+
+    if (phi == 0) {Serial.println("That circle segment is a bit too short! Try a arc length of *not* zero"); return false;}
+
+    if(phi > 0)
+    {
+        for (int i = 0; i < (int) phi * 10.0; ++i)
+        {
+            current.x = center.x + radius * cos(theta + (double) i/10.0);
+            current.y = center.y + radius * sin(theta + (double) i/10.0);
+            draw_line(current.x - previous.x, current.y-previous.y, 255);
+            previous.x = current.x;
+            previous.y = current.y;
+        }
+    } else if (phi < 0)
+    {
+        for (int i = 0; i > (int) phi * 10.0; --i)
+        {
+            current.x = center.x + radius * cos(theta + (double) i/10.0);
+            current.y = center.y + radius * sin(theta + (double) i/10.0);
+            draw_line(current.x - previous.x, current.y-previous.y, 255);
+            previous.x = current.x;
+            previous.y = current.y;
+        }
+    }
+    return true;
+}
+
+/*
+draws circle when plotter head/carriage is not currently on the arc of the circle
+center_x and center_y is relative to current plotter position.
+*/
+bool BEZIER::circle_segment_offr(double theta, double phi, double radius, uint32_t center_x, uint32_t center_y){
+    COORDS centre = {center_x, center_y};
+    centre.x += cos(theta) * radius;
+    centre.y += sin(theta) * radius;
+    draw_line(centre.x, centre.y, 255);
+    circle_segment_onr(theta, phi, radius);
+    return true;
 }
 
 /*
