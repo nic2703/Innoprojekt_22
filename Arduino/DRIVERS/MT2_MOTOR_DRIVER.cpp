@@ -90,13 +90,14 @@ double to_micros(double delta, char dir, double speed) {
 
 // intitialisation
 //-----------------------------------------------------------------
+
 Servo pen_servo;
 
 /*
 Constructor
 @param x,y,init_with_brakes positions default to 0; if thrid argument not 0, brakes are set to high
 */
-Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1)
+Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1, int _init_w_servo = 1)
 {
     xpos = xposition;
     ypos = yposition;
@@ -114,6 +115,9 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_bra
     if (_init_w_brakes){
         set_brakes(_BRAKE_B, HIGH); //engage both brakes
         set_brakes(_BRAKE_A, HIGH);
+    }
+    if (_init_w_servo){
+        initServo();
     }
 }
 
@@ -162,6 +166,18 @@ bool Plotter::initServo(pin pin_servo = _SERVO_LATCH)
     }
     servo_p = pin_servo;
     pen_servo.attach(pin_servo);
+    pen_servo.write(0);
+    return true;
+}
+
+bool Plotter::setpinServo(pin pin_servo)
+{
+ if (pin_servo > 30)
+    {
+        return false;
+    }
+    servo_p = pin_servo;
+    pen_servo.attach(pin_servo);
     return true;
 }
 
@@ -184,6 +200,19 @@ bool Plotter::resetpos(float xposition, float yposition)
 
 // line drawing fns
 //-----------------------------------------------------------------
+
+/*
+sets servo to specified angle
+@param angle input angle, between 0 and 1023
+*/
+bool Plotter::set_servo(uint32_t angle){
+    if (0 <= angle && angle <= 1023)
+    {
+    angle = TO_ANGLE(angle);
+    pen_servo.write(angle);
+    return true;
+    } else return false;
+}
 
 /*
 draw lines, function decides which type of line to make

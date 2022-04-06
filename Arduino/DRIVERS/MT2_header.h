@@ -75,18 +75,20 @@ class Plotter{
     pin servo_p = 0; 
     bool islifted = false;
 
+    bool initServo(pin);
     bool straight_line_x(float);
     bool straight_line_y(float);
     bool diagonal_line(float, float);
     bool approximate_line(float xdelta, float ydelta);
     
     public:
-        Plotter(float x = 0.0f, float y = 0.0f, int brakes = 1);
+        Plotter(float x = 0.0f, float y = 0.0f, int brakes = 1, int servo = 1);
         ~Plotter();
     
     bool setpinX(pin, pin, pin);
     bool setpinY(pin, pin, pin);
-    bool initServo(pin);     
+    bool setpinServo(pin);
+    bool set_servo(uint32_t);  
     bool resetpos(float, float);
     bool draw_line(float, float, float);
 };
