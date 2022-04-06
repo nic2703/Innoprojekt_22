@@ -82,7 +82,7 @@ class Plotter{
     bool approximate_line(float xdelta, float ydelta);
     
     public:
-        Plotter(float x = 0.0f, float y = 0.0f, int brakes = 1);
+        Plotter(float x = 0.0f, float y = 0.0f, int brakes = 1, int servo = 1);
         ~Plotter();
     
     bool setpinX(pin, pin, pin);
