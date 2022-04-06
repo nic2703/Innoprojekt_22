@@ -3,20 +3,12 @@
 #include "BEZIER_H.h"
 
 // general formula is: B(t) = (1-t)^3*p_0 + 3*(1-t)^2*t*p1 + 3*(1-t)*t*p_2+t^3*p_3, 0<t<1
-
-BEZIER::BEZIER(/* args */)
-{
-    _init_coords();
-}
-
-BEZIER::~BEZIER()
+//TODO: modify for custumisation of plotter object
+BEZIER::BEZIER()// : Plotter(0.0f, 0.0f, 1, 1)//initialises with standard plotter object
 {
 }
 
-void BEZIER::_init_coords(){
-    curve.x = 0; // cursed return home
-    curve.y = 0;
-}
+BEZIER::~BEZIER(){};
 
 //should plot an r
 bool BEZIER::robotica_test(int scale)
@@ -82,7 +74,7 @@ bool BEZIER::circle_segment_onr(double theta, double phi, double radius){
 draws circle when plotter head/carriage is not currently on the arc of the circle
 center_x and center_y is relative to current plotter position.
 */
-bool BEZIER::circle_segment_offr(double theta, double phi, double radius, uint32_t center_x, uint32_t center_y){
+bool BEZIER::circle_segment_offr(double theta, double phi, double radius, double center_x, double center_y){
     COORDS centre = {center_x, center_y};
     centre.x += cos(theta) * radius;
     centre.y += sin(theta) * radius;
@@ -96,8 +88,8 @@ function to plot nic's random mandala. I do not yet uderstand the maths behind t
 but i made this function nonetheless.
 @param your-mother your mother
 */
-bool BEZIER::random_curve(){
-    /*Basically this can be done in two ways. Either, you pass random parameters directly to the function, which makes it more interactive as
+/* bool BEZIER::random_curve(){
+    Basically this can be done in two ways. Either, you pass random parameters directly to the function, which makes it more interactive as
     the kids might be able to modify these in some way:
 
     There is the question of the random curves. I imagine two methods (first one easier) for this:
@@ -109,5 +101,5 @@ bool BEZIER::random_curve(){
     We would then need to ensure that this polar representation form is turned into cartesian.
 
     Other notes to mind:
-    Functions may not have too high of a curvature at any point/corners, and may not have too short segements*/
-}
+    Functions may not have too high of a curvature at any point/corners, and may not have too short segements
+} */

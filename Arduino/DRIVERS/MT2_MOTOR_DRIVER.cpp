@@ -97,7 +97,7 @@ Servo pen_servo;
 Constructor
 @param x,y,init_with_brakes positions default to 0; if thrid argument not 0, brakes are set to high
 */
-Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1, int _init_w_servo = 1)
+Plotter::Plotter(float xposition, float yposition, int _init_w_brakes, int _init_w_servo)
 {
     xpos = xposition;
     ypos = yposition;
@@ -117,7 +117,7 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_bra
         set_brakes(_BRAKE_A, HIGH);
     }
     if (_init_w_servo){
-        initServo();
+        initServo(_SERVO_LATCH);
     }
 }
 
@@ -206,12 +206,13 @@ sets servo to specified angle
 @param angle input angle, between 0 and 1023
 */
 bool Plotter::set_servo(uint32_t angle){
-    if (0 <= angle && angle <= 1023)
-    {
+    //if (0 <= angle && angle <= 1023)
+    //{
     angle = TO_ANGLE(angle);
     pen_servo.write(angle);
+    //return true;
+    //} else return false;
     return true;
-    } else return false;
 }
 
 /*
