@@ -5,6 +5,7 @@
 using namespace std;
 ifstream fin;
 ofstream fout;
+string filename = "Aleph.svg";
 
 bool searchforpath();
 bool ganalysis();
@@ -438,7 +439,6 @@ bool pathanalysis(){
 }
 
 int main(void){
-    string filename = "omega-svgrepo-com.svg";
     fin.open(filename);
     if (!fin.is_open()){
         cout << "Could not open the input file " << filename << endl;
