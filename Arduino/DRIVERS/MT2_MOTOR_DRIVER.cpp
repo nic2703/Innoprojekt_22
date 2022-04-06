@@ -108,6 +108,8 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_bra
     pinMode(_SPEED_A, OUTPUT); //speed pin
     pinMode(_DIR_B, OUTPUT); // direction pin
     pinMode(_BRAKE_B, OUTPUT); // brake pin
+    //servo
+    initServo(_SERVO_LATCH);
 
     if (_init_w_brakes){
         set_brakes(_BRAKE_B, HIGH); //engage both brakes
