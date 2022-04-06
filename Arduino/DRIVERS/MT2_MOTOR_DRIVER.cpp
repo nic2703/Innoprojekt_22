@@ -97,7 +97,7 @@ Servo pen_servo;
 Constructor
 @param x,y,init_with_brakes positions default to 0; if thrid argument not 0, brakes are set to high
 */
-Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1)
+Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1, int _init_w_servo = 1)
 {
     xpos = xposition;
     ypos = yposition;
@@ -115,6 +115,9 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_bra
     if (_init_w_brakes){
         set_brakes(_BRAKE_B, HIGH); //engage both brakes
         set_brakes(_BRAKE_A, HIGH);
+    }
+    if (_init_w_servo){
+        initServo();
     }
 }
 
