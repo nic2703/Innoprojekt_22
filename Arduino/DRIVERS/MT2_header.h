@@ -16,7 +16,7 @@ typedef unsigned int bit_speed;
 #define _SPEED_B    11
 #define _DIR_A      12
 #define _DIR_B      13
-#define _SERVO_LATCH 10
+#define _SERVO_LATCH 4
 
 //macros
 #define SET_DIR(a, p_dir) (a > 0 ? digitalWrite(p_dir, HIGH) : digitalWrite(p_dir, LOW)) //if delta is negative, go backwards, else go forwards
@@ -75,20 +75,19 @@ class Plotter{
     pin servo_p = 0; 
     bool islifted = false;
 
-    bool initServo(pin);
     bool straight_line_x(float);
     bool straight_line_y(float);
     bool diagonal_line(float, float);
     bool approximate_line(float xdelta, float ydelta);
     
     public:
-        Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1, int _init_w_servo = 1);
+        Plotter(float xposition = 0.0f, float yposition = 0.0f/*, int _init_w_brakes = 1, int _init_w_servo = 1*/);
         ~Plotter();
     
     bool setpinX(pin, pin, pin);
     bool setpinY(pin, pin, pin);
     bool setpinServo(pin);
-    bool set_servo(uint32_t);  
+    bool set_servo(int);  
     bool resetpos(float, float);
     bool draw_line(float, float, float);
 };
