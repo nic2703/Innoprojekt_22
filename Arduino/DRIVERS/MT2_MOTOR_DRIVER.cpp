@@ -90,6 +90,7 @@ double to_micros(double delta, char dir, double speed) {
 
 // intitialisation
 //-----------------------------------------------------------------
+
 Servo pen_servo;
 
 /*
@@ -184,6 +185,19 @@ bool Plotter::resetpos(float xposition, float yposition)
 
 // line drawing fns
 //-----------------------------------------------------------------
+
+/*
+sets servo to specified angle
+@param angle input angle, between 0 and 1023
+*/
+bool set_servo(uint32_t angle){
+    if (0 <= angle && angle <= 1023)
+    {
+    angle = TO_ANGLE(angle);
+    pen_servo.write(angle);
+    return true;
+    } else return false;
+}
 
 /*
 draw lines, function decides which type of line to make
