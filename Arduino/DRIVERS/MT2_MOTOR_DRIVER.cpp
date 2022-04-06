@@ -5,17 +5,91 @@
 /*
 sets speed of moter in byte value from 0 to 255
 @param motorPin,speed latch at whiich motor is attached and byte value to write to pin
-
 */
-void set_speed(pin motorPin, bit_speed speed){
+inline void set_speed(pin motorPin, bit_speed speed){
     analogWrite(motorPin, speed);
 }
 
-//sets brakes
-void set_brakes(pin pin, int state){ 
+/*
+sets speed of moter in byte value from 0 to 255
+@param brake_pin,state latch at whiich the brake for the motor is attached and wheter to switch brake on or off
+*/
+inline void set_brakes(pin pin, int state){ 
   digitalWrite(pin, state);
 }
 
+//speed conversions
+//-----------------------------------------------------------------
+
+/*
+converts a bytevalue speed to a mm/s
+@param in_speed double value of speed
+@return out_speed 
+*/
+inline double map_to_speed(double in_speed_bits)
+{
+    double out_speed = 1.012e-5 * cube(in_speed_bits) - 6.19e-3 * sq(in_speed_bits) + 1.332 * in_speed_bits - 37.24;
+    return out_speed;
+}
+
+/*
+converts a speed in mm/s to a bytevalue that can be written to the motor. this curve is an approximation but is fairly accurate
+@param in_speed double value of speed in mm/s
+@return out_speed a double value constrained to be between 40 and 255
+*/
+inline double map_to_bitspeed(double in_speed){
+    double out_speed = 203.887 - 0.0658762 * pow(3718.33 * sqrt(2.1603e9 * sq(in_speed) - 2.71301e11 * in_speed + 8.52866e12) - 1.72824e8 * in_speed + 1.08521e10, 0.33333333) + 34970.7 / pow(3718.33 * sqrt(2.1603e9 * sq(in_speed) - 2.71301e11 * in_speed + 8.52866e12) - 1.72824e8 * in_speed + 1.08521e10, 0.33333333);
+    return constrain(out_speed, 40.0, 255.0);
+} // ive done some testing and this seems to work quite reliably as the inverse of map_to_speed
+
+/*
+converts speed to revolutions per microsecond
+@param delta,dir converts distance to time, this overload assumes full speed (255)
+@return ms returns time in mocroseconds
+*/
+double to_micros(double delta, char dir) {
+    double ms;
+
+    switch (dir)
+    {
+    case 'x':
+        ms = TO_REV(delta, RADIUS_PULLEY) /  (map_to_speed(255) / RADIUS_PULLEY); // takes in speed in byte val and returns rps;
+        break;
+    case 'y':
+        ms = TO_REV(delta, RADIUS_RACK) /  (map_to_speed(255) / RADIUS_RACK);
+        break;
+    default:
+        Serial.println("That is not a valid axis! Try x or y instead.");
+    };
+
+    return 1000000.0 * ms;
+}
+
+/*
+converts speed to revolutions per microsecond
+@param delta,dir converts distance to time, this overload lets input speed be y byte value
+@return ms returns time in mocroseconds
+*/
+double to_micros(double delta, char dir, double speed) {
+    double ms;
+
+    switch (dir)
+    {
+    case 'x':
+        ms = TO_REV(delta, RADIUS_PULLEY) /  (map_to_speed(BYTE_SPEED(speed)) / RADIUS_PULLEY); // takes in speed in byte val and returns rps;
+        break;
+    case 'y':
+        ms = TO_REV(delta, RADIUS_RACK) /  (map_to_speed(BYTE_SPEED(speed)) / RADIUS_RACK);
+        break;
+    default:
+        Serial.println("That is not a valid axis! Try x or y instead.");
+    };
+
+    return 1000000.0 * ms;
+}
+
+// intitialisation
+//-----------------------------------------------------------------
 Servo pen_servo;
 
 /*
@@ -34,6 +108,8 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_bra
     pinMode(_SPEED_A, OUTPUT); //speed pin
     pinMode(_DIR_B, OUTPUT); // direction pin
     pinMode(_BRAKE_B, OUTPUT); // brake pin
+    //servo
+    initServo(_SERVO_LATCH);
 
     if (_init_w_brakes){
         set_brakes(_BRAKE_B, HIGH); //engage both brakes
@@ -105,6 +181,10 @@ bool Plotter::resetpos(float xposition, float yposition)
     return false;
 }
 
+
+// line drawing fns
+//-----------------------------------------------------------------
+
 /*
 draw lines, function decides which type of line to make
 @param xposnew,yposnew,speed desired new positions of x and y coordinates, speed at which to execute move
@@ -147,7 +227,7 @@ bool Plotter::straight_line_x(float xdelta)
 {
     SET_DIR(xdelta, xpdir); // set direction
 
-    uint32_t ms = TO_TIME(xdelta, RADIUS_PULLEY); 
+    uint32_t ms = to_micros(xdelta, 'x'); 
 
     if (TIME_MAX < ms)
     {
@@ -175,7 +255,7 @@ bool Plotter::straight_line_y(float ydelta)
 {
     SET_DIR(ydelta, ypdir); // set direction 
 
-    uint32_t ms = TO_TIME(ydelta, RADIUS_RACK);
+    uint32_t ms = to_micros(ydelta, 'y');
     
     if (TIME_MAX < ms)
     {
@@ -203,28 +283,28 @@ bool Plotter::diagonal_line(float xdelta, float ydelta)
     if (3 * abs(ydelta / xdelta) < 1 || abs(ydelta / xdelta) > 3.0f)
     {
         float ms; // no uneccesary memory waste
-        if (TIME_MAX < ms) {
-            Serial.println("Overran 10 second limit for normal line move!");
-            digitalWrite(xpbrk, HIGH);
-            digitalWrite(ypbrk, HIGH);
-            return false;
-        }
 
         if (abs(xdelta) > abs(ydelta)) // if x move is greater than y move
         {
-            ms = TO_TIME(xdelta, RADIUS_PULLEY);
+            ms = to_micros(xdelta, 'x');
             set_brakes(xpbrk, LOW); // release the handbrake
             set_speed(xpspd, 255);    // full speed line, x
             set_brakes(ypbrk, LOW); // release the handbrake
             set_speed(ypspd, (ydelta / xdelta) * 255.0f); // make diagonal
         } else {
-            ms = (ydelta) / (2 * PI * RADIUS_RACK); // same here
+            ms = to_micros(ydelta, 'y'); // same here
             set_brakes(ypbrk, LOW); // release the handbrake
             set_speed(ypspd, 255);    // full speed line, y 
             set_brakes(xpbrk, LOW); // release the handbrake
             set_speed(xpspd, (xdelta / ydelta) * 255.0f); // make diagonal
         }
 
+        if (TIME_MAX < ms) {
+            Serial.println("Overran 10 second limit for normal line move!");
+            digitalWrite(xpbrk, HIGH);
+            digitalWrite(ypbrk, HIGH);
+            return false;
+        }
 
         delay (ms);
 
