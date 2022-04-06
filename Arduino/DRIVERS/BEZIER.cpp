@@ -19,29 +19,29 @@ void BEZIER::_init_coords(){
 }
 
 //should plot an r
-bool BEZIER::robotica_test()
+bool BEZIER::robotica_test(int scale)
 {
-    Plotter::draw_line(0, 100, 255);
-    Plotter::draw_line(20, 0, 255);
-    Plotter::draw_line(0, -65, 255);
-    Plotter::draw_line(10, 10, 255);
-    Plotter::draw_line(10, 5, 255);
-    Plotter::draw_line(25, 0, 255);
-    Plotter::draw_line(10, -5, 255);
-    Plotter::draw_line(10, -10, 255);
-    Plotter::draw_line(15, 15, 255);
-    Plotter::draw_line(-10, 10, 255);
-    Plotter::draw_line(-20, 7, 255);
-    Plotter::draw_line(-25, 0, 255);
-    Plotter::draw_line(-20, -7, 255);
-    Plotter::draw_line(-3, -3, 255);
-    Plotter::draw_line(0, 10, 255);
-    Plotter::draw_line(-20, 0, 255);
-    Plotter::draw_line(0, -50, 255);
+    Plotter::draw_line(0,               100 * scale,    255);
+    Plotter::draw_line(20 * scale,      0,              255);
+    Plotter::draw_line(0,               -65 * scale,    255);
+    Plotter::draw_line(10 * scale,      10 * scale,     255);
+    Plotter::draw_line(10 * scale,      5 * scale,      255);
+    Plotter::draw_line(25 * scale,      0,              255);
+    Plotter::draw_line(10 * scale,      -5 * scale,     255);
+    Plotter::draw_line(10 * scale,      -10 * scale,    255);
+    Plotter::draw_line(15 * scale,      15 * scale,     255);
+    Plotter::draw_line(-10 * scale,     10 * scale,     255);
+    Plotter::draw_line(-20 * scale,     7 * scale,      255);
+    Plotter::draw_line(-25 * scale,     0,              255);
+    Plotter::draw_line(-20 * scale,     -7 * scale,     255);
+    Plotter::draw_line(-3 * scale,      -3 * scale,     255);
+    Plotter::draw_line(0,               10 * scale,     255);
+    Plotter::draw_line(-20 * scale,     0 * scale,      255);
+    Plotter::draw_line(0 * scale,       -50 * scale,    255);
 }
 
 /*
-draws a circle segment, assuming the plotter head is aready on the radius. at too steep angles, the circle must be approximated, so 
+draws a circle segment, assuming the plotter head/carriage is aready on the radius. at too steep angles, the circle must be approximated, so 
 there will be zig-zag lines at the parts of the circle, where the tangent
 is roughly parallel to the x or y axis
 @param theta,phi,radius,dir (RADIANS!!!!!!!) theta is the angle to the //TODO:what axis? ()-axis at which the circle segment will 

@@ -21,7 +21,7 @@ public:
     BEZIER(/* args */);
     ~BEZIER();
 
-    bool robotica_test();
+    bool robotica_test(int = 1);
     bool circle_segment_offr(double, double, double, uint32_t, uint32_t);
     bool circle_segment_onr(double, double, double);
     bool random_curve();
