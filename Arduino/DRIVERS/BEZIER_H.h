@@ -19,7 +19,7 @@ public:
     ~BEZIER();
 
     bool robotica_test();
-    bool circle_segment();
+    bool circle_segment(double, double, double, int);
     bool random_curve();
 };
 

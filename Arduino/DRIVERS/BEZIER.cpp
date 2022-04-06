@@ -41,10 +41,22 @@ bool BEZIER::robotica_test()
     Plotter::draw_line(0, -50, 255);
 }
 
-bool BEZIER::circle_segment(){
+/*
+draws a circle segment. at too steep angles, the circle must be approximated, so 
+there will be zig-zag lines at the parts of the circle, where the tangent
+is roughly parallel to the x or y axis
+@param theta,phi,radius,dir theta is the angle to the //TODO:what axis? ()-axis at which the circle segment will 
+begin drawing from, phi the arc-length and radius the radius of the circle segment
+*/
+bool BEZIER::circle_segment(double theta, double phi, double radius, int dir){
 
 }
 
+/*
+function to plot nic's random mandala. I do not yet uderstand the maths behind this or in fact know what the transform is,
+but i made this function nonetheless.
+@param your-mother your mother
+*/
 bool BEZIER::random_curve(){
     
 }
