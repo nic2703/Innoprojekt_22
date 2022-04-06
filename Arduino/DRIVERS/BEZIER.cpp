@@ -60,5 +60,17 @@ but i made this function nonetheless.
 @param your-mother your mother
 */
 bool BEZIER::random_curve(){
-    
+    /*Basically this can be done in two ways. Either, you pass random parameters directly to the function, which makes it more interactive as
+    the kids might be able to modify these in some way:
+
+    There is the question of the random curves. I imagine two methods (first one easier) for this:
+    1) Rotated coordinate system from polar to quadratic. Random continous functions on an interval with known start and end values may
+    be inserted into "pie"-like slices of the Mandala and then repeated. This would require a coordinate transformation from cartesian
+    to polar and back
+
+    2) Using purely parametric curves, it is probably possible to create a compelling (or multiple) repeating patterns with some rotational similarity.
+    We would then need to ensure that this polar representation form is turned into cartesian.
+
+    Other notes to mind:
+    Functions may not have too high of a curvature at any point/corners, and may not have too short segements*/
 }
