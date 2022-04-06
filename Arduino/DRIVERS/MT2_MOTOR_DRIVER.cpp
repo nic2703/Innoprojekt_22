@@ -163,6 +163,7 @@ bool Plotter::initServo(pin pin_servo = _SERVO_LATCH)
     }
     servo_p = pin_servo;
     pen_servo.attach(pin_servo);
+    pen_servo.write(0);
     return true;
 }
 
