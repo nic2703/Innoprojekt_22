@@ -166,6 +166,17 @@ bool Plotter::initServo(pin pin_servo = _SERVO_LATCH)
     return true;
 }
 
+bool Plotter::setpinServo(pin pin_servo)
+{
+ if (pin_servo > 30)
+    {
+        return false;
+    }
+    servo_p = pin_servo;
+    pen_servo.attach(pin_servo);
+    return true;
+}
+
 /*
 resets private positions of motors
 @param x,y current positions, sets to input parameters
@@ -190,7 +201,7 @@ bool Plotter::resetpos(float xposition, float yposition)
 sets servo to specified angle
 @param angle input angle, between 0 and 1023
 */
-bool set_servo(uint32_t angle){
+bool Plotter::set_servo(uint32_t angle){
     if (0 <= angle && angle <= 1023)
     {
     angle = TO_ANGLE(angle);
