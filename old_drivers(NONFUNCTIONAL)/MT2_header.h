@@ -52,7 +52,7 @@ const double RADIUS_RACK = 4.5;  // in mm (y)
 const double RADIUS_PULLEY = 0.5;  // in mm (x)
 
 //update
-const float MINDIST = 0.00001lazygit; // minimum distance the motor can turn in mm, immutable for safety
+const float MINDIST = 0.00001; // minimum distance the motor can turn in mm, immutable for safety
 const int X_BOUNDARY = 100;
 const int Y_BOUNDARY = 100;
 
