@@ -52,7 +52,7 @@ const double RADIUS_RACK = 4.5;  // in mm (y)
 const double RADIUS_PULLEY = 0.5;  // in mm (x)
 
 //update
-const float MINDIST = 1.0f; // minimum distance the motor can turn in mm, immutable for safety
+const float MINDIST = 0.00001lazygit; // minimum distance the motor can turn in mm, immutable for safety
 const int X_BOUNDARY = 100;
 const int Y_BOUNDARY = 100;
 
@@ -84,8 +84,8 @@ class Plotter{
         Plotter(float xposition = 0.0f, float yposition = 0.0f/*, int _init_w_brakes = 1, int _init_w_servo = 1*/);
         ~Plotter();
     
-    bool setpinX(pin, pin, pin);
-    bool setpinY(pin, pin, pin);
+    bool setpinX(pin pin_speed = _SPEED_A, pin pin_brake = _BRAKE_A, pin pin_direction = _DIR_A);
+    bool setpinY(pin pin_speed = _SPEED_B, pin pin_brake = _BRAKE_B, pin pin_direction = _DIR_B);
     bool setpinServo(pin);
     bool set_servo(int);  
     bool resetpos(float, float);

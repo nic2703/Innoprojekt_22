@@ -126,7 +126,7 @@ set pins
 @param x output pins (headers) on Arduino, default to 3, 9, 12
 @return boolean value true if operation succeeded, else false
 */
-bool Plotter::setpinX(pin pin_speed = _SPEED_A, pin pin_brake = _BRAKE_A, pin pin_direction = _DIR_A)
+bool Plotter::setpinX(pin pin_speed, pin pin_brake, pin pin_direction)
 {
     if (pin_speed > 30 || pin_brake > 30 || pin_direction > 30) // available pins
     {
@@ -143,7 +143,7 @@ set pins
 @param y output pins (headers) on Arduino, default to 
 @return boolean value true if operation succeeded, else false
 */
-bool Plotter::setpinY(pin pin_speed = _SPEED_B, pin pin_brake = _BRAKE_B, pin pin_direction = _DIR_B)
+bool Plotter::setpinY(pin pin_speed, pin pin_brake, pin pin_direction)
 {
     if (pin_speed > 30 || pin_brake > 30 || pin_direction > 30) // IDEA: if pins are taken (say by x or  servo), complain
     {

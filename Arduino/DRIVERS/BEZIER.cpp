@@ -11,7 +11,7 @@ BEZIER::BEZIER()// : Plotter(0.0f, 0.0f, 1, 1)//initialises with standard plotte
 BEZIER::~BEZIER(){};
 
 //should plot an r
-bool BEZIER::robotica_test(int scale)
+bool BEZIER::robotica_test(double scale)
 {
     Plotter::draw_line(0,               100 * scale,    255);
     Plotter::draw_line(20 * scale,      0,              255);
