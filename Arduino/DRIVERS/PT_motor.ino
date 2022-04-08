@@ -9,7 +9,7 @@ void setup() {
    *   code for individual and combinerd test    *
    *                                             *
    * *********************************************/
-    Plotter plotter = Plotter(3.2f, 6.5f, 1); // there exists an object
+    Plotter plotter = Plotter(3.2f, 6.5f/*, 1, 1*/); // there exists an object
     
 }
 

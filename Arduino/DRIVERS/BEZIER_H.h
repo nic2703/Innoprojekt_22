@@ -9,9 +9,9 @@
 */
 struct COORDS 
 {
-    uint32_t x;
-    uint32_t y;
-} curve = {0,0};
+    double x;
+    double y;
+};
 
 class BEZIER : public Plotter
 {
@@ -21,10 +21,10 @@ public:
     BEZIER(/* args */);
     ~BEZIER();
 
-    bool robotica_test();
-    bool circle_segment_offr(double, double, double, int);
-    bool circle_segment_onr(double, double, double, int);
-    bool random_curve();
+    bool robotica_test(int = 1);
+    bool circle_segment_offr(double, double, double, double, double);
+    bool circle_segment_onr(double, double, double);
+    //bool random_curve();
 };
 
 #endif // !BEZIER_H

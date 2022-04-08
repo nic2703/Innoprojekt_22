@@ -2,6 +2,8 @@
 #include <Servo.h>
 #include "MT2_header.h"
 
+Servo pen_servo;
+
 /*
 sets speed of moter in byte value from 0 to 255
 @param motorPin,speed latch at whiich motor is attached and byte value to write to pin
@@ -91,13 +93,11 @@ double to_micros(double delta, char dir, double speed) {
 // intitialisation
 //-----------------------------------------------------------------
 
-Servo pen_servo;
-
 /*
 Constructor
 @param x,y,init_with_brakes positions default to 0; if thrid argument not 0, brakes are set to high
 */
-Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_brakes = 1, int _init_w_servo = 1)
+Plotter::Plotter(float xposition /*= 0*/, float yposition /*= 0*//*, int _init_w_brakes /*= 1, int _init_w_servo /*= 1*/)
 {
     xpos = xposition;
     ypos = yposition;
@@ -110,15 +110,12 @@ Plotter::Plotter(float xposition = 0.0f, float yposition = 0.0f, int _init_w_bra
     pinMode(_DIR_B, OUTPUT); // direction pin
     pinMode(_BRAKE_B, OUTPUT); // brake pin
     //servo
-    initServo(_SERVO_LATCH);
+    servo_p = _SERVO_LATCH;
+    pen_servo.attach(_SERVO_LATCH);
+    pen_servo.write(0);
 
-    if (_init_w_brakes){
-        set_brakes(_BRAKE_B, HIGH); //engage both brakes
-        set_brakes(_BRAKE_A, HIGH);
-    }
-    if (_init_w_servo){
-        initServo();
-    }
+    set_brakes(_BRAKE_B, HIGH); //engage both brakes
+    set_brakes(_BRAKE_A, HIGH);
 }
 
 Plotter::~Plotter(){}; // no destructor needed
@@ -158,18 +155,6 @@ bool Plotter::setpinY(pin pin_speed = _SPEED_B, pin pin_brake = _BRAKE_B, pin pi
     return true;
 }
 
-bool Plotter::initServo(pin pin_servo = _SERVO_LATCH) 
-{
-    if (pin_servo > 30)
-    {
-        return false;
-    }
-    servo_p = pin_servo;
-    pen_servo.attach(pin_servo);
-    pen_servo.write(0);
-    return true;
-}
-
 bool Plotter::setpinServo(pin pin_servo)
 {
  if (pin_servo > 30)
@@ -205,13 +190,14 @@ bool Plotter::resetpos(float xposition, float yposition)
 sets servo to specified angle
 @param angle input angle, between 0 and 1023
 */
-bool Plotter::set_servo(uint32_t angle){
-    if (0 <= angle && angle <= 1023)
-    {
-    angle = TO_ANGLE(angle);
+bool Plotter::set_servo(int angle){
+    //if (0 <= angle && angle <= 1023)
+    //{
+    //angle = TO_ANGLE(angle);
     pen_servo.write(angle);
+    //return true;
+    //} else return false;
     return true;
-    } else return false;
 }
 
 /*
@@ -223,7 +209,7 @@ bool Plotter::draw_line(float xposnew = 0.0f, float yposnew = 0.0f, float speed 
 {
     float xdelta = xposnew - xpos;
     float ydelta = yposnew - ypos;
-    if (IS_TOO_SMALL(xdelta) && IS_TOO_SMALL(ydelta)){
+    if (IS_TOO_SMALL(xdelta) || IS_TOO_SMALL(ydelta)){
         Serial.println("Line too short!");
     } 
     else if (IS_TOO_SMALL(xdelta)) 
