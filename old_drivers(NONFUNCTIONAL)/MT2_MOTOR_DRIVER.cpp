@@ -6,7 +6,7 @@ Servo pen_servo;
 
 /*
 sets speed of moter in byte value from 0 to 255
-@param motorPin,speed latch at whiich motor is attached and byte value to write to pin
+@param motorPin,speed latch at which motor is attached and byte value to write to pin
 */
 inline void set_speed(pin motorPin, bit_speed speed){
     analogWrite(motorPin, speed);
