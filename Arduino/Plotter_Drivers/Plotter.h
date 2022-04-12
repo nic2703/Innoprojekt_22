@@ -8,6 +8,8 @@
  * @date 2022-04-10
  */
 
+#pragma once
+
 #ifndef PLT_H
 #define PLT_H
 
@@ -47,12 +49,25 @@ Servo pen_lift;
 
 #endif // ORIENTATION
 
+class plt
+{
+public:
+    plt() = default; // default constructor
+    plt(plt &&) = default; 
+    plt(const plt &) = default;
+    plt &operator=(plt &&) = default;
+    plt &operator=(const plt &) = default;
+    ~plt() = default;
+
+private:
+};
+
 //-------------------------------------------------------
 
 #define MOTOR_CORRECTION a / b // TODO: we need to experimentally find a, b or a/b
 
 // macros
-#define cube(x) ((x) * (x) * (x))                                                           // cubes x
+#define cube(x) ((x)*(x)*(x))                                                           // cubes x
 #define SPEED_TO_BITS(s) ((28.97 + 3.402 * (s)-0.1736 * sq(s) + 0.003101 * cube(s)) * 67.7) // caluculates bit value needed for bits, takes float returns float in the range [0, 1]
 #define BITS_TO_SPEED(s) (1.012e-5 * cube(s) - 6.19e-3 * sq(s) + 1.332 * s - 37.24)         // bytespeed to actual irl speed
 #define SET_DIR(s, p_dir) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
@@ -72,6 +87,8 @@ struct Plotter
     bool has_not_died = true;             // Security
 };
 
+bool __plt_init(); // initialisation sequence plotter
+
 // motors----------------------------------------------------
 
 /**
@@ -83,9 +100,11 @@ struct Plotter
 inline void set_speed(pin, int, pin, int);
 // FIXME: I find the returns void commedy, but we can get rid of it
 
-uint16_t revolutions(vec); // TODO: convert distance to necessary revs at 255 byte speed
+//uint16_t revolutions(vec); // TODO: convert distance to necessary revs at 255 byte speed
+//different calculation method is probs better
 
 // Drawing--------------------------------------------------
+
 /**
  * @brief Draws a line from the current position using
  * @param dx delta x

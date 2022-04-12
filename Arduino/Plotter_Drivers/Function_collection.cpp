@@ -3,22 +3,29 @@
 Plotter plotter; // instance of struct Plotter
 extern Servo pen_lift;
 
-// simple stuff
-/*
-inline void set_speed(pin motor_a, int speed_a, pin motor_b, int speed_b)
+
+bool __plt_init()
 {
-    analogWrite(motor_a, speed_a);
+    // TODO: do button check
+
+    pinMode(buttonPin, INPUT);
+    
+    pinMode(ledPin, OUTPUT); // this 
+    pinMode(ledPin, OUTPUT);
+    pinMode(ledPin, OUTPUT);
+    pinMode(ledPin, OUTPUT);
+
+
+
+}
+
+// simple stuff
+
+inline void set_speed(int speed_a, int speed_b, bool both)
+{
+    analogWrite(motor_a, speed_a); // FIXME: global motor vars needed
     analogWrite(motor_b, speed_b);
 }
-*/ //when writing to both motors it is not necessary to actually specify the motors
-
-inline void set_speed(int speed_a, int speed_b)
-{
-    analogWrite(SPEED_A, speed_a);
-    analogWrite(SPEED_B, speed_b);
-}
-
-// overload
 
 inline void set_speed(pin motor, int speed)
 {
