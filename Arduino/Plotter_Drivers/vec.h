@@ -1,6 +1,7 @@
-#include <cmath>
-#include <string>
-#include <iostream>
+#ifndef VEC_H
+#define VEC_H
+
+#include <Arduino.h>
 
 class vec
 {
@@ -227,11 +228,6 @@ public:
      * @return vec orthogonal vector
      */
     vec orth();
-
-    /**
-     * @brief defines the << operator for the ostream
-     * 
-     * @return std::ostream& 
-     */
-    friend std::ostream &operator<<(std::ostream &, vec &);
 };
+
+#endif
