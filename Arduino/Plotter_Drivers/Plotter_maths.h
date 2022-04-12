@@ -1,7 +1,7 @@
 /**
  * @file Plotter_maths.h
  * @author Robotica (@student.ethz.ch)
- * @brief Provides linear algebra support in the context of the plotter.
+ * @brief Provides maths support in the context of the plotter.
  * @version 0.1
  * @date 2022-04-12
  * 

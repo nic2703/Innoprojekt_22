@@ -5,7 +5,7 @@ double Vec::norm()
     return sqrt(sq(*this));
 }
 
-vec Vec::orth()
+Vec Vec::orth()
 {
-    return vec(this->y, -(this->x));
+    return Vec(this->y, -(this->x));
 }

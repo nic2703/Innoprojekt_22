@@ -1,7 +1,7 @@
 /**
  * @file vec.h
  * @author Robotica (vkottas@student.ethz.ch)
- * @brief 
+ * @brief Provides linear algebra support in the context of the plotter.
  * @version 0.1
  * @date 2022-04-12
  * 
