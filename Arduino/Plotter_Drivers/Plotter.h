@@ -66,8 +66,8 @@ Servo pen_lift;
  */
 struct Plotter
 {
-    coords max_position = {21000, 29700}; // Short side of the paper with 1/100 mm precision, Long side of the paper with 1/100 mm precision
-    coords position = {-1, -1};           // Current position of the plotter head
+    vec max_position = {21000, 29700}; // Short side of the paper with 1/100 mm precision, Long side of the paper with 1/100 mm precision
+    vec position = {-1, -1};           // Current position of the plotter head
     int z = LOW;                          // Tells you if the pen is lifted
     bool has_not_died = true;             // Security
 };
@@ -83,7 +83,7 @@ struct Plotter
 inline void set_speed(pin, int, pin, int);
 // FIXME: I find the returns void commedy, but we can get rid of it
 
-uint16_t revolutions(coords); // TODO: convert distance to necessary revs at 255 byte speed
+uint16_t revolutions(vec); // TODO: convert distance to necessary revs at 255 byte speed
 
 // Drawing--------------------------------------------------
 /**
@@ -92,7 +92,7 @@ uint16_t revolutions(coords); // TODO: convert distance to necessary revs at 255
  * @param dy delta y
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_line(coords);
+bool draw_line(vec);
 
 /**
  * @brief Draws a line to the nearest point on the circle radius, than starts drawing a circle segent up to the specified angle
@@ -101,7 +101,7 @@ bool draw_line(coords);
  * @param arc arc length in radians within range [-2*pi, 2*pi]
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_circle_segment(coords, int, double);
+bool draw_circle_segment(vec, int, double);
 
 /**
  * @brief Draws a line to a specified point on the circle radius, than starts drawing a circle segent up to the specified angle
@@ -111,7 +111,7 @@ bool draw_circle_segment(coords, int, double);
  * @param start_angle angle relative to x-axis at which to start the circle segment
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_circle_segment(coords, int, double, double);
+bool draw_circle_segment(vec, int, double, double);
 
 /**
  * @brief

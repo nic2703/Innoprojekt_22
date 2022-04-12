@@ -25,7 +25,7 @@ inline void set_speed(pin motor, int speed)
     analogWrite(motor, speed);
 }
 
-// mafs
+// mafs 
 
 double norm(vec vec)
 {
