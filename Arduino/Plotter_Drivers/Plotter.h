@@ -10,8 +10,8 @@
 
 #pragma once
 
-#ifndef PLT_H
-#define PLT_H
+#ifndef Plt_H
+#define Plt_H
 
 #include <Arduino.h>
 #include <Servo.h>
@@ -51,15 +51,15 @@ Servo pen_lift;
 
 //TODO: we need to replace all instances of vec struct with Vec class
 
-class plt
+class Plt
 {
 public:
-    plt() = default; // default constructor
-    plt(plt &&) = default; 
-    plt(const plt &) = default;
-    plt &operator=(plt &&) = default;
-    plt &operator=(const plt &) = default;
-    ~plt() = default;
+    Plt() = default; // default constructor
+    Plt(Plt &&) = default; 
+    Plt(const Plt &) = default;
+    Plt &operator=(Plt &&) = default;
+    Plt &operator=(const Plt &) = default;
+    ~Plt() = default;
 
 private:
 };
@@ -83,13 +83,13 @@ private:
  */
 struct Plotter
 {
-    vec max_position = vec(21000, 29700); // Short side of the paper with 1/100 mm precision, Long side of the paper with 1/100 mm precision
-    vec position = vec(-1, -1);           // Current position of the plotter head
+    Vec max_position = Vec(21000, 29700); // Short side of the paper with 1/100 mm precision, Long side of the paper with 1/100 mm precision
+    Vec position = Vec(-1, -1);           // Current position of the plotter head
     int z = LOW;                          // Tells you if the pen is lifted
     bool has_not_died = true;             // Security
 };
 
-bool __plt_init(); // initialisation sequence plotter
+bool __Plt_init(); // initialisation sequence plotter
 
 // motors----------------------------------------------------
 
@@ -113,7 +113,7 @@ inline void set_speed(pin, int, pin, int);
  * @param dy delta y
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_line(vec);
+bool draw_line(Vec);
 
 /**
  * @brief Draws a line to the nearest point on the circle radius, than starts drawing a circle segent up to the specified angle
@@ -122,7 +122,7 @@ bool draw_line(vec);
  * @param arc arc length in radians within range [-2*pi, 2*pi]
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_circle_segment(vec, int, double);
+bool draw_circle_segment(Vec, int, double);
 
 /**
  * @brief Draws a line to a specified point on the circle radius, than starts drawing a circle segent up to the specified angle
@@ -132,7 +132,7 @@ bool draw_circle_segment(vec, int, double);
  * @param start_angle angle relative to x-axis at which to start the circle segment
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_circle_segment(vec, int, double, double);
+bool draw_circle_segment(Vec, int, double, double);
 
 /**
  * @brief

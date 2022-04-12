@@ -32,14 +32,7 @@ inline void set_speed(pin motor, int speed)
     analogWrite(motor, speed);
 }
 
-// mafs 
-
-double norm(vec vec)
-{
-    return sqrt(vec*vec);
-}
-
-uint16_t to_micros(vec delta)
+uint16_t to_micros(Vec delta)
 {
 return delta.x * M_1_PI;
 } // formula delta/(pi*d)
@@ -47,7 +40,7 @@ return delta.x * M_1_PI;
 // drawing
 //--------------------------------
 
-bool draw_line(vec delta)
+bool draw_line(Vec delta)
 {
     if (plotter.position.x + delta.x > plotter.max_position.x || plotter.position.y + delta.y > plotter.max_position.y || plotter.position.x + delta.x < 0 && plotter.position.y + delta.y) // check if the line would land out of bounds
         return false;
@@ -67,14 +60,14 @@ bool draw_line(vec delta)
     return true;
 }
 
-bool draw_circle_segment(vec midpoint, int radius, double arc)
+bool draw_circle_segment(Vec midpoint, int radius, double arc)
 {
     if (/*condition to check if it will be out of bounds*/ true) // TODO: condition check if circle will be out of bounds
         return false;
 
     double current_angle = 0;
-    vec to_midpoint = midpoint - plotter.position;
-    vec to_point; //FIXME: needed definition for to_point, presumanly using the dot product
+    Vec to_midpoint = midpoint - plotter.position;
+    Vec to_point; //FIXME: needed definition for to_point, presumanly using the dot product
 
     if (-0.01 < arc && arc < 0.01)
     {
@@ -105,16 +98,16 @@ bool draw_circle_segment(vec midpoint, int radius, double arc)
 
 //overload
 
-bool draw_circle_segment(vec midpoint, int radius, double arc, double start_angle)
+bool draw_circle_segment(Vec midpoint, int radius, double arc, double start_angle)
 {
     if (/*condition to check if it will be out of bounds*/ true) // TODO: condition check if circle will be out of bounds
         return false;
 
     double current_angle = 0;
-    vec to_midpoint = midpoint - plotter.position;
-    vec radius_angles = vec(int(cos(start_angle) * radius), int(sin(start_angle) * radius)); //FIXME: find a better name for this variable, it is just the vector to the point ont the circle from the circle midpoint
+    Vec to_midpoint = midpoint - plotter.position;
+    Vec radius_angles = Vec(int(cos(start_angle) * radius), int(sin(start_angle) * radius)); //FIXME: find a better name for this variable, it is just the vector to the point ont the circle from the circle midpoint
     //FIXME: typecasting to int might cause severe precision issues here, please verify
-    vec to_point = to_midpoint + radius_angles; //{midpoint.x - plotter.position.x + cos(start_angle) * radius, 2 * midpoint.y - plotter.position.y + sin(start_angle) * radius}; // vector to point on arc
+    Vec to_point = to_midpoint + radius_angles; //{midpoint.x - plotter.position.x + cos(start_angle) * radius, 2 * midpoint.y - plotter.position.y + sin(start_angle) * radius}; // vector to point on arc
 
     if (-0.01 < arc && arc < 0.01)
     {

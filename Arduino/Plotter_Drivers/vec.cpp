@@ -1,11 +1,11 @@
 #include "vec.h"
 
-double vec::norm()
+double Vec::norm()
 {
     return sqrt(sq(*this));
 }
 
-vec vec::orth()
+vec Vec::orth()
 {
     return vec(this->y, -(this->x));
 }
