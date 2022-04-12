@@ -49,6 +49,8 @@ Servo pen_lift;
 
 #endif // ORIENTATION
 
+//TODO: we need to replace all instances of vec struct with Vec class
+
 class plt
 {
 public:
