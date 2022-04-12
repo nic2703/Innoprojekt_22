@@ -74,7 +74,7 @@ bool draw_circle_segment(vec midpoint, int radius, double arc)
 
     double current_angle = 0;
     vec to_midpoint = midpoint - plotter.position;
-    vec to_point;
+    vec to_point; //FIXME: needed definition for to_point, presumanly using the dot product
 
     if (-0.01 < arc && arc < 0.01)
     {
@@ -112,7 +112,7 @@ bool draw_circle_segment(vec midpoint, int radius, double arc, double start_angl
 
     double current_angle = 0;
     vec to_midpoint = midpoint - plotter.position;
-    vec radius_angles = {int(cos(start_angle) * radius), int(sin(start_angle) * radius)}; //FIXME: find a better name for this variable, it is just the vector to the point ont the circle from the circle midpoint
+    vec radius_angles = vec(int(cos(start_angle) * radius), int(sin(start_angle) * radius)); //FIXME: find a better name for this variable, it is just the vector to the point ont the circle from the circle midpoint
     //FIXME: typecasting to int might cause severe precision issues here, please verify
     vec to_point = to_midpoint + radius_angles; //{midpoint.x - plotter.position.x + cos(start_angle) * radius, 2 * midpoint.y - plotter.position.y + sin(start_angle) * radius}; // vector to point on arc
 

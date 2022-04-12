@@ -83,8 +83,8 @@ private:
  */
 struct Plotter
 {
-    vec max_position = {21000, 29700}; // Short side of the paper with 1/100 mm precision, Long side of the paper with 1/100 mm precision
-    vec position = {-1, -1};           // Current position of the plotter head
+    vec max_position = vec(21000, 29700); // Short side of the paper with 1/100 mm precision, Long side of the paper with 1/100 mm precision
+    vec position = vec(-1, -1);           // Current position of the plotter head
     int z = LOW;                          // Tells you if the pen is lifted
     bool has_not_died = true;             // Security
 };
