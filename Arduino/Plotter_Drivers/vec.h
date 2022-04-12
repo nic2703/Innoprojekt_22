@@ -5,7 +5,7 @@
 class vec
 {
 public:
-    int x; //xcoordinate
+    int x; //x coordinate
     int y; //y coordinate
 
     /**
