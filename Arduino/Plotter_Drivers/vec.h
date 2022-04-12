@@ -1,21 +1,31 @@
+/**
+ * @file vec.h
+ * @author Robotica (vkottas@student.ethz.ch)
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-12
+ * 
+ */
+#pragma once
+
 #ifndef VEC_H
 #define VEC_H
 
 #include <Arduino.h>
 
-class vec
+class Vec
 {
 public:
     int x; //x coordinate
     int y; //y coordinate
 
     /**
-     * @brief Construct a new vec object
+     * @brief Construct a new Vec object
      * 
      * @param init_x x coordinate
      * @param init_y y coordinate
      */
-    vec(int init_x, int init_y)
+    Vec(int init_x, int init_y)
     {
         x = init_x;
         y = init_y;
@@ -28,7 +38,7 @@ public:
      * @return true if the two vectors are equal
      * @return false if they are not
      */
-    bool operator==(vec vector)
+    bool operator==(Vec vector)
     {
         return vector.x == x && vector.y == y;
     }
@@ -40,7 +50,7 @@ public:
      * @return true if the vector is shorter or equal
      * @return false if the vector is longer
      */
-    bool operator<=(vec vector)
+    bool operator<=(Vec vector)
     {
         return (*this).norm() <= vector.norm();
     }
@@ -52,7 +62,7 @@ public:
      * @return true if the vector is shorter
      * @return false if the vector is longer or equal
      */
-    bool operator<(vec vector)
+    bool operator<(Vec vector)
     {
         return (*this).norm() < vector.norm();
     }
@@ -64,7 +74,7 @@ public:
      * @return true if the vector is longer or equal
      * @return false if the vector is shorter
      */
-    bool operator>=(vec vector)
+    bool operator>=(Vec vector)
     {
         return (*this).norm() >= vector.norm();
     }
@@ -76,7 +86,7 @@ public:
      * @return true if the vector is longer
      * @return false if the vector is shorter or equal
      */
-    bool operator>(vec vector)
+    bool operator>(Vec vector)
     {
         return (*this).norm() > vector.norm();
     }
@@ -88,7 +98,7 @@ public:
      * @param vec2 
      * @return int
      */
-    friend int operator*(const vec vec1, const vec vec2)
+    friend int operator*(const Vec vec1, const Vec vec2)
     {
         return vec1.x * vec2.x + vec1.y * vec2.y;
     }
@@ -97,31 +107,31 @@ public:
      * @brief multiplication a scalar
      * 
      * @param scalar 
-     * @return vec 
+     * @return Vec 
      */
-    friend vec operator*(int scalar, vec vector)
+    friend Vec operator*(int scalar, Vec vector)
     {
-        return vec(vector.x * scalar, vector.y * scalar);
+        return Vec(vector.x * scalar, vector.y * scalar);
     }
 
     /**
      * @brief multiplitcation with a scalar
      * 
      * @param scalar 
-     * @return vec 
+     * @return Vec 
      */
-    friend vec operator*(vec vector, int scalar)
+    friend Vec operator*(Vec vector, int scalar)
     {
-        return vec(vector.x * scalar, vector.y * scalar);
+        return Vec(vector.x * scalar, vector.y * scalar);
     }
 
     /**
      * @brief multplication and assignment
      * 
      * @param scalar 
-     * @return vec& original vector scaled by the scalar
+     * @return Vec& original vector scaled by the scalar
      */
-    vec &operator*=(int scalar)
+    Vec &operator*=(int scalar)
     {
         x *= scalar;
         y *= scalar;
@@ -133,31 +143,31 @@ public:
      * @brief division with a scalar
      * 
      * @param scalar 
-     * @return vec 
+     * @return Vec 
      */
-    friend vec operator/(int scalar, vec vector)
+    friend Vec operator/(int scalar, Vec vector)
     {
-        return vec(vector.x / scalar, vector.y / scalar);
+        return Vec(vector.x / scalar, vector.y / scalar);
     }
 
     /**
      * @brief division with a scalar
      * 
      * @param scalar 
-     * @return vec 
+     * @return Vec 
      */
-    friend vec operator/(vec vector, int scalar)
+    friend Vec operator/(Vec vector, int scalar)
     {
-        return vec(vector.x / scalar, vector.y / scalar);
+        return Vec(vector.x / scalar, vector.y / scalar);
     }
 
     /**
      * @brief division and assignment
      * 
      * @param scalar 
-     * @return vec& original vector scaled by the scalar
+     * @return Vec& original vector scaled by the scalar
      */
-    vec &operator/=(int scalar)
+    Vec &operator/=(int scalar)
     {
         x /= scalar;
         y /= scalar;
@@ -169,9 +179,9 @@ public:
      * @brief addition and assignment
      * 
      * @param vector 
-     * @return vec&
+     * @return Vec&
      */
-    vec &operator+=(vec vector)
+    Vec &operator+=(Vec vector)
     {
         x += vector.x;
         y += vector.y;
@@ -183,20 +193,20 @@ public:
      * @brief addition of two vectors
      * 
      * @param vector 
-     * @return vec sum of the two vectors
+     * @return Vec sum of the two vectors
      */
-    vec operator+(vec vector)
+    Vec operator+(Vec vector)
     {
-        return vec(x + vector.x, y + vector.y);
+        return Vec(x + vector.x, y + vector.y);
     }
 
     /**
      * @brief subtraction and assignment
      * 
      * @param vector 
-     * @return vec&
+     * @return Vec&
      */
-    vec &operator-=(vec vector)
+    Vec &operator-=(Vec vector)
     {
         x -= vector.x;
         y -= vector.y;
@@ -210,9 +220,9 @@ public:
      * @param vector 
      * @return subtraction sum of the two vectors
      */
-    vec operator-(vec vector)
+    Vec operator-(Vec vector)
     {
-        return vec(x - vector.x, y - vector.y);
+        return Vec(x - vector.x, y - vector.y);
     }
 
     /**
@@ -225,9 +235,14 @@ public:
     /**
      * @brief vector rotated by pi/2
      * 
-     * @return vec orthogonal vector
+     * @return Vec orthogonal vector
      */
-    vec orth();
+    Vec orth();
 };
+#endif
 
+#ifdef EXTRN_VEC
+extern Vec vec;
+#else
+Vec vec;
 #endif
