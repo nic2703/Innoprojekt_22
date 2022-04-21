@@ -49,7 +49,9 @@ Servo pen_lift;
 
 #endif // ORIENTATION
 
-//TODO: we need to replace all instances of vec struct with Vec class
+
+// TODO: standard iterator to get next step.
+//XXX: CAREFUL THAT THIS DOESNT FALL INTO SAME TRAP AS LAST TIME
 
 class Plt
 {
