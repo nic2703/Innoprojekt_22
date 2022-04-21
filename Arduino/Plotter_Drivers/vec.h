@@ -240,7 +240,7 @@ public:
     Vec orth();
 };
 #endif
-
+//define a standard vector already initialised. i mean, this is not necessary and might be a bit of a waste of memory actually but it might be useful, who knows...
 #ifdef EXTRN_VEC
 extern Vec vec;
 #else
