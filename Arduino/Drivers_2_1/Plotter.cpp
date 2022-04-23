@@ -1,9 +1,8 @@
 #include "Plotter_H.h"
 
 #ifndef PLT
-    #error Plotter not defined
+#error Plotter not defined
 #endif // !PLT
-
 
 inline void set_speed(pin, int)
 {
@@ -24,9 +23,7 @@ Plt::Plt()
     __plt_init();
 }
 
-Plt::~Plt()
-{
-}
+Plt::~Plt() {}
 
 bool Plt::__plt_init()
 {
@@ -34,11 +31,35 @@ bool Plt::__plt_init()
     x_speed = _SPEED_A, x_dir = _DIR_A, x_brk = _BRAKE_A;
     y_speed = _SPEED_B, y_dir = _DIR_B, y_brk = _BRAKE_B;
 
-    uint16_t time_A = micros();
+    pin buttonA;
+    pinMode(buttonA, INPUT);
+
+    uint8_t button_state;
+    uint8_t last_button_state = LOW, debounce = 50;
+    uint16_t timeA;
 
     bool button_not_registered = true;
+    uint16_t start = millis();
     while (button_not_registered)
     {
-        
+        int readingA = digitalRead(buttonA);
+        if (readingA != last_button_state)
+        {
+            timeA = millis();
+        }
+
+        if (millis() - timeA > debounce)
+        {
+            if (button_state != last_button_state)
+            {
+                button_state = readingA;
+
+                if (button_state == HIGH)
+                {
+                    timeA = millis() - start;
+                    button_not_registered = false;
+                }
+            }
+        }
     }
 }

@@ -57,6 +57,9 @@ public:
     Plt &operator=(const Plt &) = default;
     ~Plt();
 
+    void panic(); // check if out of bounds and abort if necessary
+    //TODO: this
+
 private:
     bool __plt_init(); // initialisation sequence
 
