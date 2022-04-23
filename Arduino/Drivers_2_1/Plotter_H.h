@@ -6,7 +6,7 @@
 #include "plt_maths.h" 
 
 typedef byte pin;
-typedef plt::Vector Vec;
+typedef pmath::Vector Vec;
 
 /**
  * servo for pen lifing

@@ -1,5 +1,5 @@
 #include "plt_maths.h"
-typedef plt::Vector Vec;
+typedef pmath::Vector Vec;
 
 double Vec::norm()
 {

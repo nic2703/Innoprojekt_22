@@ -1,7 +1,7 @@
 #ifndef PLT_MATHS
 #define PLT_MATHS
 
-namespace plt
+namespace pmath
 {
     class Vector
     {
