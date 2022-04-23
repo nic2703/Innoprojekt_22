@@ -1,3 +1,7 @@
+#if !defined(__cplusplus)
+    #error c++ compiler needed
+#endif // cpp compiler needed lol
+
 #ifndef PLT
 #define PLT
 
@@ -19,7 +23,7 @@ struct pen
     bool down; // to ensure that the servo will not spin the wrong way
 };
 
-void _init_servo() __ATTR_CONST__; // dunno why i did this but it's cool
+void _init_servo() __ATTR_CONST__; // dunno why i did this but it's cool //XXX?
 bool lift_pen(pen &);
 
 // initial pins set
@@ -57,8 +61,8 @@ private:
     bool __plt_init(); // initialisation sequence
 
     // motor pins
-    pin x_pin, x_speed, x_dir;
-    pin y_pin, y_speed, y_dir;
+    pin x_speed, x_brk, x_dir;
+    pin y_speed, y_brk, y_dir;
 };
 
 #endif // !PLT
