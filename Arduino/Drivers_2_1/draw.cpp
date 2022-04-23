@@ -2,5 +2,5 @@
 #include "plt_maths.h"
 #include "draw.h"
 
-Plotter plotter;
+Plt plotter;
 extern Servo servo;

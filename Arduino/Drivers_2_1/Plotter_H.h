@@ -48,6 +48,9 @@ bool lift_pen(pen &);
 inline void set_speed(pin, int);
 inline void set_brakes(pin, int);
 
+// TODO: should this be in a namespace too with all the drawing fns? that way the user could define their own drawing fns...
+// tbh i have no clue so yea someone better tell me
+
 class Plt
 {
 public:
