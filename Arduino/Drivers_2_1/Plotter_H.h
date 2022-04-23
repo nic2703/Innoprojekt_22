@@ -7,6 +7,7 @@
 
 #include "Arduino.h"
 #include "Servo.h"
+#include "draw.h"
 #include "plt_maths.h"
 
 typedef byte pin;

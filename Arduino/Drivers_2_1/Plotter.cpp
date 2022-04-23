@@ -4,12 +4,14 @@
 #error Plotter not defined
 #endif // !PLT
 
-inline void set_speed(pin, int)
+inline void set_speed(pin motor_a, int speed_a)
 {
+    analogWrite(motor_a, speed_a);
 }
 
-inline void set_brakes(pin, int)
+inline void set_brakes(pin motor, int state)
 {
+    digitalWrite(motor, state);
 }
 
 [[maybe_unused]] void _init_servo()
