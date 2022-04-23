@@ -20,18 +20,18 @@ inline void set_brakes(pin, int)
 
 Plt::Plt()
 {
-    __plt_init();
+    __plt_init(1);
 }
 
 Plt::~Plt() {}
 
-bool Plt::__plt_init()
+bool Plt::__plt_init(pin button)
 {
     // run into walls till button registered
     x_speed = _SPEED_A, x_dir = _DIR_A, x_brk = _BRAKE_A;
     y_speed = _SPEED_B, y_dir = _DIR_B, y_brk = _BRAKE_B;
 
-    pin buttonA;
+    pin buttonA = button;
     pinMode(buttonA, INPUT);
 
     uint8_t button_state;
