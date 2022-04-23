@@ -61,7 +61,7 @@ public:
     //TODO: this
 
 private:
-    bool __plt_init(); // initialisation sequence
+    bool __plt_init(pin); // initialisation sequence
 
     // motor pins
     pin x_speed, x_brk, x_dir;
