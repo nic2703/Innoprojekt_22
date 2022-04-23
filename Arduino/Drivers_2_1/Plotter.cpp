@@ -14,6 +14,13 @@ inline void set_brakes(pin motor, int state)
     digitalWrite(motor, state);
 }
 
+void painc(uint8_t error)
+{
+    Serial.println("Aborted: Error code: ");
+    Serial.println(error);
+    abort();
+}
+
 [[maybe_unused]] void _init_servo()
 {
     servo.attach(_SERVO);
@@ -22,7 +29,7 @@ inline void set_brakes(pin motor, int state)
 
 Plt::Plt()
 {
-    __plt_init(1);
+    if (!(__plt_init(1))) panic();
 }
 
 Plt::~Plt() {}
@@ -55,7 +62,6 @@ bool Plt::__plt_init(pin button)
             if (button_state != last_button_state)
             {
                 button_state = readingA;
-
                 if (button_state == HIGH)
                 {
                     timeA = millis() - start;

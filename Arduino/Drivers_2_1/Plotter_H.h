@@ -14,7 +14,7 @@ typedef byte pin;
 typedef pmath::Vector Vec;
 
 /**
- * servo for pen lifing
+ * servo for lifing pen
  */
 Servo servo;
 
@@ -48,6 +48,8 @@ bool lift_pen(pen &);
 inline void set_speed(pin, int);
 inline void set_brakes(pin, int);
 
+ void panic() __ATTR_NORETURN__; 
+
 // TODO: should this be in a namespace too with all the drawing fns? that way the user could define their own drawing fns...
 // tbh i have no clue so yea someone better tell me
 
@@ -60,9 +62,6 @@ public:
     Plt &operator=(Plt &&) = default;
     Plt &operator=(const Plt &) = default;
     ~Plt();
-
-    void panic(); // check if out of bounds and abort if necessary
-    //TODO: this
 
 private:
     bool __plt_init(pin); // initialisation sequence
