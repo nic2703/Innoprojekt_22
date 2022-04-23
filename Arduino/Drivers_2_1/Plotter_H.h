@@ -8,6 +8,7 @@
 typedef byte pin;
 typedef pmath::Vector Vec;
 
+
 /**
  * servo for pen lifing
  */
@@ -56,5 +57,7 @@ private:
     pin y_pin, y_speed, y_dir;
 
 };
+
+bool lift_pen(int);
 
 #endif // !PLT
