@@ -73,7 +73,7 @@ bool Plt::__plt_init()
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 
-    if (calibrate()) //swap them //FIXME: is this the right way round
+    if (calibrate()) //swap them
     {
         pins_x[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
         pins_y[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;

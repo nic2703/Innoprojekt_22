@@ -87,7 +87,7 @@ namespace pmath
         int x, y;
     };
 
-    Vector::Vector(int x_init, int y_init)
+    Vector::Vector(int x_init = 0, int y_init = 0)
     {
         x = x_init;
         y = y_init;
