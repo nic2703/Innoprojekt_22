@@ -122,7 +122,6 @@ bool Plt::calibrate()
     set_speed(pins_y, 0);
     set_brakes(pins_y[2], HIGH);
     
-    done_c = true;
     pos = Vec(0, 0);
     
     return (duration_x > duration_y); //returns wether or not x is the longer side

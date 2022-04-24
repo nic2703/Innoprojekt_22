@@ -83,8 +83,9 @@ namespace pmath
         double norm();
         Vector orth();
 
-    private:
         int x, y;
+        
+    private:
     };
 
     Vector::Vector(int x_init = 0, int y_init = 0)

@@ -32,6 +32,8 @@ struct pen
 void _init_servo() __ATTR_CONST__; // dunno why i did this but it's cool //XXX?
 bool lift_pen(pen &);
 
+extern Plt p_plot;
+
 // initial pins set RESERVED FOR MOTORS
 #define _BRAKE_A 9
 #define _BRAKE_B 8
@@ -91,11 +93,11 @@ private:
     pin pins_x[3];
     pin pins_y[3];
 
-    static bool done_c; // i have a weird urge to rename this to donkey
     static int duration_x;
     static int duration_y;
 
     Vec pos;
+    Vec max = Vec(1000, 1000);
 };
 
 #endif // !PLT
