@@ -1,12 +1,13 @@
 #include "PlotterV2.h"
 
 #ifndef PLT
-#error Plotter not defined
+    #error Plotter not defined
 #endif // !PLTs
 
-inline void set_speed(pin motor_a, int speed_a)
+inline void set_speed(pin motor[], int speed)
 {
-    analogWrite(motor_a, speed_a);
+    set_dir(motor[1], speed);
+    analogWrite(motor[0], abs(speed));
 }
 
 inline void set_brakes(pin motor, int state)
@@ -19,23 +20,31 @@ void finish()
     Serial.println("Program terminated with exit code: 0");
 }
 
-/* void emergency_stop()
-{
-    panic(3);
-} */
-
-void panic(uint8_t error)
+void emergency_stop()
 {
     /*Engage Brakes*/
-    set_brakes( _BRAKE_A, HIGH);
-    set_brakes( _BRAKE_B, HIGH);
+    digitalWrite( _BRAKE_A, HIGH);
+    digitalWrite( _BRAKE_B, HIGH);
 
     /*Cut Power to the motors*/
-    set_speed( _SPEED_A, 0);
-    set_speed( _SPEED_B, 0);
+    analogWrite( _SPEED_A, 0);
+    analogWrite( _SPEED_B, 0);
+
+    abort();
+}
+
+void panic(volatile uint8_t error)
+{
+    /*Engage Brakes*/
+    digitalWrite( _BRAKE_A, HIGH);
+    digitalWrite( _BRAKE_B, HIGH);
+
+    /*Cut Power to the motors*/
+    analogWrite( _SPEED_A, 0);
+    analogWrite( _SPEED_B, 0);
 
     /*Output the error*/
-    Serial.println("Aborted: Error code: ");
+    Serial.print("Aborted: Error code: ");
     Serial.println(error);
 
     /*Wait for the message to be sent*/
@@ -61,15 +70,60 @@ Plt::~Plt() {}
 bool Plt::__plt_init()
 {
     // run into walls till button registered
-    x_speed = _SPEED_A, x_dir = _DIR_A, x_brk = _BRAKE_A;
-    y_speed = _SPEED_B, y_dir = _DIR_B, y_brk = _BRAKE_B;
+    pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
+    pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 
-    calibrate();
+    if (calibrate()) //swap them //FIXME: is this the right way round
+    {
+        pins_x[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+        pins_y[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
+    }
 
-    attachInterrupt(digitalPinToInterrupt(2), emergency_stop, )
+    attachInterrupt(digitalPinToInterrupt(BUTTON), emergency_stop, RISING);
 }
 
-void Plt::calibrate()
+bool Plt::calibrate()
 {
+    /*Calibrate Motor A*/
+    set_brakes(pins_x[2], LOW);
+    set_speed(pins_x, 255);
+
+    /*run into wall*/ 
+    while (!(digitalRead(BUTTON))) { /*DO NOTHING*/ }
+    set_brakes(pins_x[2], HIGH);
+    
+    /*run into the opposite wall*/
+    set_speed(pins_x, -255);
+    set_brakes(pins_x[2], LOW);
+
+    int init_time = millis();
+    while (!(digitalRead(BUTTON))) {/*DO NOTHING*/}
+    duration_x = millis() - init_time; //measure time taken
+
+    set_speed(pins_x, 0);
+    set_brakes(pins_x[2], HIGH);
+
+    /*Calibrate Motor B*/
+    set_brakes(pins_y[2], LOW);
+    set_speed(pins_y, 255);
+
+    /*run into wall*/ 
+    while (!(digitalRead(BUTTON))) { /*DO NOTHING*/ }
+    set_brakes(pins_y[2], HIGH);
+    
+    /*run into the opposite wall*/
+    set_speed(pins_y, -255);
+    set_brakes(pins_y[2], LOW);
+
+    int init_time = millis();
+    while (!(digitalRead(BUTTON))) {/*DO NOTHING*/}
+    duration_y = millis() - init_time; //measure time taken
+
+    set_speed(pins_y, 0);
+    set_brakes(pins_y[2], HIGH);
+    
     done_c = true;
+    pos = Vec(0, 0); //FIXME: Does this work
+    
+    return (duration_x > duration_y); //returns wether or not x is the longer side
 }
