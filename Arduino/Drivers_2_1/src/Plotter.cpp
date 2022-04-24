@@ -22,7 +22,7 @@ void panic()
 void panic(uint8_t error)
 {
     /*Engage Brakes*/
-    set_brakes( _BRAKE_A, HIGH); //FIXME: Should the brakes be engaged first of the speed set to 0? i think brakes first, as this immediately stops the motors
+    set_brakes( _BRAKE_A, HIGH);
     set_brakes( _BRAKE_B, HIGH);
 
     /*Cut Power to the motors*/
@@ -48,7 +48,7 @@ void _init_servo()
 
 Plt::Plt()
 {
-    if (!(__plt_init(1))) panic(1));
+    if (!(__plt_init(1))) panic(1);
 }
 
 Plt::~Plt() {}
