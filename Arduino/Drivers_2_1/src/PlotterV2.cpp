@@ -1,4 +1,4 @@
-#include "Plotter_H.h"
+#include "PlotterV2.h"
 
 #ifndef PLT
 #error Plotter not defined
@@ -14,9 +14,14 @@ inline void set_brakes(pin motor, int state)
     digitalWrite(motor, state);
 }
 
-void panic()
+void finish()
 {
     Serial.println("Program terminated with exit code: 0");
+}
+
+void emergency_stop()
+{
+    panic(3);
 }
 
 void panic(uint8_t error)
@@ -48,45 +53,25 @@ void _init_servo() // [[maybe_unused]]
 
 Plt::Plt()
 {
-    if (!(__plt_init(1))) panic(1);
+    if (!(__plt_init())) panic(1);
 }
 
 Plt::~Plt() {}
 
-bool Plt::__plt_init(pin button)
+bool Plt::__plt_init()
 {
     // run into walls till button registered
     x_speed = _SPEED_A, x_dir = _DIR_A, x_brk = _BRAKE_A;
     y_speed = _SPEED_B, y_dir = _DIR_B, y_brk = _BRAKE_B;
 
-    pin buttonA = button;
-    pinMode(buttonA, INPUT);
+    const pin buttonx = 2;
+    pinMode(buttonx, INPUT);
+    
+    attachInterrupt(digitalPinToInterrupt(buttonx), emergency_stop, CHANGE); // 2 & 3 are possible interrupts
+    
+}
 
-    uint8_t button_state;
-    uint8_t last_button_state = LOW, debounce = 50;
-    uint16_t timeA;
-
-    bool button_not_registered = true;
-    uint16_t start = millis();
-    while (button_not_registered)
-    {
-        int readingA = digitalRead(buttonA);
-        if (readingA != last_button_state)
-        {
-            timeA = millis();
-        }
-
-        if (millis() - timeA > debounce)
-        {
-            if (button_state != last_button_state)
-            {
-                button_state = readingA;
-                if (button_state == HIGH)
-                {
-                    timeA = millis() - start;
-                    button_not_registered = false;
-                }
-            }
-        }
-    }
+void calibrate()
+{
+  done_c = true;
 }

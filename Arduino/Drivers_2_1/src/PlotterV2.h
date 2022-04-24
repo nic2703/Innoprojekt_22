@@ -24,6 +24,7 @@ struct pen
     bool down; // to ensure that the servo will not spin the wrong way
 };
 
+
 void _init_servo() __ATTR_CONST__; // dunno why i did this but it's cool //XXX?
 bool lift_pen(pen &);
 
@@ -38,6 +39,9 @@ bool lift_pen(pen &);
 #define _DIR_B 13
 
 #define _SERVO 4
+
+#define _LONGUP(t) (100 < t && t < 110) // TODO: discover thse constants experimentally
+#define _SHORTUP(t) (100 < t && t < 110) // TODO : yea same as above
 
 // bigguns:
 // teildurchmesser current: 24mm
@@ -56,7 +60,12 @@ bool lift_pen(pen &);
 inline void set_speed(pin, int);
 inline void set_brakes(pin, int);
 
+void calibrate(void);
+static bool done_c = false; // i have a weird urge to rename this to donkey
+
+void finish(void);
 void panic(uint8_t); //__ATTR_NORETURN__
+void emergency_stop();
 
 // TODO: should this be in a namespace too with all the drawing fns? that way the user could define their own drawing fns...
 // tbh i have no clue so yea someone better tell me
@@ -72,7 +81,7 @@ public:
     ~Plt();
 
 private:
-    bool __plt_init(pin); // initialisation sequence
+    bool __plt_init(); // initialisation sequence
 
     // motor pins
     pin x_speed, x_brk, x_dir;
