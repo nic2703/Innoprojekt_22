@@ -12,7 +12,7 @@ bool draw_line(const Vec delta)
     || p_plot.pos.x + delta.x < 0 && p_plot.pos.y + delta.y) // check if the line would land out of bounds
         return false;
     else if (delta.x == 0 && delta.y == 0)
-        return true;
+        return true; // no line necessary
 
     return true; // hasn't failed so far
 }
