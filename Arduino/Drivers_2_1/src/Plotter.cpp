@@ -14,11 +14,29 @@ inline void set_brakes(pin motor, int state)
     digitalWrite(motor, state);
 }
 
+void panic()
+{
+    Serial.println("Program terminated with exit code: 0");
+}
+
 void panic(uint8_t error)
 {
+    /*Engage Brakes*/
+    set_brakes( _BRAKE_A, HIGH);
+    set_brakes( _BRAKE_B, HIGH);
+
+    /*Cut Power to the motors*/
+    set_speed( _SPEED_A, 0);
+    set_speed( _SPEED_B, 0);
+
+    /*Output the error*/
     Serial.println("Aborted: Error code: ");
     Serial.println(error);
+
+    /*Wait for the message to be sent*/
     delay(10);
+
+    /*Stop execution*/
     abort();
 }
 
@@ -30,7 +48,7 @@ void _init_servo() // [[maybe_unused]]
 
 Plt::Plt()
 {
-    if (!(__plt_init(1))) panic(0);
+    if (!(__plt_init(1))) panic(1);
 }
 
 Plt::~Plt() {}

@@ -1,4 +1,5 @@
 #include "Plotter_H.h"
+
 /**
  * @brief Draws a line from the current position using
  * @param dx delta x
