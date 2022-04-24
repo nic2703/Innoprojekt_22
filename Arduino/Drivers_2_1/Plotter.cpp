@@ -22,7 +22,7 @@ void panic(uint8_t error)
     abort();
 }
 
-void _init_servo()
+void _init_servo() // [[maybe_unused]]
 {
     servo.attach(_SERVO);
     Serial.println("attached servo to pin 4");
