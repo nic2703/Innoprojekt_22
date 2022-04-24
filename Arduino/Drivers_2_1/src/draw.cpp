@@ -14,5 +14,5 @@ bool draw_line(const Vec delta)
     else if (delta.x == 0 && delta.y == 0)
         return true;
 
-    return true;
+    return true; // hasn't failed so far
 }
