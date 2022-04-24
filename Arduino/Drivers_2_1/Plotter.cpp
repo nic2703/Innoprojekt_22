@@ -2,7 +2,7 @@
 
 #ifndef PLT
 #error Plotter not defined
-#endif // !PLT
+#endif // !PLTs
 
 inline void set_speed(pin motor_a, int speed_a)
 {
@@ -14,14 +14,15 @@ inline void set_brakes(pin motor, int state)
     digitalWrite(motor, state);
 }
 
-void painc(uint8_t error)
+void panic(uint8_t error)
 {
     Serial.println("Aborted: Error code: ");
     Serial.println(error);
+    delay(10);
     abort();
 }
 
-[[maybe_unused]] void _init_servo()
+void _init_servo()
 {
     servo.attach(_SERVO);
     Serial.println("attached servo to pin 4");
@@ -29,7 +30,7 @@ void painc(uint8_t error)
 
 Plt::Plt()
 {
-    if (!(__plt_init(1))) panic();
+    if (!(__plt_init(1))) panic(0);
 }
 
 Plt::~Plt() {}

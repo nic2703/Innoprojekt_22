@@ -39,8 +39,16 @@ bool lift_pen(pen &);
 
 #define _SERVO 4
 
+// bigguns:
+// teildurchmesser current: 24mm
+// previous: 19
+
+// pulley: !übersetzung:
+// current: 15.75 (on motor), 
+// previous:
+
 // macros
-#define cube(x) ((x) * (x) * (x))                                                           // cubes x
+#define cube(x) ((x)*(x)*(x))                                                           // cubes x
 #define SPEED_TO_BITS(s) ((28.97 + 3.402 * (s)-0.1736 * sq(s) + 0.003101 * cube(s)) * 67.7) // caluculates bit value needed for bits, takes float returns float in the range [0, 1]
 #define BITS_TO_SPEED(s) (1.012e-5 * cube(s) - 6.19e-3 * sq(s) + 1.332 * s - 37.24)         // bytespeed to actual irl speed
 #define SET_DIR(s, p_dir) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
@@ -48,7 +56,7 @@ bool lift_pen(pen &);
 inline void set_speed(pin, int);
 inline void set_brakes(pin, int);
 
- void panic() __ATTR_NORETURN__; 
+void panic(uint8_t); //__ATTR_NORETURN__
 
 // TODO: should this be in a namespace too with all the drawing fns? that way the user could define their own drawing fns...
 // tbh i have no clue so yea someone better tell me
