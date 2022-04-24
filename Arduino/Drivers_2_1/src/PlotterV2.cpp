@@ -19,10 +19,10 @@ void finish()
     Serial.println("Program terminated with exit code: 0");
 }
 
-void emergency_stop()
+/* void emergency_stop()
 {
     panic(3);
-}
+} */
 
 void panic(uint8_t error)
 {
@@ -64,14 +64,12 @@ bool Plt::__plt_init()
     x_speed = _SPEED_A, x_dir = _DIR_A, x_brk = _BRAKE_A;
     y_speed = _SPEED_B, y_dir = _DIR_B, y_brk = _BRAKE_B;
 
-    const pin buttonx = 2;
-    pinMode(buttonx, INPUT);
-    
-    attachInterrupt(digitalPinToInterrupt(buttonx), emergency_stop, CHANGE); // 2 & 3 are possible interrupts
-    
+    calibrate();
+
+    attachInterrupt(digitalPinToInterrupt(2), emergency_stop, )
 }
 
-void calibrate()
+void Plt::calibrate()
 {
-  done_c = true;
+    done_c = true;
 }

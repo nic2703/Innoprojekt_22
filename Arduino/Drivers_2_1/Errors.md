@@ -4,3 +4,4 @@
 |`0` (exit code)| The Plotter finnished drawing|
 |`1`| The Plotter class was not initialised properly|
 |`2`| Crash detecteds|
+|`3`| emergency stop: ran into wall!|

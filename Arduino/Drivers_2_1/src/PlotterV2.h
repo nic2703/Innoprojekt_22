@@ -60,9 +60,6 @@ bool lift_pen(pen &);
 inline void set_speed(pin, int);
 inline void set_brakes(pin, int);
 
-void calibrate(void);
-static bool done_c = false; // i have a weird urge to rename this to donkey
-
 void finish(void);
 void panic(uint8_t); //__ATTR_NORETURN__
 void emergency_stop();
@@ -79,6 +76,7 @@ public:
     Plt &operator=(Plt &&) = default;
     Plt &operator=(const Plt &) = default;
     ~Plt();
+    void calibrate(void);
 
 private:
     bool __plt_init(); // initialisation sequence
@@ -86,6 +84,8 @@ private:
     // motor pins
     pin x_speed, x_brk, x_dir;
     pin y_speed, y_brk, y_dir;
+
+    static bool done_c; // i have a weird urge to rename this to donkey
 };
 
 #endif // !PLT
