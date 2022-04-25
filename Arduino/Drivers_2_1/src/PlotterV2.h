@@ -10,7 +10,7 @@
 #include "draw.h"
 #include "plt_maths.h"
 
-#ifndef PLT_MATHSs
+#ifndef PLT_MATHS
     #warning MATHS IS NOT REAL
 #endif // !PLT_MATHS
 
