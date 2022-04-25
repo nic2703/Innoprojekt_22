@@ -7,15 +7,19 @@
 
 #include "Arduino.h"
 #include "Servo.h"
+
 #include "draw.h"
+#ifndef PLT_MATHS
 #include "plt_maths.h"
+#endif // !PLT_MATHS
 
 #ifndef PLT_MATHS
 #warning MATHS IS NOT REAL
 #endif // !PLT_MATHS
 
 typedef byte pin;
-typedef pmath::Vector Vec;
+//typedef pmath::Vector Vec;
+//typedef
 
 //ERRORS
 #define __SHOTDOWN_INIT_FAILED 1
@@ -55,11 +59,6 @@ typedef pmath::Vector Vec;
 #define servo_up() servo_goto(_SERVO_TOP)
 #define servo_down() servo_goto(_SERVO_BOTTOM)
 
-struct [[maybe_unused]] pen
-{
-    int angle; // angle of servo
-    bool down; // to ensure that the servo will not spin the wrong way
-};
 
 void _init_servo() __ATTR_CONST__;
 inline void servo_goto(byte angle);
@@ -73,7 +72,7 @@ void panic(volatile uint8_t); //__ATTR_NORETURN__
 void emergency_stop();
 
 inline bool out_of_bounds(Vec);
-[[maybe_unused]] void complain_OOB();
+void complain_OOB();
 
 // TODO: should this be in a namespace too with all the drawing fns? that way the user could define their own drawing fns...
 // tbh i have no clue so yea someone better tell me
@@ -103,7 +102,7 @@ private:
 
 };
 
-extern Servo servo;
-extern Plt p_plot = Plt();
+Servo servo;
+Plt p_plot = Plt();
 
 #endif // !PLT

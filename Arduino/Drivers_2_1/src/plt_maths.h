@@ -1,8 +1,7 @@
 #ifndef PLT_MATHS
 #define PLT_MATHS
 
-namespace pmath
-{
+
     class Vector
     {
     public:
@@ -102,6 +101,7 @@ namespace pmath
 
     void mandala(); //TODO: CMON I FUCKING NEED THIS FN! i was promised some maths, give it to me...
 
-} // namespace plt (plotter_maths)
+// namespace plt (plotter_maths)
+typedef Vector Vec;
 
 #endif // !PLT_MATHS

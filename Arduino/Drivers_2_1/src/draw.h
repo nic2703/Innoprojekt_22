@@ -1,7 +1,6 @@
 #include "PlotterV2.h"
 #include "plt_maths.h"
 
-typedef pmath::Vector Vec;
 
 /**
  * @brief Draws a line from the current position using

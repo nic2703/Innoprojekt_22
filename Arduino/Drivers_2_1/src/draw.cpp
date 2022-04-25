@@ -2,8 +2,8 @@
 #include "plt_maths.h"
 #include "draw.h"
 
-Servo servo;
-Plt p_plot;
+extern Servo servo;
+extern Plt p_plot;
 
 bool draw_line(const Vec delta)
 {

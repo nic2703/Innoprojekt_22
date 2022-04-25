@@ -1,5 +1,6 @@
 #include "BUK1_H.h"
-#include "Arduino.h";
+#include "Arduino.h"
+
 
 //Motor functions here
 inline void set_speed(pin spdPin, bit bitspeed){
@@ -15,22 +16,7 @@ inline void set_direction(pin dirPin, int state){
 }
 
 //Servo functions here
-inline void servo_goto(bit angle){
-    PenServo.write(angle);
-    //delay(15);
-}
 
-inline void servo_up(){
-    servo_goto(_SERVO_TOP);
-}
-
-inline void servo_down(){
-    servo_goto(_SERVO_BOTTOM);
-}
-
-inline bit servo_angle(){
-    return PenServo.read();
-}
 
 //Math functions here
 inline bool outofbounds(BUKvec coords){
@@ -45,7 +31,7 @@ inline bool outofbounds(BUKvec coords){
     return false;
 }
 
-BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, unsigned int i){
+BUKvec BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, unsigned int i){
     float t = i/prec;
     float x = cube(1-t)*position[0] + sq(1-t)*3*t*control1[0] + (1-t)*3*sq(t)*control2[0] + cube(t)*coords[0];
     float y = cube(1-t)*position[1] + sq(1-t)*3*t*control1[1] + (1-t)*3*sq(t)*control2[1] + cube(t)*coords[1];
@@ -53,7 +39,7 @@ BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& 
     return subpoint;
 }
 
-BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& coords, unsigned int prec, unsigned int i){
+BUKvec BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& coords, unsigned int prec, unsigned int i){
     float t = i/prec;
     float x = sq(1-t)*position[0] + (1-t)*2*t*control1[0] + sq(t)*coords[0];
     float y = sq(1-t)*position[1] + (1-t)*2*t*control1[1] + sq(t)*coords[1];
@@ -93,7 +79,7 @@ BUKPlt::BUKPlt(){
 
     set_brakes(_BRAKE_A, HIGH);
     set_brakes(_BRAKE_B, HIGH);
-    
+
     PenServo.attach(_SERVO_LATCH);
 
     pinMode(_BUTTON_XTOP, INPUT);
@@ -105,6 +91,23 @@ BUKPlt::BUKPlt(){
 
 BUKPlt::~BUKPlt(){
     Serial.println("Plotter object destroyed");
+}
+
+inline void servo_goto(bit angle){
+    PenServo.write(angle);
+    //delay(15);
+}
+
+inline void servo_up(){
+    servo_goto(_SERVO_TOP);
+}
+
+inline void servo_down(){
+    servo_goto(_SERVO_BOTTOM);
+}
+
+inline bit servo_angle(){
+    return PenServo.read();
 }
 
 
