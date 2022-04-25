@@ -12,7 +12,7 @@ Servo servo;
 
 inline bool out_of_bounds(Vec coords)
 {
-    return (coords.x <= 0.0f || coords.x >= _PAPER_WIDTH || coords.y <= 0.0f || coords.y >= _PAPER_LENGTH);
+    return (coords.x <= 0 || coords.x >= _PAPER_WIDTH || coords.y <= 0 || coords.y >= _PAPER_LENGTH);
 }
 
 [[maybe_unused]] void complain_OOB(Vec coords)

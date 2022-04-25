@@ -35,6 +35,8 @@ inline byte servo_angle()
 void finish()
 {
     Serial.println("Program terminated with exit code: 0");
+    delay(10);
+    abort();
 }
 
 void emergency_stop()

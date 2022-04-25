@@ -17,6 +17,12 @@
 typedef byte pin;
 typedef pmath::Vector Vec;
 
+//ERRORS
+#define __SHOTDOWN_INIT_FAILED 1
+#define __SHUTDOWN_EMERGENCY 2
+#define __SHUTDOWN_OOB 3
+#define __SHUTDOWN_OOPS 4
+
 // initial pins set RESERVED FOR MOTORS
 #define _BRAKE_A 9
 #define _BRAKE_B 8
@@ -34,7 +40,7 @@ typedef pmath::Vector Vec;
 #define BUTTON 2
 
 //-------------------------
-#define _PAPER_LENGTH 297 // Please include safety margin when used
+#define _PAPER_LENGTH 297
 #define _PAPER_WIDTH 210
 
 #define _MAX_SPEED INFINITY // max irl speed
@@ -96,7 +102,6 @@ private:
     static int duration_y;
 
     Vec pos;
-    Vec max = Vec(1000, 1000);
 };
 
 #endif // !PLT
