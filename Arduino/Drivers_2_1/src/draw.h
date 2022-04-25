@@ -1,8 +1,7 @@
 #include "PlotterV2.h"
 
-#ifdef SERVO
-extern Servo servo;
-#endif // SERVO
+
+Servo servo;
 Plt p_plot;
 
 /**
@@ -11,7 +10,7 @@ Plt p_plot;
  * @param dy delta y
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_line(Vec);
+bool draw_line(Vec &);
 
 /**
  * @brief Draws a line to the nearest point on the circle radius, than starts drawing a circle segent up to the specified angle
@@ -20,7 +19,7 @@ bool draw_line(Vec);
  * @param arc arc length in radians within range [-2*pi, 2*pi]
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_circle_segment(Vec, int, double);
+bool draw_circle_segment(Vec &, int, double);
 
 /**
  * @brief Draws a line to a specified point on the circle radius, than starts drawing a circle segent up to the specified angle
@@ -30,7 +29,7 @@ bool draw_circle_segment(Vec, int, double);
  * @param start_angle angle relative to x-axis at which to start the circle segment
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_circle_segment(Vec, int, double, double);
+bool draw_circle_segment(Vec &, int, double, double);
 
 /**
  * @brief implementation of a bezier curve

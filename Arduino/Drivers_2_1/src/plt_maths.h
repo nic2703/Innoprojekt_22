@@ -14,15 +14,15 @@ namespace pmath
         Vector &operator=(Vector &&) = default;
         Vector &operator=(const Vector &) = default;
         // comparison
-        bool operator==(Vector v) {return v.x == x && v.y == y;}
+        bool operator==(Vector v) const {return v.x == x && v.y == y;}
         bool operator<=(Vector v) {return (*this).norm() <= v.norm();}
         bool operator<(Vector v) {return (*this).norm() < v.norm();}
         bool operator>=(Vector v) {return (*this).norm() >= v.norm();}
         bool operator>(Vector v) {return (*this).norm() > v.norm();}
         
         // mathematical operations
-        Vector operator+(Vector vector) {return Vector(x + vector.x, y + vector.y);}
-        Vector operator-(Vector vector) {return Vector(x - vector.x, y - vector.y);}
+        Vector operator+(Vector vector) const {return Vector(x + vector.x, y + vector.y);}
+        Vector operator-(Vector vector) const {return Vector(x - vector.x, y - vector.y);}
         Vector &operator+=(Vector vector)
         {
             x += vector.x;
@@ -50,7 +50,6 @@ namespace pmath
         }
 
         // overloaded mathematical operators
-        // these aren't actually class members, they just fit in nicely here 
         friend int operator*(const Vector vec1, const Vector vec2)
         {
             return vec1.x * vec2.x + vec1.y * vec2.y;

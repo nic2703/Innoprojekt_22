@@ -17,10 +17,6 @@
 typedef byte pin;
 typedef pmath::Vector Vec;
 
-/**
- * servo for lifing pen
- */
-
 // initial pins set RESERVED FOR MOTORS
 #define _BRAKE_A 9
 #define _BRAKE_B 8
@@ -32,30 +28,19 @@ typedef pmath::Vector Vec;
 #define _DIR_B 13
 
 #define _SERVO 4
-#define _SERVO_TOP      180
-#define _SERVO_BOTTOM   0
+#define _SERVO_TOP 180
+#define _SERVO_BOTTOM 0
 
 #define BUTTON 2
 
 //-------------------------
-#define _PAPER_LENGTH   297         //Please include safety margin when used
-#define _PAPER_WIDTH    210
+#define _PAPER_LENGTH 297 // Please include safety margin when used
+#define _PAPER_WIDTH 210
 
-
-/* #define _LONGUP(t) (100 < t && t < 110) // TODO: discover thse constants experimentally
-#define _SHORTUP(t) (100 < t && t < 110) // TODO : yea same as above */
-
-// bigguns:
-// teildurchmesser current: 24mm
-// previous: 19
-
-// pulley: !übersetzung:
-// current: 15.75 (on motor),
-// previous:
+#define _MAX_SPEED INFINITY // max irl speed
 
 // macros
-#define cube(x) ((x)*(x)*(x))   
-                                                        // cubes x
+#define cube(x) ((x)*(x)*(x))                                                           // cubes x
 #define SPEED_TO_BITS(s) ((28.97 + 3.402 * (s)-0.1736 * sq(s) + 0.003101 * cube(s)) * 67.7) // caluculates bit value needed for bits, takes float returns float in the range [0, 1]
 #define BITS_TO_SPEED(s) (1.012e-5 * cube(s) - 6.19e-3 * sq(s) + 1.332 * s - 37.24)         // bytespeed to actual irl speed
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
@@ -63,8 +48,7 @@ typedef pmath::Vector Vec;
 #define servo_up() servo_goto(_SERVO_TOP)
 #define servo_down() servo_goto(_SERVO_BOTTOM)
 
-#define SERVO
-Servo servo;
+extern Servo servo;
 extern Plt p_plot = Plt();
 
 [[maybe_unused]] struct pen
@@ -77,13 +61,15 @@ void _init_servo() __ATTR_CONST__;
 inline void servo_goto(byte angle);
 inline byte servo_angle() __ATTR_CONST__;
 
-
-inline void set_speed(pin, int);
+inline void set_speed(pin *, int);
 inline void set_brakes(pin, int);
 
 void finish(void);
 void panic(volatile uint8_t); //__ATTR_NORETURN__
 void emergency_stop();
+
+inline bool out_of_bounds(Vec);
+[[maybe_unused]] void complain_OOB();
 
 // TODO: should this be in a namespace too with all the drawing fns? that way the user could define their own drawing fns...
 // tbh i have no clue so yea someone better tell me
