@@ -362,6 +362,7 @@ bool BUKPlt::emergencystop(){
     if (digitalRead(_BUTTON_XBTM) == HIGH || digitalRead(_BUTTON_XTOP) == HIGH 
     || digitalRead(_BUTTON_YBTM) == HIGH || digitalRead(_BUTTON_YTOP) == HIGH
     || digitalRead(_BUTTON_EMERGENCY) == HIGH){
+        //digitalWrite(12, HIGH); straight to interrupt
         Serial.println("EMERGENCY || ERROR A3: Emergency Stop initiated");
         return true;
     }
