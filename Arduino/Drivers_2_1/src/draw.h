@@ -1,5 +1,10 @@
 #include "PlotterV2.h"
 
+#ifdef SERVO
+extern Servo servo;
+#endif // SERVO
+Plt p_plot;
+
 /**
  * @brief Draws a line from the current position using
  * @param dx delta x

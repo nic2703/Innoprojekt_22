@@ -2,9 +2,6 @@
 #include "plt_maths.h"
 #include "draw.h"
 
-extern Plt p_plot;
-extern Servo servo;
-
 bool draw_line(const Vec delta)
 {
     if (p_plot.pos.x + delta.x > p_plot.max.x

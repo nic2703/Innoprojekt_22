@@ -4,6 +4,10 @@
     #error Plotter not defined
 #endif // !PLTs
 
+#ifdef SERVO
+extern Servo servo;
+#endif // SERVO
+
 inline void set_speed(pin motor[], int speed)
 {
     set_dir(motor[1], speed);
@@ -15,6 +19,7 @@ inline void set_brakes(pin motor, int state)
     digitalWrite(motor, state);
 }
 
+// stop
 void finish()
 {
     Serial.println("Program terminated with exit code: 0");
@@ -54,11 +59,24 @@ void panic(volatile uint8_t error)
     abort();
 }
 
+//servo
+/**
+ * @brief initialises servo object 
+ */
 void _init_servo() // [[maybe_unused]]
 {
     servo.attach(_SERVO);
     Serial.println("attached servo to pin 4");
 }
+
+inline void servo_goto(byte angle){
+    servo.write(angle);
+}
+
+inline byte servo_angle(){
+    return servo.read();
+}
+
 
 Plt::Plt()
 {

@@ -1,5 +1,5 @@
 #if !defined(__cplusplus)
-    #error c++ compiler needed
+#error c++ compiler needed
 #endif // cpp compiler needed lol
 
 #ifndef PLT
@@ -11,7 +11,7 @@
 #include "plt_maths.h"
 
 #ifndef PLT_MATHS
-    #warning MATHS IS NOT REAL
+#warning MATHS IS NOT REAL
 #endif // !PLT_MATHS
 
 typedef byte pin;
@@ -20,50 +20,63 @@ typedef pmath::Vector Vec;
 /**
  * servo for lifing pen
  */
-Servo servo;
-
-struct pen
-{
-    int angle; // angle of servo
-    bool down; // to ensure that the servo will not spin the wrong way
-};
-
-
-void _init_servo() __ATTR_CONST__; // dunno why i did this but it's cool //XXX?
-bool lift_pen(pen &);
-
-extern Plt p_plot;
 
 // initial pins set RESERVED FOR MOTORS
 #define _BRAKE_A 9
 #define _BRAKE_B 8
 
-#define _SPEED_A 3 
+#define _SPEED_A 3
 #define _SPEED_B 11
 
 #define _DIR_A 12
 #define _DIR_B 13
 
 #define _SERVO 4
+#define _SERVO_TOP      180
+#define _SERVO_BOTTOM   0
 
 #define BUTTON 2
 
+//-------------------------
+#define _PAPER_LENGTH   297         //Please include safety margin when used
+#define _PAPER_WIDTH    210
+
+
 /* #define _LONGUP(t) (100 < t && t < 110) // TODO: discover thse constants experimentally
-#define _SHORTUP(t) (100 < t && t < 110) // TO§DO : yea same as above */
+#define _SHORTUP(t) (100 < t && t < 110) // TODO : yea same as above */
 
 // bigguns:
 // teildurchmesser current: 24mm
 // previous: 19
 
 // pulley: !übersetzung:
-// current: 15.75 (on motor), 
+// current: 15.75 (on motor),
 // previous:
 
 // macros
-#define cube(x) ((x)*(x)*(x))                                                           // cubes x
+#define cube(x) ((x)*(x)*(x))   
+                                                        // cubes x
 #define SPEED_TO_BITS(s) ((28.97 + 3.402 * (s)-0.1736 * sq(s) + 0.003101 * cube(s)) * 67.7) // caluculates bit value needed for bits, takes float returns float in the range [0, 1]
 #define BITS_TO_SPEED(s) (1.012e-5 * cube(s) - 6.19e-3 * sq(s) + 1.332 * s - 37.24)         // bytespeed to actual irl speed
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
+
+#define servo_up() servo_goto(_SERVO_TOP)
+#define servo_down() servo_goto(_SERVO_BOTTOM)
+
+#define SERVO
+Servo servo;
+extern Plt p_plot = Plt();
+
+[[maybe_unused]] struct pen
+{
+    int angle; // angle of servo
+    bool down; // to ensure that the servo will not spin the wrong way
+};
+
+void _init_servo() __ATTR_CONST__;
+inline void servo_goto(byte angle);
+inline byte servo_angle() __ATTR_CONST__;
+
 
 inline void set_speed(pin, int);
 inline void set_brakes(pin, int);

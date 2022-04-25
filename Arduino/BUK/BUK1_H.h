@@ -41,6 +41,7 @@ inline bit servo_angle();
 inline double cube(double s){
     return sq(s)*s;
 }
+
 inline bool outofbounds(BUKvec coords);
 BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, unsigned int i);
 BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& coords, unsigned int prec, unsigned int i);
