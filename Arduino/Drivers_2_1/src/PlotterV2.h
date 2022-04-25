@@ -43,12 +43,13 @@ typedef pmath::Vector Vec;
 #define _PAPER_LENGTH 297
 #define _PAPER_WIDTH 210
 
-#define _MAX_SPEED INFINITY // max irl speed
+#define _MAX_SPEED INFINITY //FIXME: needs calculation 
+//max irl speed
 
 // macros
 #define cube(x) ((x)*(x)*(x))                                                           // cubes x
-#define SPEED_TO_BITS(s) ((28.97 + 3.402 * (s)-0.1736 * sq(s) + 0.003101 * cube(s)) * 67.7) // caluculates bit value needed for bits, takes float returns float in the range [0, 1]
-#define BITS_TO_SPEED(s) (1.012e-5 * cube(s) - 6.19e-3 * sq(s) + 1.332 * s - 37.24)         // bytespeed to actual irl speed
+#define SPEED_TO_BITS(s) (((s) == 0)?0:((28.97 + 3.402 * (s)-0.1736 * sq(s) + 0.003101 * cube(s)) * 67.7)) // caluculates bit value needed for bits, takes float returns float in the range [0, 1] ||| (0,1] --> [30, 255] + 0 --> 0
+#define BITS_TO_SPEED(s) (1.012e-5 * cube(s) - 6.19e-3 * sq(s) + 1.332 * s - 37.24)         // bytespeed to actual irl speed 
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
 
 #define servo_up() servo_goto(_SERVO_TOP)
@@ -57,7 +58,7 @@ typedef pmath::Vector Vec;
 extern Servo servo;
 extern Plt p_plot = Plt();
 
-[[maybe_unused]] struct pen
+struct [[maybe_unused]] pen
 {
     int angle; // angle of servo
     bool down; // to ensure that the servo will not spin the wrong way

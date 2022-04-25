@@ -4,10 +4,6 @@
 #error Plotter not defined
 #endif // !PLTs
 
-#ifdef SERVO
-Servo servo;
-#endif // SERVO
-
 //----------------
 
 inline bool out_of_bounds(Vec coords)
@@ -15,13 +11,13 @@ inline bool out_of_bounds(Vec coords)
     return (coords.x <= 0 || coords.x >= _PAPER_WIDTH || coords.y <= 0 || coords.y >= _PAPER_LENGTH);
 }
 
-[[maybe_unused]] void complain_OOB(Vec coords)
+void complain_OOB(Vec coords) //[[maybe_unused]]
 {
-    Serial.print("DRAW || ERROR A2: Coordinates provided {");
-    Serial.print(coords.x);
+    Serial.print("ERROR 3: OOB (");
+    Serial.print(coords.x + p_plot.pos.x);
     Serial.print(" , ");
-    Serial.print(coords.y);
-    Serial.print("} are out of bounds.");
+    Serial.print(coords.y + p_plot.pos.y);
+    Serial.print(")");
 }
 
 //---------------

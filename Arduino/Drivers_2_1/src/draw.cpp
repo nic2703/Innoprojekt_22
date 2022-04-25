@@ -2,10 +2,14 @@
 #include "plt_maths.h"
 #include "draw.h"
 
-bool draw_line(const Vec delta)
+Servo servo;
+Plt p_plot;
+
+bool draw_line(const Vec & delta)
 {
-    if (out_of_bounds(delta)) // check if the line would land out of bounds
+    if (out_of_bounds((p_plot.pos + delta))) // check if the line would land out of bounds
         {
+            complain_OOB();
             panic(__SHUTDOWN_OOB);
             return false;
         }
@@ -14,10 +18,10 @@ bool draw_line(const Vec delta)
     
     bool x_larger = delta.y < delta.x;
 
-    int a = (x_larger)? delta.x:delta.y;
-    int b = (x_larger)? delta.y:delta.x;
+    int a = (x_larger)? delta.y : delta.x;
+    int b = (x_larger)? delta.x : delta.y;
 
-    int slope = a/b;
+    float slope = float(a)/float(b); //Range [0,1]
 
     int bits_a = int(SPEED_TO_BITS(slope));
 
@@ -30,10 +34,13 @@ bool draw_line(const Vec delta)
         set_brakes(p_plot.pins_y[2], LOW);
     }
 
-    set_speed((x_larger)?p_plot.pins_x:p_plot.pins_y, 255);
-    set_speed((x_larger)?p_plot.pins_y:p_plot.pins_x, int(SPEED_TO_BITS(slope)));
+    set_speed((x_larger) ? p_plot.pins_x : p_plot.pins_y, 255);
 
-    while (time_not_reached) {/*Do Nothing*/}
+    set_speed((x_larger) ? p_plot.pins_y : p_plot.pins_x, (a==b)?255:int(SPEED_TO_BITS(slope)));
+
+    uint16_t t_to_dist = millis() + ((x_larger)? delta.x:delta.y)/_MAX_SPEED;
+
+    while (millis() < t_to_dist) {/*Do Nothing*/}
 
     set_brakes(p_plot.pins_x[2], HIGH);
     set_brakes(p_plot.pins_y[2], HIGH);

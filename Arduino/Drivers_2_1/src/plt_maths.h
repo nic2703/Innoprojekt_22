@@ -97,6 +97,9 @@ namespace pmath
 
     //-----------------------------------------------------------------------------
 
+    Vector & q_bezier();
+    Vector & c_bezier();
+
     void mandala(); //TODO: CMON I FUCKING NEED THIS FN! i was promised some maths, give it to me...
 
 } // namespace plt (plotter_maths)
