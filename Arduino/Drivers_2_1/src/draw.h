@@ -32,12 +32,12 @@ bool draw_circle_segment(Vec &, int, double);
 bool draw_circle_segment(Vec &, int, double, double);
 
 /**
- * @brief implementation of a bezier curve
+ * @brief Quadratic Bézier curve
  * 
  * @return true 
  * @return false 
  */
-bool draw_curve();
+bool b_quad();
 
 /**
  * @brief wraps a graph around the origin in the style of a mandala
