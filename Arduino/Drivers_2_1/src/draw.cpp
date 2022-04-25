@@ -5,7 +5,7 @@
 Servo servo;
 Plt p_plot;
 
-bool draw_line(const Vec & delta)
+bool draw_line(const Vec delta)
 {
     if (out_of_bounds((p_plot.pos + delta))) // check if the line would land out of bounds
         {

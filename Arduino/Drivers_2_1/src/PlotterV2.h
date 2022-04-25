@@ -55,9 +55,6 @@ typedef pmath::Vector Vec;
 #define servo_up() servo_goto(_SERVO_TOP)
 #define servo_down() servo_goto(_SERVO_BOTTOM)
 
-extern Servo servo;
-extern Plt p_plot = Plt();
-
 struct [[maybe_unused]] pen
 {
     int angle; // angle of servo
@@ -92,17 +89,21 @@ public:
     ~Plt();
     bool calibrate(void);
 
-private:
-    bool __plt_init(); // initialisation sequence
-
+    Vec pos;
     // motor pins
     pin pins_x[3];
     pin pins_y[3];
+    
+private:
+    bool __plt_init(); // initialisation sequence
+
 
     static int duration_x;
     static int duration_y;
 
-    Vec pos;
 };
+
+extern Servo servo;
+extern Plt p_plot = Plt();
 
 #endif // !PLT

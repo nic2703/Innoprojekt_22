@@ -1,4 +1,7 @@
 #include "PlotterV2.h"
+#include "plt_maths.h"
+
+typedef pmath::Vector Vec;
 
 /**
  * @brief Draws a line from the current position using
@@ -6,7 +9,7 @@
  * @param dy delta y
  * @returns true | false if the task succeeded and false if it failed
  **/
-bool draw_line(const Vec &);
+bool draw_line(const Vec);
 
 //CIRCLES
 
