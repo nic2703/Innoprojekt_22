@@ -14,6 +14,8 @@
 #include "errors"
 #endif // !ERRORS
 
+Servo servo;
+
 static inline void set_speed(pin motor, int speed) {analogWrite(motor, speed);}
 static inline void set_speed(const pin motors[2], int speed) {
     set_dir(motors[1], speed);
@@ -62,7 +64,23 @@ void finish()
     abort();
 }
 
-bool draw_line(const Vec delta)
+void _init_servo() // [[maybe_unused]]
+{
+    servo.attach(_SERVO);
+    Serial.println("attached servo to pin 4");
+}
+
+inline void servo_goto(byte angle)
+{
+    servo.write(angle);
+}
+
+inline byte servo_angle()
+{
+    return servo.read();
+}
+
+bool Plt::draw_line(const Vec delta)
 {
     if (delta == Vec(0, 0))
     return true; // no line necessary

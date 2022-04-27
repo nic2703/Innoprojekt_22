@@ -12,20 +12,32 @@ typedef enum
     _SPEED_A = 3,
     _SPEED_B = 11,
     _DIR_A = 12,
-    _DIR_B = 13
+    _DIR_B = 13,
+    _SERVO = 4
 } pins;
 
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
 #define _MAX_SPEED INFINITY //FIXME no
 
-const pin pins_x[3] = {_SPEED_A, _DIR_A, _BRAKE_A};
-const pin pins_y[3] = {_SPEED_B, _DIR_B, _BRAKE_B};
-
 void panic(volatile error_t);
 void emergency_stop();
 void finish();
 
-bool draw_line(const Vec);
+void _init_servo();
 
+class Plotter
+{
+public:
+    Plotter();
+    ~Plotter() = default;
+    
+    bool draw_line(const Vec);
+    bool active();
+
+private:
+    pin pins_x[3] = {_SPEED_A, _DIR_A, _BRAKE_A};
+    pin pins_y[3] = {_SPEED_B, _DIR_B, _BRAKE_B};
+};
+typedef Plotter Plt;
 
 #endif // !PLT_h
