@@ -1,6 +1,4 @@
-#include "PlotterV2.h"
 #include "plt_maths.h"
-
 
 /**
  * @brief Draws a line from the current position using

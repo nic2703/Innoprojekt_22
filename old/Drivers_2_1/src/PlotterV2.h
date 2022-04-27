@@ -5,10 +5,13 @@
 #ifndef PLT
 #define PLT
 
+//#include "draw.h"
+
+#ifndef ARD
 #include "Arduino.h"
+#endif // !ARDUINO
 #include "Servo.h"
 
-#include "draw.h"
 #ifndef PLT_MATHS
 #include "plt_maths.h"
 #endif // !PLT_MATHS

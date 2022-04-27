@@ -1,5 +1,6 @@
-#include "PlotterV2.h"
-#include "plt_maths.h"
+//#include "PlotterV2.h"
+#include "PlotterV2.cpp"
+//#include "plt_maths.h"
 #include "draw.h"
 
 extern Servo servo;

@@ -5,7 +5,7 @@
 #endif // !PLTs
 
 //----------------
-
+extern Servo servo;
 
 inline void set_speed(pin motor[], int speed)
 {
@@ -43,7 +43,7 @@ void finish()
 {
     Serial.println("Program terminated with exit code: 0");
     delay(10);
-    //abort();
+    abort();
 }
 
 void emergency_stop()
