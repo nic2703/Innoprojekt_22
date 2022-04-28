@@ -14,7 +14,7 @@ class BUKvec{
         BUKvec(float init_x = 0, float init_y = 0);
         ~BUKvec();
         BUKvec& operator=(const BUKvec&);
-        float& operator[](int i);
+        float operator[](int i);
         bool operator==(const BUKvec vector) const;
         bool operator!=(const BUKvec vector) const;
         bool operator<=(const BUKvec vector) const;

@@ -5,8 +5,9 @@
 #ifndef BUK1_H_
 #define BUK1_H_
 
-#include "Arduino.h";
-#include "BUK1_VEC.h";
+#include "Arduino.h"
+#include "Servo.h"
+#include "BUK1_VEC.h"
 
 typedef byte pin;
 typedef unsigned int bit;
@@ -41,9 +42,10 @@ inline bit servo_angle();
 inline double cube(double s){
     return sq(s)*s;
 }
+
 inline bool outofbounds(BUKvec coords);
-BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, unsigned int i);
-BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& coords, unsigned int prec, unsigned int i);
+BUKvec BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, unsigned int i);
+BUKvec BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& coords, unsigned int prec, unsigned int i);
 
 
 //Class functions here

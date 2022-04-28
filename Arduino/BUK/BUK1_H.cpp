@@ -1,5 +1,6 @@
 #include "BUK1_H.h"
-#include "Arduino.h";
+#include "Arduino.h"
+
 
 //Motor functions here
 inline void set_speed(pin spdPin, bit bitspeed){
@@ -15,22 +16,7 @@ inline void set_direction(pin dirPin, int state){
 }
 
 //Servo functions here
-inline void servo_goto(bit angle){
-    PenServo.write(angle);
-    delay(15);
-}
 
-inline void servo_up(){
-    servo_goto(_SERVO_TOP);
-}
-
-inline void servo_down(){
-    servo_goto(_SERVO_BOTTOM);
-}
-
-inline bit servo_angle(){
-    return PenServo.read();
-}
 
 //Math functions here
 inline bool outofbounds(BUKvec coords){
@@ -45,7 +31,7 @@ inline bool outofbounds(BUKvec coords){
     return false;
 }
 
-BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, unsigned int i){
+BUKvec BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, unsigned int i){
     float t = i/prec;
     float x = cube(1-t)*position[0] + sq(1-t)*3*t*control1[0] + (1-t)*3*sq(t)*control2[0] + cube(t)*coords[0];
     float y = cube(1-t)*position[1] + sq(1-t)*3*t*control1[1] + (1-t)*3*sq(t)*control2[1] + cube(t)*coords[1];
@@ -53,7 +39,7 @@ BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& control2, BUKvec& 
     return subpoint;
 }
 
-BUKvec& BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& coords, unsigned int prec, unsigned int i){
+BUKvec BUKBezier(BUKvec& position, BUKvec& control1, BUKvec& coords, unsigned int prec, unsigned int i){
     float t = i/prec;
     float x = sq(1-t)*position[0] + (1-t)*2*t*control1[0] + sq(t)*coords[0];
     float y = sq(1-t)*position[1] + (1-t)*2*t*control1[1] + sq(t)*coords[1];
@@ -93,7 +79,7 @@ BUKPlt::BUKPlt(){
 
     set_brakes(_BRAKE_A, HIGH);
     set_brakes(_BRAKE_B, HIGH);
-    
+
     PenServo.attach(_SERVO_LATCH);
 
     pinMode(_BUTTON_XTOP, INPUT);
@@ -105,6 +91,23 @@ BUKPlt::BUKPlt(){
 
 BUKPlt::~BUKPlt(){
     Serial.println("Plotter object destroyed");
+}
+
+inline void servo_goto(bit angle){
+    PenServo.write(angle);
+    //delay(15);
+}
+
+inline void servo_up(){
+    servo_goto(_SERVO_TOP);
+}
+
+inline void servo_down(){
+    servo_goto(_SERVO_BOTTOM);
+}
+
+inline bit servo_angle(){
+    return PenServo.read();
 }
 
 
@@ -362,14 +365,20 @@ bool BUKPlt::emergencystop(){
     if (digitalRead(_BUTTON_XBTM) == HIGH || digitalRead(_BUTTON_XTOP) == HIGH 
     || digitalRead(_BUTTON_YBTM) == HIGH || digitalRead(_BUTTON_YTOP) == HIGH
     || digitalRead(_BUTTON_EMERGENCY) == HIGH){
-        //digitalWrite(12, HIGH); straight to interrupt
         Serial.println("EMERGENCY || ERROR A3: Emergency Stop initiated");
         return true;
     }
     return false;
 }
 
-
+/**
+ * @brief up then over then down
+ * 
+ * @param coords 
+ * @param bitspeed 
+ * @return true 
+ * @return false 
+ */
 bool BUKPlt::penM(BUKvec& coords, bit bitspeed){
     servo_up();
     Serial.println("penM || Moving to coordinates");
@@ -380,6 +389,14 @@ bool BUKPlt::penM(BUKvec& coords, bit bitspeed){
     return true;
 }
 
+/**
+ * @brief over then up
+ * 
+ * @param coords 
+ * @param bitspeed 
+ * @return true 
+ * @return false 
+ */
 bool BUKPlt::penZ(BUKvec& coords, bit bitspeed){
     Serial.println("penZ || Moving to coordinates");
     if(!penL(coords, bitspeed)){
@@ -389,6 +406,14 @@ bool BUKPlt::penZ(BUKvec& coords, bit bitspeed){
     return true;
 }
 
+/**
+ * @brief move carriage by vec
+ * 
+ * @param coords 
+ * @param bitspeed 
+ * @return true 
+ * @return false 
+ */
 bool BUKPlt::penL(BUKvec& coords, bit bitspeed){
     set_brakes(_BRAKE_A, HIGH);
     set_brakes(_BRAKE_B, HIGH);
@@ -429,6 +454,14 @@ bool BUKPlt::penL(BUKvec& coords, bit bitspeed){
     return true;
 }
 
+/**
+ * @brief horizontal move
+ * 
+ * @param h 
+ * @param bitspeed 
+ * @return true 
+ * @return false 
+ */
 bool BUKPlt::penH(float& h, bit bitspeed){
     BUKvec coords = BUKvec(h, position[1]);
     servo_down();
@@ -438,6 +471,14 @@ bool BUKPlt::penH(float& h, bit bitspeed){
     return true;
 }
 
+/**
+ * @brief vertical move
+ * 
+ * @param v 
+ * @param bitspeed 
+ * @return true 
+ * @return false 
+ */
 bool BUKPlt::penV(float& v, bit bitspeed){
     BUKvec coords = BUKvec(position[0], v);
     servo_down();
@@ -447,7 +488,17 @@ bool BUKPlt::penV(float& v, bit bitspeed){
     return true;
 }
 
-
+/**
+ * @brief cubic
+ * 
+ * @param control1 
+ * @param control2 
+ * @param coords 
+ * @param prec 
+ * @param bitspeed 
+ * @return true 
+ * @return false 
+ */
 bool BUKPlt::penC(BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned int prec, bit bitspeed){
     set_brakes(_BRAKE_A, HIGH);
     set_brakes(_BRAKE_B, HIGH);
@@ -483,6 +534,16 @@ bool BUKPlt::penC(BUKvec& control1, BUKvec& control2, BUKvec& coords, unsigned i
     return true;
 }
 
+/**
+ * @brief quadratic
+ * 
+ * @param control1 
+ * @param coords 
+ * @param prec 
+ * @param bitspeed 
+ * @return true 
+ * @return false 
+ */
 bool BUKPlt::penQ(BUKvec& control1, BUKvec& coords, unsigned int prec, bit bitspeed){
     set_brakes(_BRAKE_A, HIGH);
     set_brakes(_BRAKE_B, HIGH);

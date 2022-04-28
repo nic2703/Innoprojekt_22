@@ -17,7 +17,7 @@ BUKvec& BUKvec::operator=(const BUKvec& vector){
     return *this;
 }
 
-float& BUKvec::operator[](int i){
+float BUKvec::operator[](int i){
     float error = -1.0f;
     switch(i){
         case 0: return x;

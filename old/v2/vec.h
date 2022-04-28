@@ -13,7 +13,7 @@
 
 #include <Arduino.h>
 
-class Vec
+//class Vec
 {
 public:
     int x; //x coordinate
