@@ -23,21 +23,26 @@ void panic(volatile error_t);
 void emergency_stop();
 void finish();
 
+const pin pins_x[3] = {_SPEED_A, _DIR_A, _BRAKE_A};
+const pin pins_y[3] = {_SPEED_B, _DIR_B, _BRAKE_B};
+
+void go();
+
+void drawA(int);
+
+bool draw_line(const Vec);
+
 void _init_servo();
 
-class Plotter
+/* class Plotter
 {
 public:
-    Plotter();
-    ~Plotter() = default;
-    
-    bool draw_line(const Vec);
+   
     bool active();
 
 private:
-    pin pins_x[3] = {_SPEED_A, _DIR_A, _BRAKE_A};
-    pin pins_y[3] = {_SPEED_B, _DIR_B, _BRAKE_B};
 };
-typedef Plotter Plt;
+Plotter::Plotter(){};
+typedef Plotter Plt; */
 
 #endif // !PLT_h
