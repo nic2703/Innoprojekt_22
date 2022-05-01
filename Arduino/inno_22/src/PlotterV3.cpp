@@ -22,7 +22,7 @@
 #include "errors"
 #endif // !ERRORS
 
-// Servo servo;
+Servo servo;
 
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
 static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
@@ -156,8 +156,8 @@ void Plotter::draw_line(long dx, long dy)
     bool x_geq = abs(n_dx) >= abs(n_dy);
     bool y_geq = abs(n_dy) >= abs(n_dx);
 
-    n_dx = (x_geq) ? sign(n_dx) : n_dx/n_dy; //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (y_geq) ? sign(n_dy) : n_dy/n_dx;
+    n_dx = (x_geq) ? sign(n_dx) : n_dx/abs(n_dy); //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
+    n_dy = (y_geq) ? sign(n_dy) : n_dy/abs(n_dx);
 
     set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx)) ) * sign(n_dx) );
     set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy)) ) * sign(n_dy) );
@@ -181,7 +181,7 @@ void Plotter::draw_line(const Vec & delta)
 
         return; // no line necessary
     }
-    
+
     double norm = delta.norm();
     double n_dx = (delta._x() / norm) * CORRECTION;
     double n_dy = delta._y() / norm;
@@ -189,8 +189,8 @@ void Plotter::draw_line(const Vec & delta)
     bool x_geq = abs(n_dx) >= abs(n_dy);
     bool y_geq = abs(n_dy) >= abs(n_dx);
 
-    n_dx = (x_geq) ? sign(n_dx) : n_dx/n_dy; //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (y_geq) ? sign(n_dy) : n_dy/n_dx;
+    n_dx = (x_geq) ? sign(n_dx) : n_dx/abs(n_dy); //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
+    n_dy = (y_geq) ? sign(n_dy) : n_dy/abs(n_dx);
 
     set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx)) ) * sign(n_dx) );
     set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy)) ) * sign(n_dy) );
@@ -231,40 +231,3 @@ void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
         }
     }
 }
-
-/*  bool x_larger = abs(delta._y()) < abs(delta._x());
-
-    int a = (x_larger)? delta._y() : delta._x();
-    int b = (x_larger)? delta._x() : delta._y();
-    Serial.println(a);
-    Serial.println(b);
-
-    float slope = float(a)/float(b); //Range [0,1]
-    Serial.println(slope);
-    
-    int bits_a = int(speed_to_bits(slope)) * ((a>0) ? 1 : -1);
-    Serial.println(bits_a);
-
-    if (delta._x() != 0)
-    {
-        set_brakes(_BRAKE_A, LOW);
-    }
-    
-    if (delta._y() != 0)
-    {
-        set_brakes(_BRAKE_B, LOW);
-    }
-
-    set_speed((x_larger) ? pins_x : pins_y, 255 * ((b>0) ? 1 : -1));
-
-    set_speed((x_larger) ? pins_y : pins_x, bits_a);
-
-    uint16_t t_to_dist = millis() + ((x_larger)? abs(delta._x()):abs(delta._y()));
-    Serial.println(t_to_dist);
-
-    while (millis() < t_to_dist) {/*Do Nothing}
-
-    set_brakes(pins_x[2], HIGH);
-    set_brakes(pins_y[2], HIGH);
-    
-    return; // hasn't failed so far*/
