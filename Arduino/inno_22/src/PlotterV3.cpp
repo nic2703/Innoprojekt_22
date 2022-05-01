@@ -56,34 +56,6 @@ static void emergency_stop()
     abort();
 }
 
-static void panic(volatile error_t error)
-{
-    /*Engage Brakes*/
-    digitalWrite(_BRAKE_A, HIGH);
-    digitalWrite(_BRAKE_B, HIGH);
-
-    /*Cut Power to the motors*/
-    analogWrite(_SPEED_A, 0);
-    analogWrite(_SPEED_B, 0);
-
-    /*Output the error*/
-    Serial.print("Aborted: Error code: ");
-    Serial.println(error);
-
-    /*Wait for the message to be sent*/
-    delay(50);
-
-    /*Stop execution*/
-    abort();
-}
-
-static void finish()
-{
-    Serial.println("Program terminated with exit code: 0");
-    delay(10);
-    abort();
-}
-
 Plotter::Plotter() 
 {
     Serial.begin(9600);
@@ -166,45 +138,8 @@ bool Plotter::out_of_bounds(int dx, int dy)
     return false;
 }
 
-/* void Plotter::draw_line(long dx, long dy)
-{
-    if (out_of_bounds(dx, dy))
-    { // security
-        emergency_stop();
-    }
-
-    if (dx == 0 && dy == 0)
-    {
-        return;
-    }
-
-    double norm = sqrt(sq(dx) + sq(dy));
-    double n_dx = (dx / norm) * CORRECTION;
-    double n_dy = dy / norm;
-
-    n_dx = (n_dx >= n_dy) ? 1 : n_dx / n_dy; // scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (n_dy >= n_dx) ? 1 : n_dy / n_dx;
-
-    set_speed(pins_x, (n_dx > n_dy) ? 255 : int(speed_to_bits(n_dx)));
-    set_speed(pins_y, (n_dy > n_dx) ? 255 : int(speed_to_bits(n_dy)));
-
-    int eta = millis() + int(abs(((n_dx > n_dy) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
-
-    while (millis() < eta) {}
-
-    set_speed(pins_x, 0);
-    set_speed(pins_y, 0);
-
-    x += dx;
-    y += dy;
-} */
-
 void Plotter::draw_line(long dx, long dy)
 {
-    if (out_of_bounds(dx, dy))
-    { // security
-        emergency_stop();
-    }
 
     if (dx == 0 && dy == 0)
     {
@@ -229,7 +164,7 @@ void Plotter::draw_line(long dx, long dy)
 
     int eta = millis() + int(abs( ( (n_dx > n_dy) ? dx/MAX_SPEED_X : dy/MAX_SPEED_Y )));
 
-    while (millis() < eta)
+    while (millis() < eta) {}
 
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
@@ -240,45 +175,14 @@ void Plotter::draw_line(long dx, long dy)
 
 void Plotter::draw_line(const Vec & delta)
 {
-    if (delta == Vec(0, 0))
-    return; // no line necessary
-    
-    bool x_larger = abs(delta._y()) < abs(delta._x());
+    if (delta == Vec(0, 0)) {
+        set_speed(pins_x, 0);
+        set_speed(pins_y, 0);
 
-    int a = (x_larger)? delta._y() : delta._x();
-    int b = (x_larger)? delta._x() : delta._y();
-    Serial.println(a);
-    Serial.println(b);
-
-    float slope = float(a)/float(b); //Range [0,1]
-    Serial.println(slope);
-    
-    int bits_a = int(speed_to_bits(slope)) * ((a>0) ? 1 : -1);
-    Serial.println(bits_a);
-
-    if (delta._x() != 0)
-    {
-        set_brakes(_BRAKE_A, LOW);
+        return; // no line necessary
     }
     
-    if (delta._y() != 0)
-    {
-        set_brakes(_BRAKE_B, LOW);
-    }
-
-    set_speed((x_larger) ? pins_x : pins_y, 255 * ((b>0) ? 1 : -1));
-
-    set_speed((x_larger) ? pins_y : pins_x, bits_a);
-
-    uint16_t t_to_dist = millis() + ((x_larger)? abs(delta._x()):abs(delta._y()));
-    Serial.println(t_to_dist);
-
-    while (millis() < t_to_dist) {/*Do Nothing*/}
-
-    set_brakes(pins_x[2], HIGH);
-    set_brakes(pins_y[2], HIGH);
-    
-    return; // hasn't failed so far
+  
 }
 
 void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
@@ -295,10 +199,7 @@ void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
     if (arc > 0)
     {
         for (int i = 0; i < arc * 10; i++) // steps in hundredths of arc length.
-        {
-            Vec
-            sin(i);
-            cos(i);   
+        {  
         }
     }
     else if (arc < 0)

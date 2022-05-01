@@ -7,15 +7,17 @@
 
 typedef byte pin;
 
-#define MAX_X 1000000 //TODO: choose a value here, this is the short side
-#define MAX_Y 1000000 //TODO: Choose a value here, this is the long side
+#define MAX_X 100000000 //TODO: choose a value here, this is the short side
+#define MAX_Y 100000000 //TODO: Choose a value here, this is the long side
 #define MAX_SPEED_X 1 //TODO: Get a max speed calculation
-#define MAX_SPEED_Y 1 //TODO: Get the max speed calculation
+#define MAX_SPEED_Y 1 //TODO: Get the max speed calc§ulation
 
 #define CORRECTION 1 //TODO: get Correction
 
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
-
+#define sign(x) (((x)>0)-((x)<0)) //nice to have, return values {-1, 0, 1}
+#undef abs
+#define abs(x) ((x)*sign((x))) //better
 
 void _init_servo();
 
