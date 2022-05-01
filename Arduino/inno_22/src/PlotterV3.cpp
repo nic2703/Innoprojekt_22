@@ -198,7 +198,8 @@ bool Plotter::out_of_bounds(int dx, int dy)
     x += dx;
     y += dy;
 } */
-void Plotter::draw_line(int dx, int dy)
+
+void Plotter::draw_line(long dx, long dy)
 {
     if (out_of_bounds(dx, dy))
     { // security
