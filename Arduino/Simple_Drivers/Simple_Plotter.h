@@ -9,8 +9,12 @@
 
 #define CORRECTION 1 //TODO: get Correction
 
+#define sign(x) (((x)>0)-((x)<0)) //nice to have, return values {-1, 0, 1}
+#undef abs(x)
+#define abs(x) ((x)*sign((x))) //better
+
 #define cu(x) sq(x)*x
-#define speed_to_bits(s) (sq(s)) //TODO: yoink from large drivers
+#define speed_to_bits(s) ( ((s) == 0)?0:( 28.97 + 3.402 * (abs(s)*58.5)-0.1736 * sq(abs(s)*58.5) + 0.003101 * cube(abs(s)*58.5) ) )
 
 #define SPEED_A 9
 #define SPEED_B 8

@@ -129,6 +129,9 @@ void draw_line(int dx, int dy)
 
     if (dx == 0 && dy == 0)
     {
+        set_speed(pins_x, 0);
+        set_speed(pins_y, 0);
+
         return;
     }
 
@@ -136,11 +139,14 @@ void draw_line(int dx, int dy)
     double n_dx = (dx / norm) * CORRECTION;
     double n_dy = dy / norm;
 
-    n_dx = (n_dx >= n_dy) ? 1 : n_dx/n_dy; //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (n_dy >= n_dx) ? 1 : n_dy/n_dx;
+    bool x_geq = abs(n_dx) >= abs(n_dy);
+    bool y_geq = abs(n_dy) >= abs(n_dx);
 
-    set_speed(pins_x, (n_dx > n_dy) ? 255 : int(speed_to_bits(n_dx)));
-    set_speed(pins_y, (n_dy > n_dx) ? 255 : int(speed_to_bits(n_dy)));
+    n_dx = (x_geq) ? sign(n_dx) : n_dx/n_dy; //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
+    n_dy = (y_geq) ? sign(n_dy) : n_dy/n_dx;
+
+    set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx)) ) * sign(n_dx) );
+    set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy)) ) * sign(n_dy) );
 
     int eta = millis() + int(abs( ( (n_dx > n_dy) ? dx/MAX_SPEED_X : dy/MAX_SPEED_Y )));
 
