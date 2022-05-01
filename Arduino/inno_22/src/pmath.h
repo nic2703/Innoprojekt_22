@@ -90,8 +90,10 @@ namespace pmath
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        double norm();
-        Vector orth();
+        double norm() const {
+            return sqrt(sq(x)+sq(y));
+        }
+        //Vector orth() const;
         
     private:
         long x, y;
