@@ -98,6 +98,7 @@ namespace pmath
     };    
 }
 
+
 typedef pmath::Vector Vec;
 
 #endif // !PMTH
