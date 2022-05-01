@@ -142,8 +142,8 @@ void draw_line(int dx, int dy)
     bool x_geq = abs(n_dx) >= abs(n_dy);
     bool y_geq = abs(n_dy) >= abs(n_dx);
 
-    n_dx = (x_geq) ? sign(n_dx) : n_dx/n_dy; //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (y_geq) ? sign(n_dy) : n_dy/n_dx;
+    n_dx = (x_geq) ? sign(n_dx) : n_dx/abs(n_dy); //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
+    n_dy = (y_geq) ? sign(n_dy) : n_dy/abs(n_dx);
 
     set_speed(pins_x, (x_geq) ? 255 * sign(n_dx) : int(speed_to_bits(n_dx)) );
     set_speed(pins_y, (y_geq) ? 255 * sign(n_dy) : int(speed_to_bits(n_dy)) );
