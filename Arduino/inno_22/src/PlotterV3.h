@@ -5,8 +5,6 @@
 #include "errors"
 #include "plt_pins"
 
-#define __DEPRACATED__ __atribute__((depracated))
-
 typedef byte pin;
 
 #define MAX_X 1000000 //TODO: choose a value here, this is the short side
@@ -28,7 +26,9 @@ public:
    
     //bool is_active();
     void draw_line(long, long);
-    bool draw_line(const Vec) [[deprecated("Use draw_line(int, int) instead.")]];
+    void draw_line(const Vec &) [[deprecated("Use draw_line(int, int) instead.")]];
+
+    void circle_segment(Vec &, int, double);
 
 private:
     pin pins_x[3];
