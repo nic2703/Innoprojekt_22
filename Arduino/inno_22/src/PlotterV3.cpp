@@ -1,13 +1,19 @@
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-//  #include <Servo.h>
 #endif
+
+#ifndef Servo_h
+#include <Servo.h>
+#endif // DEBUG
 
 #include "PlotterV3.h"
 
 #ifndef PLT_H
 #error Plotter not defined
 #endif // !PLT_h
+#ifndef Servo_h
+#error Servo not defined
+#endif // !Servo_h
 
 #ifndef PMTH
 #include "pmath.h"
@@ -37,18 +43,7 @@ static void set_speed(const pin pins[3], int speed)
     digitalWrite(pins[2], LOW);
 }
 
-Plotter::Plotter()
-{
-    Serial.begin(9600);
-    pinMode(_BRAKE_A, OUTPUT);
-    pinMode(_BRAKE_B, OUTPUT);
-    pinMode(_SPEED_A, OUTPUT);
-    pinMode(_SPEED_B, OUTPUT);
-    pinMode(_DIR_A, OUTPUT);
-    pinMode(_DIR_B, OUTPUT);
-}
-
-void emergency_stop()
+static void emergency_stop()
 {
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
@@ -61,7 +56,7 @@ void emergency_stop()
     abort();
 }
 
-void panic(volatile error_t error)
+static void panic(volatile error_t error)
 {
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
@@ -82,11 +77,82 @@ void panic(volatile error_t error)
     abort();
 }
 
-void finish()
+static void finish()
 {
     Serial.println("Program terminated with exit code: 0");
     delay(10);
     abort();
+}
+
+Plotter::Plotter() 
+{
+    Serial.begin(9600);
+    pinMode(_BRAKE_A, OUTPUT);
+    pinMode(_BRAKE_B, OUTPUT);
+    pinMode(_SPEED_A, OUTPUT);
+    pinMode(_SPEED_B, OUTPUT);
+    pinMode(_DIR_A, OUTPUT);
+    pinMode(_DIR_B, OUTPUT);
+
+    pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
+    pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+    /* if (run_into_walls(pins_x, pins_y)){ //Switch if necessary
+        pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
+        pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
+    } */
+
+    x = 0;
+    y = 0;
+    angle = 0;
+    attachInterrupt(_SWITCH, emergency_stop, RISING); 
+
+}
+
+bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
+{
+    /*Make sure B is off*/
+    set_speed(pins_y, 0);
+
+
+    set_speed(pins_x, 255); //Run A forward
+
+    /*Run until button*/
+    while (digitalRead(_SWITCH) != HIGH) {} //Do Nothing
+
+    /*Stop A*/
+    set_speed(pins_x, 0);
+
+    /*Start B*/
+    set_speed(pins_y, 255);
+
+    /*Run until button*/
+    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
+
+    /*Stop B*/
+    set_speed(pins_y, 0);
+
+    /*Start A*/
+    set_speed(pins_x, -255);
+
+    int time = millis();
+
+    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
+    int duration_x = millis()-time;
+
+    /*Stop A*/
+    set_speed(pins_x, 0);
+
+    /*Start B*/
+    set_speed(pins_y, -255);
+
+    time = millis();
+    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
+    int duration_y = millis() - time;
+
+    /*Stop B*/
+    set_speed(pins_y, 0);
+
+    return duration_x > duration_y;
 }
 
 bool Plotter::out_of_bounds(int dx, int dy)
@@ -100,7 +166,7 @@ bool Plotter::out_of_bounds(int dx, int dy)
     return false;
 }
 
-void Plotter::draw_line(int dx, int dy)
+void Plotter::draw_line(long dx, long dy)
 {
     if (out_of_bounds(dx, dy))
     { // security
@@ -124,11 +190,48 @@ void Plotter::draw_line(int dx, int dy)
 
     int eta = millis() + int(abs(((n_dx > n_dy) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
 
-    while (millis() < eta)
+    while (millis() < eta) {}
 
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
 
     x += dx;
     y += dy;
+}
+
+bool Plotter::draw_line(const Vec delta) 
+{
+    if (delta == Vec(0, 0))
+    return true; // no line necessary
+    
+    bool x_larger = delta._y() < delta._x();
+
+    int a = (x_larger)? delta._y() : delta._x();
+    int b = (x_larger)? delta._x() : delta._y();
+
+    float slope = float(a)/float(b); //Range [0,1]
+
+    int bits_a = int(speed_to_bits(slope));
+
+    if (delta._x() != 0)
+    {
+        set_brakes(_BRAKE_A, LOW);
+    }
+    if (delta._y() != 0)
+    {
+        set_brakes(_BRAKE_B, LOW);
+    }
+
+    set_speed((x_larger) ? pins_x : pins_y, 255);
+
+    set_speed((x_larger) ? pins_y : pins_x, ((a==b) ? 255 : int(speed_to_bits(slope))));
+
+    uint16_t t_to_dist = millis() + ((x_larger)? delta._x():delta._y()); // TODO scale by max speed
+
+    while (millis() < t_to_dist) {/*Do Nothing*/}
+
+    set_brakes(pins_x[2], HIGH);
+    set_brakes(pins_y[2], HIGH);
+    
+    return true; // hasn't failed so far
 }

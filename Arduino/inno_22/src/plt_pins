@@ -8,5 +8,6 @@ typedef enum
     _SPEED_B = 11,
     _DIR_A = 12,
     _DIR_B = 13,
-    _SERVO = 4
+    _SERVO = 4,
+    _SWITCH = 2
 } pins;

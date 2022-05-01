@@ -94,7 +94,7 @@ namespace pmath
         Vector orth();
         
     private:
-        int x, y;
+        long x, y;
     };    
 }
 
