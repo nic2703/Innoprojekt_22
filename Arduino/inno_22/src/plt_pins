@@ -1,3 +1,5 @@
+#define PINS
+
 typedef enum
 {
     _BRAKE_A = 9,
