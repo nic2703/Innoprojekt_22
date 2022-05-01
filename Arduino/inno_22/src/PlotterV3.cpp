@@ -1,11 +1,19 @@
-#include <Arduino.h>
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "Arduino.h"
+#endif
+
+#ifndef Servo_h
 #include <Servo.h>
+#endif // DEBUG
 
 #include "PlotterV3.h"
 
-#ifndef PLT_h
+#ifndef PLT_H
 #error Plotter not defined
 #endif // !PLT_h
+#ifndef Servo_h
+#error Servo not defined
+#endif // !Servo_h
 
 #ifndef PMTH
 #include "pmath.h"
@@ -14,16 +22,28 @@
 #include "errors"
 #endif // !ERRORS
 
-Servo servo;
+// Servo servo;
 
-static inline void set_speed(pin motor, int speed) {analogWrite(motor, speed);}
-static inline void set_speed(const pin motors[2], int speed) {
-    set_dir(motors[1], speed);
-    analogWrite(motors[0], abs(speed));
+static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
+static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
+
+static void set_speed(const pin pins[3], int speed)
+{
+    if (speed == 0)
+    {
+        digitalWrite(pins[2], HIGH);
+        analogWrite(pins[0], 0);
+
+        return;
+    }
+
+    digitalWrite(pins[1], (speed < 0) ? LOW : HIGH);
+    analogWrite(pins[0], abs(speed));
+
+    digitalWrite(pins[2], LOW);
 }
-static inline void set_brakes(pin motor, int state) {digitalWrite(motor, state);}
 
-void emergency_stop()
+static void emergency_stop()
 {
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
@@ -34,9 +54,9 @@ void emergency_stop()
     analogWrite(_SPEED_B, 0);
 
     abort();
-} 
+}
 
-void panic(volatile error_t error)
+static void panic(volatile error_t error)
 {
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
@@ -51,36 +71,135 @@ void panic(volatile error_t error)
     Serial.println(error);
 
     /*Wait for the message to be sent*/
-    delay(10);
+    delay(50);
 
     /*Stop execution*/
     abort();
 }
 
-void finish()
+static void finish()
 {
     Serial.println("Program terminated with exit code: 0");
     delay(10);
     abort();
 }
 
-void _init_servo() // [[maybe_unused]]
+Plotter::Plotter() 
 {
-    servo.attach(_SERVO);
-    Serial.println("attached servo to pin 4");
+    Serial.begin(9600);
+    pinMode(_BRAKE_A, OUTPUT);
+    pinMode(_BRAKE_B, OUTPUT);
+    pinMode(_SPEED_A, OUTPUT);
+    pinMode(_SPEED_B, OUTPUT);
+    pinMode(_DIR_A, OUTPUT);
+    pinMode(_DIR_B, OUTPUT);
+
+    pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
+    pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+    /* if (run_into_walls(pins_x, pins_y)){ //Switch if necessary
+        pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
+        pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
+    } */
+
+    x = 0;
+    y = 0;
+    angle = 0;
+    attachInterrupt(_SWITCH, emergency_stop, RISING); 
+
 }
 
-inline void servo_goto(byte angle)
+bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 {
-    servo.write(angle);
+    /*Make sure B is off*/
+    set_speed(pins_y, 0);
+
+
+    set_speed(pins_x, 255); //Run A forward
+
+    /*Run until button*/
+    while (digitalRead(_SWITCH) != HIGH) {} //Do Nothing
+
+    /*Stop A*/
+    set_speed(pins_x, 0);
+
+    /*Start B*/
+    set_speed(pins_y, 255);
+
+    /*Run until button*/
+    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
+
+    /*Stop B*/
+    set_speed(pins_y, 0);
+
+    /*Start A*/
+    set_speed(pins_x, -255);
+
+    int time = millis();
+
+    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
+    int duration_x = millis()-time;
+
+    /*Stop A*/
+    set_speed(pins_x, 0);
+
+    /*Start B*/
+    set_speed(pins_y, -255);
+
+    time = millis();
+    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
+    int duration_y = millis() - time;
+
+    /*Stop B*/
+    set_speed(pins_y, 0);
+
+    return duration_x > duration_y;
 }
 
-inline byte servo_angle()
+bool Plotter::out_of_bounds(int dx, int dy)
 {
-    return servo.read();
+    int new_x = x + dx;
+    int new_y = y + dy;
+    if (new_x < 0 || new_y < 0 || new_x > MAX_X || new_y > MAX_Y)
+    {
+        return true;
+    }
+    return false;
 }
 
-bool Plt::draw_line(const Vec delta)
+void Plotter::draw_line(long dx, long dy)
+{
+    if (out_of_bounds(dx, dy))
+    { // security
+        emergency_stop();
+    }
+
+    if (dx == 0 && dy == 0)
+    {
+        return;
+    }
+
+    double norm = sqrt(sq(dx) + sq(dy));
+    double n_dx = (dx / norm) * CORRECTION;
+    double n_dy = dy / norm;
+
+    n_dx = (n_dx >= n_dy) ? 1 : n_dx / n_dy; // scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
+    n_dy = (n_dy >= n_dx) ? 1 : n_dy / n_dx;
+
+    set_speed(pins_x, (n_dx > n_dy) ? 255 : int(speed_to_bits(n_dx)));
+    set_speed(pins_y, (n_dy > n_dx) ? 255 : int(speed_to_bits(n_dy)));
+
+    int eta = millis() + int(abs(((n_dx > n_dy) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
+
+    while (millis() < eta) {}
+
+    set_speed(pins_x, 0);
+    set_speed(pins_y, 0);
+
+    x += dx;
+    y += dy;
+}
+
+bool Plotter::draw_line(const Vec delta) 
 {
     if (delta == Vec(0, 0))
     return true; // no line necessary
@@ -92,7 +211,7 @@ bool Plt::draw_line(const Vec delta)
 
     float slope = float(a)/float(b); //Range [0,1]
 
-    int bits_a = int(SPEED_TO_BITS(slope));
+    int bits_a = int(speed_to_bits(slope));
 
     if (delta._x() != 0)
     {
@@ -105,9 +224,9 @@ bool Plt::draw_line(const Vec delta)
 
     set_speed((x_larger) ? pins_x : pins_y, 255);
 
-    set_speed((x_larger) ? pins_y : pins_x, ((a==b) ? 255 : int(SPEED_TO_BITS(slope))));
+    set_speed((x_larger) ? pins_y : pins_x, ((a==b) ? 255 : int(speed_to_bits(slope))));
 
-    uint16_t t_to_dist = millis() + ((x_larger)? delta._x():delta._y())/_MAX_SPEED;
+    uint16_t t_to_dist = millis() + ((x_larger)? delta._x():delta._y()); // TODO scale by max speed
 
     while (millis() < t_to_dist) {/*Do Nothing*/}
 

@@ -1,27 +1,23 @@
-#ifndef PLT_h
-#define PLT_h
+#ifndef PLT_H
+#define PLT_H
 
 #include "pmath.h"
 #include "errors"
+#include "plt_pins"
+
+#define __DEPRACATED__ __atribute__((depracated))
 
 typedef byte pin;
-typedef enum
-{
-    _BRAKE_A = 9,
-    _BRAKE_B = 8,
-    _SPEED_A = 3,
-    _SPEED_B = 11,
-    _DIR_A = 12,
-    _DIR_B = 13,
-    _SERVO = 4
-} pins;
+
+#define MAX_X 1000000 //TODO: choose a value here, this is the short side
+#define MAX_Y 1000000 //TODO: Choose a value here, this is the long side
+#define MAX_SPEED_X 1 //TODO: Get a max speed calculation
+#define MAX_SPEED_Y 1 //TODO: Get the max speed calculation
+
+#define CORRECTION 1 //TODO: get Correction
 
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
-#define _MAX_SPEED INFINITY //FIXME no
 
-void panic(volatile error_t);
-void emergency_stop();
-void finish();
 
 void _init_servo();
 
@@ -29,15 +25,21 @@ class Plotter
 {
 public:
     Plotter();
-    ~Plotter() = default;
-    
-    bool draw_line(const Vec);
-    bool active();
+   
+    //bool is_active();
+    void draw_line(long, long);
+    bool draw_line(const Vec) [[deprecated("Use draw_line(int, int) instead.")]];
 
 private:
-    pin pins_x[3] = {_SPEED_A, _DIR_A, _BRAKE_A};
-    pin pins_y[3] = {_SPEED_B, _DIR_B, _BRAKE_B};
+    pin pins_x[3];
+    pin pins_y[3];
+
+    int x, y, angle;
+
+    bool out_of_bounds(int, int);
+    bool run_into_walls(pin[3], pin[3]);
+
 };
 typedef Plotter Plt;
 
-#endif // !PLT_h
+#endif // !PLT_H
