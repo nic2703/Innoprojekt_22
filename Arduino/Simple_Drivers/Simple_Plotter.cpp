@@ -1,4 +1,4 @@
-#include "test.h"
+#include "Simple_Plotter.h"
 
 Plotter plotter;
 
