@@ -20,8 +20,6 @@ void panic(volatile error_t);
 void emergency_stop();
 void finish();
 
-bool draw_line(const Vec &);
-
 void _init_servo();
 
 class Plotter
@@ -29,7 +27,7 @@ class Plotter
 public:
     Plotter();
    
-    bool active();
+    bool is_active();
     void draw_line(int, int);
 
 private:

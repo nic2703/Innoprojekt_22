@@ -1,5 +1,5 @@
 #if defined(ARDUINO) && ARDUINO >= 100
-	#include "Arduino.h"
+#include "Arduino.h"
 //  #include <Servo.h>
 #endif
 
@@ -16,10 +16,10 @@
 #include "errors"
 #endif // !ERRORS
 
-//Servo servo;
+// Servo servo;
 
-static inline void set_speed(const pin motor, int speed) {analogWrite(motor, speed);}
-static inline void set_brakes(const pin motor, int state) {digitalWrite(motor, state);}
+static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
+static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
 
 static void set_speed(const pin pins[3], int speed)
 {
@@ -37,7 +37,8 @@ static void set_speed(const pin pins[3], int speed)
     digitalWrite(pins[2], LOW);
 }
 
-Plotter::Plotter() {
+Plotter::Plotter()
+{
     Serial.begin(9600);
     pinMode(_BRAKE_A, OUTPUT);
     pinMode(_BRAKE_B, OUTPUT);
@@ -58,7 +59,7 @@ void emergency_stop()
     analogWrite(_SPEED_B, 0);
 
     abort();
-} 
+}
 
 void panic(volatile error_t error)
 {
@@ -115,13 +116,13 @@ void Plotter::draw_line(int dx, int dy)
     double n_dx = (dx / norm) * CORRECTION;
     double n_dy = dy / norm;
 
-    n_dx = (n_dx >= n_dy) ? 1 : n_dx/n_dy; //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (n_dy >= n_dx) ? 1 : n_dy/n_dx;
+    n_dx = (n_dx >= n_dy) ? 1 : n_dx / n_dy; // scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
+    n_dy = (n_dy >= n_dx) ? 1 : n_dy / n_dx;
 
     set_speed(pins_x, (n_dx > n_dy) ? 255 : int(speed_to_bits(n_dx)));
     set_speed(pins_y, (n_dy > n_dx) ? 255 : int(speed_to_bits(n_dy)));
 
-    int eta = millis() + int(abs( ( (n_dx > n_dy) ? dx/MAX_SPEED_X : dy/MAX_SPEED_Y )));
+    int eta = millis() + int(abs(((n_dx > n_dy) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
 
     while (millis() < eta)
 
