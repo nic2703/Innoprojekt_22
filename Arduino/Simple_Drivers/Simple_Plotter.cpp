@@ -150,7 +150,7 @@ void draw_line(int dx, int dy)
 
     int eta = millis() + int(abs( ( (n_dx > n_dy) ? dx/MAX_SPEED_X : dy/MAX_SPEED_Y )));
 
-    while (millis() < eta)
+    while (millis() < eta) ;
 
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
