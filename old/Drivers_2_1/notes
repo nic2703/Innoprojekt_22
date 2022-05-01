@@ -1,0 +1,10 @@
+/* #define _LONGUP(t) (100 < t && t < 110) // TODO: discover thse constants experimentally
+#define _SHORTUP(t) (100 < t && t < 110) // TODO : yea same as above */
+
+// bigguns:
+// teildurchmesser current: 24mm
+// previous: 19
+
+// pulley: !übersetzung:
+// current: 15.75 (on motor),
+// previous:
