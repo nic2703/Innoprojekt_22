@@ -22,6 +22,7 @@
 #include "errors"
 #endif // !ERRORS
 
+//maths bc i dont want a seperate maths.cpp file
 namespace pmath
 {
     int cbez_x(long x, long c1_x, long c2_x, long end_x, uint8_t prec, uint8_t i)

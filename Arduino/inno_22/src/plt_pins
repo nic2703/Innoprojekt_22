@@ -9,5 +9,7 @@ typedef enum
     _DIR_A = 12,
     _DIR_B = 13,
     _SERVO = 4,
-    _SWITCH = 2
+    _SWITCH = 2,
+    _TX = 1,
+    _RX = 0
 } pins;
