@@ -30,6 +30,8 @@ public:
     void draw_line(long, long);
     void draw_line(const Vec &) [[deprecated("Use draw_line(int, int) instead.")]];
 
+    void bezier_q();
+    void bezier_c();
     void circle_segment(Vec &, int, double);
 
 private:

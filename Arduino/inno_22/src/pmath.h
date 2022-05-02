@@ -99,29 +99,30 @@ namespace pmath
         long x, y;
     };
 
-    int cbezier_x(long x, long c1_x, long c2_x, long coord_x, uint8_t prec, uint8_t i)
+    int cbezier_x(long & x, long & c1_x, long & c2_x, long & end_x, uint8_t & prec, uint8_t & i)
     {
         double t = i / prec;
-        return (cube(1 - t) * x) + (sq(1 - t) * 3 * t * c1_x) + ((1 - t) * 3 * sq(t) * c2_x) + (cube(t) * coord_x);
+        return (cube(1 - t)*x) + (sq(1 - t)*3*t*c1_x) + ((1 - t)*3*sq(t)*c2_x) + (cube(t)*end_x);
     }
 
-    int cbezier_y(long y, long c1_y, long c2_y, long coord_y, uint8_t prec, uint8_t i)
+    int cbezier_y(long & y, long & c1_y, long & c2_y, long & end_y, uint8_t & prec, uint8_t & i)
     {
         double t = i / prec;
-        return (cube(1 - t) * y) + (sq(1 - t) * 3 * t * c1_y) + ((1 - t) * 3 * sq(t) * c2_y) + (cube(t) * coord_y);
+        return (cube(1 - t)*y) + (sq(1 - t)*3*t*c1_y) + ((1 - t)*3*sq(t)*c2_y) + (cube(t)*end_y);
     }
 
-    int qbezier_x(long x, long c1, long coord_x, uint8_t prec, uint8_t i)
+    int qbezier_x(long & x, long & c1, long & end_x, uint8_t & prec, uint8_t & i)
     {
         double t = i / prec;
-        return sq(1 - t) * x + (1 - t) * 2 * t * c1 + sq(t) * coord_x;
+        return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
 
-    int qbezier_y(long x, long c1, long coord_x, uint8_t prec, uint8_t i)
+    int qbezier_y(long & x, long & c1, long & end_x, uint8_t & prec, uint8_t & i)
     {
         double t = i / prec;
-        return sq(1 - t) * x + (1 - t) * 2 * t * c1 + sq(t) * coord_x;
+        return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
+
 }
 
 typedef pmath::Vector Vec;

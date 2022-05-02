@@ -206,7 +206,9 @@ void Plotter::draw_line(const Vec & delta)
     y += delta._y();
 }
 
+void Plotter::bezier_q(long ){
 
+}
 
 void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
 {
