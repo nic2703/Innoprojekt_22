@@ -206,6 +206,8 @@ void Plotter::draw_line(const Vec & delta)
     y += delta._y();
 }
 
+
+
 void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
 {
 /*  Vec to_rad = (midpoint - Vec(x,y)) - Vec(midpoint - Vec(x,y)) / Vec(midpoint - Vec(x,y)).norm();
