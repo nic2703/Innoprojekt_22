@@ -22,6 +22,35 @@
 #include "errors"
 #endif // !ERRORS
 
+namespace pmath
+{
+    int cbez_x(long x, long c1_x, long c2_x, long end_x, uint8_t prec, uint8_t i)
+    {
+        double t = i / prec;
+        return (cube(1 - t)*x) + (sq(1 - t)*3*t*c1_x) + ((1 - t)*3*sq(t)*c2_x) + (cube(t)*end_x);
+    }
+
+    int cbez_y(long y, long c1_y, long c2_y, long end_y, uint8_t prec, uint8_t i)
+    {
+        double t = i / prec;
+        return (cube(1 - t)*y) + (sq(1 - t)*3*t*c1_y) + ((1 - t)*3*sq(t)*c2_y) + (cube(t)*end_y);
+    }
+
+    int qbez_x(long x, long c1, long end_x, uint8_t prec, uint8_t i)
+    {
+        double t = i / prec;
+        return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
+    }
+
+    int qbez_y(long x, long c1, long end_x, uint8_t prec, uint8_t i)
+    {
+        double t = i / prec;
+        return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
+    }
+    
+} // namespace pmath
+
+
 Servo servo;
 
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
@@ -147,10 +176,6 @@ void Plotter::draw_line(long dx, long dy)
 
         return;
     }
-    /* if (out_of_bounds(dx, dy))
-    { // security
-        emergency_stop();
-    } */
 
     double norm = sqrt(sq(dx) + sq(dy));
     double n_dx = (dx / norm) * CORRECTION;
@@ -162,12 +187,12 @@ void Plotter::draw_line(long dx, long dy)
     n_dx = (x_geq) ? sign(n_dx) : n_dx/abs(n_dy); //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
     n_dy = (y_geq) ? sign(n_dy) : n_dy/abs(n_dx);
 
-    set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx)) ) * sign(n_dx) );
-    set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy)) ) * sign(n_dy) );
+    set_speed(pins_x, (x_geq) ? 255 * sign(n_dx) : int(speed_to_bits(n_dx)) );
+    set_speed(pins_y, (y_geq) ? 255 * sign(n_dy) : int(speed_to_bits(n_dy)) );
 
     int eta = millis() + int(abs( ( (n_dx > n_dy) ? dx/MAX_SPEED_X : dy/MAX_SPEED_Y )));
 
-    while (millis() < eta) {}
+    while (millis() < eta) ;
 
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
