@@ -260,7 +260,7 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
 
 void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, long end_y, uint8_t precision)
 {
-    if (precision <= 0 || 20 <= precision) {
+    if (precision <= 0 || 50 < precision) {
         return;
     }
     int p_x, p_y;
