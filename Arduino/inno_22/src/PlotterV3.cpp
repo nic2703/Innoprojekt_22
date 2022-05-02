@@ -75,7 +75,6 @@ Plotter::Plotter()
 
     x = 0;
     y = 0;
-    angle = 0;
     attachInterrupt(_SWITCH, emergency_stop, RISING); 
 
 }
@@ -206,8 +205,19 @@ void Plotter::draw_line(const Vec & delta)
     y += delta._y();
 }
 
-void Plotter::bezier_q(long ){
+void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t precision)
+{
+    if (0 >= precision || precision <= 20) {
+        return;
+    }
+    int p_x, p_y;
 
+    for (uint8_t i = 0; i < precision; ++i)
+    {
+        p_x = pmath::qbezier_x(x, c1_x, end_x, precision, i);
+        p_y = pmath::qbezier_y(y, c1_y, end_y, precision, i);
+        draw_line(p_x, p_y);
+    }
 }
 
 void Plotter::circle_segment(Vec & midpoint, int radius, double arc)

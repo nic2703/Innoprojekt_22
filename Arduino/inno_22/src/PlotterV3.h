@@ -30,7 +30,7 @@ public:
     void draw_line(long, long);
     void draw_line(const Vec &) [[deprecated("Use draw_line(int, int) instead.")]];
 
-    void bezier_q();
+    void bezier_q(long, long, long, long, uint8_t);
     void bezier_c();
     void circle_segment(Vec &, int, double);
 
@@ -38,7 +38,7 @@ private:
     pin pins_x[3];
     pin pins_y[3];
 
-    int x, y, angle;
+    long x, y;
 
     bool out_of_bounds(int, int);
     bool run_into_walls(pin[3], pin[3]);
