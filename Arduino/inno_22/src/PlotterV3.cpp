@@ -25,27 +25,27 @@
 //maths bc i dont want a seperate maths.cpp file
 namespace pmath
 {
-    int cbez_x(long x, long c1_x, long c2_x, long end_x, uint8_t prec, uint8_t i)
+    long cbez_x(long x, long c1_x, long c2_x, long end_x, uint8_t prec, uint8_t i)
     {
-        double t = i / prec;
+        double t = double(i) / prec;
         return (cube(1 - t)*x) + (sq(1 - t)*3*t*c1_x) + ((1 - t)*3*sq(t)*c2_x) + (cube(t)*end_x);
     }
 
-    int cbez_y(long y, long c1_y, long c2_y, long end_y, uint8_t prec, uint8_t i)
+    long cbez_y(long y, long c1_y, long c2_y, long end_y, uint8_t prec, uint8_t i)
     {
-        double t = i / prec;
+        double t = double(i) / prec;
         return (cube(1 - t)*y) + (sq(1 - t)*3*t*c1_y) + ((1 - t)*3*sq(t)*c2_y) + (cube(t)*end_y);
     }
 
-    int qbez_x(long x, long c1, long end_x, uint8_t prec, uint8_t i)
+    long qbez_x(long x, long c1, long end_x, uint8_t prec, uint8_t i)
     {
-        double t = i / prec;
+        double t = double(i) / prec;
         return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
 
-    int qbez_y(long x, long c1, long end_x, uint8_t prec, uint8_t i)
+    long qbez_y(long x, long c1, long end_x, uint8_t prec, uint8_t i)
     {
-        double t = i / prec;
+        double t = double(i) / prec;
         return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
     
@@ -96,6 +96,8 @@ Plotter::Plotter()
     pinMode(_DIR_A, OUTPUT);
     pinMode(_DIR_B, OUTPUT);
 
+    pinMode(_SWITCH, INPUT);
+
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
     /* if (run_into_walls(pins_x, pins_y)){ //Switch if necessary
@@ -105,8 +107,12 @@ Plotter::Plotter()
 
     x = 0;
     y = 0;
-    attachInterrupt(_SWITCH, emergency_stop, RISING); 
 
+    attachInterrupt(_SWITCH, emergency_stop, RISING); 
+}
+
+bool Plotter::is_active(){
+    return on;
 }
 
 bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
@@ -237,32 +243,36 @@ void Plotter::draw_line(const Vec & delta)
 
 void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t precision)
 {
-    if (0 >= precision || precision <= 20) {
+    if (precision <= 0 || 50 < precision) {
         return;
     }
-    int p_x, p_y;
+    long p_x, p_y;
 
     for (uint8_t i = 0; i < precision; ++i)
     {
-        p_x = pmath::qbez_x(x, c1_x, end_x, precision, i);
-        p_y = pmath::qbez_y(y, c1_y, end_y, precision, i);
+        p_x = pmath::qbez_x(x, c1_x, end_x, precision, i) - x;
+        p_y = pmath::qbez_y(y, c1_y, end_y, precision, i) - y;
+
         draw_line(p_x, p_y);
     }
+    return;
 }
 
 void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, long end_y, uint8_t precision)
 {
-    if (0 >= precision || precision <= 20) {
+    if (precision <= 0 || 20 <= precision) {
         return;
     }
     int p_x, p_y;
 
     for (uint8_t i = 0; i < precision; ++i)
     {
-        p_x = pmath::cbez_x(x, c1_x, c2_x, end_x, precision, i);
-        p_y = pmath::cbez_y(y, c1_y, c2_y, end_y, precision, i);
+        p_x = pmath::cbez_x(x, c1_x, c2_x, end_x, precision, i) - x;
+        p_y = pmath::cbez_y(y, c1_y, c2_y, end_y, precision, i) - y;
+
         draw_line(p_x, p_y);
     }
+    return;
 }
 
 void Plotter::circle_segment(Vec & midpoint, int radius, double arc)

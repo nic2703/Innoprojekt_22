@@ -26,7 +26,7 @@ class Plotter
 public:
     Plotter();
    
-    //bool is_active();
+    bool is_active();
     void draw_line(long, long);
     void draw_line(const Vec &) [[deprecated("Use draw_line(int, int) instead.")]];
 
@@ -39,6 +39,7 @@ private:
     pin pins_y[3];
 
     long x, y;
+    const bool on = true;
 
     bool out_of_bounds(int, int);
     bool run_into_walls(pin[3], pin[3]);

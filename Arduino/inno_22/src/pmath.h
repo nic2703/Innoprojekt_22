@@ -23,10 +23,18 @@ namespace pmath
         Vector &operator=(Vector &&) = default;
         Vector &operator=(const Vector &) = default;
 
-        int _x() { return x; }
         int _x() const { return x; }
-        int _y() { return y; }
         int _y() const { return y; }
+
+        long & operator[](int i)
+        {
+            switch (i)
+            {
+                case 0: return this->x; 
+                case 1: return this->y;
+        }   }
+        long operator[](int i) /*[[expects: (i >= 0 && i < 2)]]*/ const {return x * !i + y * i;}
+
 
         bool operator==(Vector v) const { return v.x == x && v.y == y; }
         bool operator!=(Vector v) const { return v.x != x && v.y != y; }
@@ -98,11 +106,11 @@ namespace pmath
     private:
         long x, y;
     };
-    
-    int qbez_x(long, long, long, uint8_t, uint8_t);
-    int qbez_x(long, long, long, uint8_t, uint8_t);
-    int cbez_x(long, long, long, long, uint8_t, uint8_t);
-    int cbez_y(long, long, long, long, uint8_t, uint8_t);
+
+    long qbez_x(long, long, long, uint8_t, uint8_t);
+    long qbez_x(long, long, long, uint8_t, uint8_t);
+    long cbez_x(long, long, long, long, uint8_t, uint8_t);
+    long cbez_y(long, long, long, long, uint8_t, uint8_t);
 }
 
 typedef pmath::Vector Vec;
