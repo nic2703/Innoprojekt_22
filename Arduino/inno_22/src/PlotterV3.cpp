@@ -299,14 +299,22 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     return;
 }
 
-void Plotter::circle_seg(Vec & v, double max_angle)
+void Plotter::circle_seg(Vec & m, int radius, double max_angle = 2*PI, int precision = 20)
 {
-  double da = 1/20.0 * sign(max_angle);
-  double agl = 0;
+    { 
+        double norm = m.norm(); //calculate norm first for efficionk
+        draw_line( int( (m._x()-x)*(1-radius/norm) ), int( (m._y()-y)*(1-radius/norm) ) ); //draw to the radius
+    }
+
+  double da = 1.0/precision*sign(max_angle); //make sure the way is signed
+  double agl = 0; //init
+
+  Vec v = Vec(x, y) - m; 
   while(abs(agl) <= abs(max_angle))
   {
-    draw_line(v-v.rotate(da));
-    agl += da;
+      Vec temp = v;
+      draw_line(temp-v.rotate(da)); // rotate vector and subtract to get a dv
+      agl += da; //keep track of angle
   }
 }
 
