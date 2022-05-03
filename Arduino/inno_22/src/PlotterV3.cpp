@@ -222,7 +222,6 @@ void Plotter::draw_line(long dx, long dy)
 
 void Plotter::draw_line(const Vec & delta)
 {
-    #warning this is unsupported
     draw_line(delta._x(), delta._y());
 }
 
