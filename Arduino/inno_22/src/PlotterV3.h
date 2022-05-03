@@ -17,7 +17,7 @@ typedef byte pin;
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
 #define sign(x) (((x)>0)-((x)<0)) //nice to have, return values {-1, 0, 1}
 #undef abs
-#define abs(x) ((x)*sign((x))) //better
+#define abs(x) ((x)*sign((x))) //better 
 
 void _init_servo();
 
@@ -34,8 +34,11 @@ public:
     void bezier_c(long, long, long, long, long, long, uint8_t);
     void circle_segment(Vec &, int, double);
     void spiral(Vec &);
-    void move();
+    void move(long, long);
+    void move(Vec &);
 
+    void up();
+    void down();
 
 private:
     pin pins_x[3];

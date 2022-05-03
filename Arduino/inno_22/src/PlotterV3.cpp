@@ -216,6 +216,16 @@ void Plotter::servo_angle(int value)
     angle = value;
 }
 
+void Plotter::up()
+{
+    servo_angle(110);
+}
+
+void Plotter::down()
+{
+    servo_angle(170);
+}
+
 void Plotter::draw_line(const Vec & delta)
 {
     if (delta == Vec(0, 0)) {
@@ -247,6 +257,20 @@ void Plotter::draw_line(const Vec & delta)
 
     x += delta._x();
     y += delta._y();
+}
+
+void Plotter::move(long dx, long dy)
+{
+    up();
+    draw_line(dx, dy);
+    down();
+}
+
+void Plotter::move(Vec & delta)
+{
+    up();
+    draw_line(delta);
+    down();
 }
 
 void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t precision)
@@ -306,6 +330,9 @@ void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
 
 void Plotter::spiral(Vec & mid)
 {
-    Vec start = mid + Vec(1,1);
+
+    Vec start = mid - Vec(x,y);
+    move(start);
+    //spiral stuff with orth vecs
 
 }
