@@ -210,6 +210,11 @@ void Plotter::draw_line(long dx, long dy)
     y += dy;
 }
 
+void Plotter::draw_line(const Vec & delta)
+{
+    draw_line(delta._x(), delta._y());
+}
+
 void Plotter::servo_angle(int value)
 {
     servo.write(value);
@@ -224,39 +229,6 @@ void Plotter::up()
 void Plotter::down()
 {
     servo_angle(170);
-}
-
-void Plotter::draw_line(const Vec & delta)
-{
-    if (delta == Vec(0, 0)) {
-        set_speed(pins_x, 0);
-        set_speed(pins_y, 0);
-
-        return; // no line necessary
-    }
-
-    double norm = delta.norm();
-    double n_dx = (delta._x() / norm) * CORRECTION;
-    double n_dy = delta._y() / norm;
-    
-    bool x_geq = abs(n_dx) >= abs(n_dy);
-    bool y_geq = abs(n_dy) >= abs(n_dx);
-
-    n_dx = (x_geq) ? sign(n_dx) : n_dx/abs(n_dy); //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (y_geq) ? sign(n_dy) : n_dy/abs(n_dx);
-
-    set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx)) ) * sign(n_dx) );
-    set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy)) ) * sign(n_dy) );
-
-    int eta = millis() + int( abs( ( (n_dx > n_dy) ? delta._x() / MAX_SPEED_X : delta._y() /MAX_SPEED_Y )));
-
-    while (millis() < eta) {}
-
-    set_speed(pins_x, 0);
-    set_speed(pins_y, 0);
-
-    x += delta._x();
-    y += delta._y();
 }
 
 void Plotter::move(long dx, long dy)
