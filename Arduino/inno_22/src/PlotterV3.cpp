@@ -66,7 +66,6 @@ Servo servo;
 
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
 static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
-
 static void set_speed(const pin pins[3], int speed)
 {
     if (speed == 0)
@@ -132,35 +131,26 @@ bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
     /*Make sure B is off*/
     set_speed(pins_y, 0);
 
-
     set_speed(pins_x, 255); //Run A forward
-
     /*Run until button*/
     while (digitalRead(_SWITCH) != HIGH) {} //Do Nothing
-
     /*Stop A*/
     set_speed(pins_x, 0);
-
     /*Start B*/
     set_speed(pins_y, 255);
-
     /*Run until button*/
     while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
-
     /*Stop B*/
     set_speed(pins_y, 0);
-
     /*Start A*/
     set_speed(pins_x, -255);
 
     int time = millis();
-
     while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
     int duration_x = millis()-time;
 
     /*Stop A*/
     set_speed(pins_x, 0);
-
     /*Start B*/
     set_speed(pins_y, -255);
 
@@ -192,7 +182,6 @@ void Plotter::draw_line(long dx, long dy)
     {
         set_speed(pins_x, 0);
         set_speed(pins_y, 0);
-
         return;
     }
 
@@ -299,7 +288,7 @@ void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
     if (arc > 0)
     {
         for (int i = 0; i < arc * 10; i++) // steps in hundredths of arc length.
-        {  
+        {
         }
     }
     else if (arc < 0)
