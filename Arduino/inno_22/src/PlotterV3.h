@@ -32,7 +32,7 @@ public:
 
     void bezier_q(long, long, long, long, uint8_t);
     void bezier_c(long, long, long, long, long, long, uint8_t);
-    void circle_segment(Vec &, int, double); //<--
+    void circle_seg(Vec &, double);
     void spiral(Vec &); //<--
     void move(long, long);
     void move(Vec &);
