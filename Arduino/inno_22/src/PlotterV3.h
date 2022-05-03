@@ -42,12 +42,13 @@ private:
     pin pins_y[3];
 
     long x, y;
+    int angle;
     const bool on = true;
 
     bool out_of_bounds(int, int);
     bool run_into_walls(pin[3], pin[3]);
 
-    void servo_angle();
+    void servo_angle(int);
 };
 typedef Plotter Plt;
 

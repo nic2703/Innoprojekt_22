@@ -210,9 +210,10 @@ void Plotter::draw_line(long dx, long dy)
     y += dy;
 }
 
-void Plotter::servo_angle()
+void Plotter::servo_angle(int value)
 {
-
+    servo.write(value);
+    angle = value;
 }
 
 void Plotter::draw_line(const Vec & delta)

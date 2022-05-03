@@ -97,22 +97,20 @@ namespace pmath
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        double norm() const;
-        Vector orth() const;
+        double Vector::norm() const
+        {
+            return sqrt(sq(x) + sq(y));
+        }
+        
+        Vector Vector::orth() const 
+        {
+            return Vector(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
+        }
 
     private:
         long x, y;
     };
 
-    double Vector::norm() const
-    {
-        return sqrt(sq(x) + sq(y));
-    }
-
-    Vector Vector::orth() const 
-    {
-        return Vec(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
-    }
 
     long qbez_x(long, long, long, uint8_t, uint8_t);
     long qbez_x(long, long, long, uint8_t, uint8_t);
