@@ -101,6 +101,9 @@ namespace pmath
 
         Vector orth() const;
 
+        Vector rotate(double);
+        Vector post_rotate(double);
+
     private:
         long x, y;
     };

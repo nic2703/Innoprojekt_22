@@ -49,11 +49,6 @@ namespace pmath
         return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
 
-    Vector circle(Vec & rad, uint8_t i)
-    {
-
-    }
-
     Vector Vector::orth() const 
     {
         return Vector(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
@@ -63,7 +58,25 @@ namespace pmath
     {
         return sqrt(sq(x) + sq(y));
     }
-    
+
+    Vector Vector::rotate(double theta)
+    {
+        long temp_x = x;
+        x = (x * cos(theta) - y * sin(theta));
+        y = (temp_x * sin(theta) + y * cos(theta));
+        return Vec(x,y);
+    }
+
+    Vector Vector::post_rotate(double theta)
+    {
+        Vec temp = Vec(x, y);
+
+        x = (x * cos(theta) - y * sin(theta));
+        y = (temp.x * sin(theta) + y * cos(theta));
+
+        return temp;
+    }
+
 } // namespace pmath
 
 
@@ -199,11 +212,8 @@ void Plotter::draw_line(long dx, long dy)
     bool x_geq = abs(n_dx) >= abs(n_dy); //--> false
     bool y_geq = abs(n_dy) >= abs(n_dx); //--> true
 
-    n_dx = (x_geq) ? sign(n_dx) : n_dx / abs(n_dy); //-->0 //scales the values, makes sure that the larger value is 1--> 255 bits, by multiplying both by the inverse of the larger one faster motor runs at 255, slower motor runs at a scaled value [0,1]
-    n_dy = (y_geq) ? sign(n_dy) : n_dy / abs(n_dx); //--> -1
-
-    set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx)) ) * sign(dx)); //--> sets speed to 0
-    set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy)) ) * sign(dy)); //--> sets speed to -255
+    set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx/n_dy)) ) * sign(dx)); //--> sets speed to 0
+    set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy/n_dy)) ) * sign(dy)); //--> sets speed to -255
 
     int eta = millis() + int(abs( ( (x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y )));
 
@@ -216,10 +226,12 @@ void Plotter::draw_line(long dx, long dy)
     y += dy;
 }
 
+
 void Plotter::draw_line(const Vec & delta)
 {
     draw_line(delta._x(), delta._y());
 }
+
 
 void Plotter::servo_angle(int value)
 {
@@ -287,25 +299,15 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     return;
 }
 
-void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
+void Plotter::circle_seg(Vec & v, double max_angle)
 {
-    if (-0.01 < arc && arc < 0.01)
-    {
-        return;
-    }
-
-    if (arc > 0)
-    {
-        for (int i = 0; i < arc * 10; i++)
-        {
-        }
-    }
-    else if (arc < 0)
-    {                                      
-        for (int i = 0; i < arc * 10; i++) 
-        {  
-        }
-    }
+  double da = 1/20.0 * sign(max_angle);
+  double agl = 0;
+  while(abs(agl) <= abs(max_angle))
+  {
+    draw_line(v-v.rotate(da));
+    agl += da;
+  }
 }
 
 void Plotter::spiral(Vec & mid)
