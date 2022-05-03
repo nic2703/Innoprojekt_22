@@ -256,12 +256,13 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
     if (precision <= 0 || 50 < precision) {
         return;
     }
+    long start_x = x, start_y = y;
     long p_x, p_y;
 
     for (uint8_t i = 0; i < precision; ++i)
     {
-        p_x = pmath::qbez_x(x, c1_x, end_x, precision, i) - x;
-        p_y = pmath::qbez_y(y, c1_y, end_y, precision, i) - y;
+        p_x = pmath::qbez_x(start_x, c1_x, end_x, precision, i) - x;
+        p_y = pmath::qbez_y(start_y, c1_y, end_y, precision, i) - y;
 
         draw_line(p_x, p_y);
     }
@@ -273,12 +274,13 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     if (precision <= 0 || 50 < precision) {
         return;
     }
-    int p_x, p_y;
+    long start_x = x, start_y = y;
+    long p_x, p_y;
 
     for (uint8_t i = 0; i < precision; ++i)
     {
-        p_x = pmath::cbez_x(x, c1_x, c2_x, end_x, precision, i) - x;
-        p_y = pmath::cbez_y(y, c1_y, c2_y, end_y, precision, i) - y;
+        p_x = pmath::cbez_x(start_x, c1_x, c2_x, end_x, precision, i) - x;
+        p_y = pmath::cbez_y(start_y, c1_y, c2_y, end_y, precision, i) - y;
 
         draw_line(p_x, p_y);
     }
