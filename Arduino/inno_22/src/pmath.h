@@ -110,6 +110,7 @@ namespace pmath
     long qbez_x(long, long, long, uint8_t, uint8_t);
     long cbez_x(long, long, long, long, uint8_t, uint8_t);
     long cbez_y(long, long, long, long, uint8_t, uint8_t);
+
 }
 
 typedef pmath::Vector Vec;

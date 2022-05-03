@@ -49,6 +49,11 @@ namespace pmath
         return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
 
+    Vector circle(Vec & rad, uint8_t i)
+    {
+
+    }
+
     Vector Vector::orth() const 
     {
         return Vector(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
@@ -111,10 +116,12 @@ Plotter::Plotter()
 
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+    noInterrupts();
     /* if (run_into_walls(pins_x, pins_y)){ //Switch if necessary
         pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
         pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
     } */
+    interrupts();
 
     x = 0;
     y = 0;
@@ -287,13 +294,13 @@ void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
 
     if (arc > 0)
     {
-        for (int i = 0; i < arc * 10; i++) // steps in hundredths of arc length.
+        for (int i = 0; i < arc * 10; i++)
         {
         }
     }
     else if (arc < 0)
-    {                                       // TODO: make this go the other way
-        for (int i = 0; i < arc * 10; i++) // steps in hundredths of arc length.
+    {                                      
+        for (int i = 0; i < arc * 10; i++) 
         {  
         }
     }
