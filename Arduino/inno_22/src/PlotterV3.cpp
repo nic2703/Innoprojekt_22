@@ -52,7 +52,7 @@ namespace pmath
     template<typename T>
     Vector<T> Vector<T>::orth() const 
     {
-        return Vector(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
+        return Vector<T>(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
     }
     template<typename T>
     double Vector<T>::norm() const
@@ -62,15 +62,15 @@ namespace pmath
     template<typename T>
     Vector<T> Vector<T>::rotate(double theta)
     {
-        long temp_x = x;
+        T temp_x = x;
         x = (x * cos(theta) - y * sin(theta));
         y = (temp_x * sin(theta) + y * cos(theta));
-        return Vec(x,y);
+        return Vector<T>(x,y);
     }
     template<typename T>
     Vector<T> Vector<T>::post_rotate(double theta)
     {
-        Vec temp = Vec(x, y);
+        Vector<T> temp = Vector<T>(x, y);
 
         x = (x * cos(theta) - y * sin(theta));
         y = (temp.x * sin(theta) + y * cos(theta));
@@ -312,24 +312,24 @@ void Plotter::circle_seg(Vec_d & m, int radius, double max_angle = 2*PI, int pre
         draw_line( int( (m._x()-x)*(1-radius/norm) ), int( (m._y()-y)*(1-radius/norm) ) ); //draw to the radius
     }
 
-  double da = 1.0/precision*sign(max_angle); //make sure the way is signed
-  double agl = 0; //init
+    double da = 1.0/precision*sign(max_angle); //make sure the way is signed
+    double agl = 0; //init
 
-  Vec_d v = Vec_d(x, y) - m; 
-  Vec_d temp;
-  while(abs(agl) <= abs(max_angle))
-  {
-      temp = v;
-      draw_line(temp-v.rotate(da)); // rotate vector and subtract to get a dv
-      agl += da; //keep track of angle
-  }
+    Vec_d v = Vec_d(x, y) - m; 
+    Vec_d temp;
+    while(abs(agl) <= abs(max_angle))
+    {
+        temp = v;
+        draw_line(temp - v.rotate(da)); // rotate vector and subtract to get a dv
+        agl += da; //keep track of angle
+    }
 }
 
-void Plotter::spiral(Vec & mid)
+/* void Plotter::spiral(Vec & mid)
 {
 
     Vec start = mid - Vec(x,y);
     move(start);
     //spiral stuff with orth vecs
 
-}
+} */
