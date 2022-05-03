@@ -97,9 +97,9 @@ namespace pmath
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        double Vector::norm() const;
+        double norm() const;
 
-        Vector Vector::orth() const;
+        Vector orth() const;
 
     private:
         long x, y;
