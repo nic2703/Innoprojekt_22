@@ -97,15 +97,9 @@ namespace pmath
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        double Vector::norm() const
-        {
-            return sqrt(sq(x) + sq(y));
-        }
-        
-        Vector Vector::orth() const 
-        {
-            return Vector(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
-        }
+        double Vector::norm() const;
+
+        Vector Vector::orth() const;
 
     private:
         long x, y;
