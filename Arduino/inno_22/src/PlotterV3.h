@@ -26,10 +26,11 @@ public:
     bool is_active();
     void draw_line(long, long);
     void draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
+    void draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
 
     void bezier_q(long, long, long, long, uint8_t);
     void bezier_c(long, long, long, long, long, long, uint8_t);
-    void circle_seg(Vec &, int, double, int);
+    void circle_seg(Vec_d &, int, double, int);
     void spiral(Vec &); //<--
     void move(long, long);
     void move(Vec &);

@@ -11,6 +11,7 @@
 
 namespace pmath
 {
+    template<typename T>
     class Vector
     {
     public:
@@ -108,7 +109,7 @@ namespace pmath
         Vector post_rotate(double);
 
     private:
-        long x, y;
+        T x, y;
     };
 
 
@@ -119,6 +120,7 @@ namespace pmath
 
 }
 
-typedef pmath::Vector Vec;
+typedef pmath::Vector<int> Vec;
+typedef pmath::Vector<double> Vec_d;
 
 #endif // !PMTH

@@ -49,25 +49,26 @@ namespace pmath
         return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
 
-    Vector Vector::orth() const 
+    template<typename T>
+    Vector<T> Vector<T>::orth() const 
     {
         return Vector(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
     }
-    
-    double Vector::norm() const
+    template<typename T>
+    double Vector<T>::norm() const
     {
         return sqrt(sq(x) + sq(y));
     }
-
-    Vector Vector::rotate(double theta)
+    template<typename T>
+    Vector<T> Vector<T>::rotate(double theta)
     {
         long temp_x = x;
         x = (x * cos(theta) - y * sin(theta));
         y = (temp_x * sin(theta) + y * cos(theta));
         return Vec(x,y);
     }
-
-    Vector Vector::post_rotate(double theta)
+    template<typename T>
+    Vector<T> Vector<T>::post_rotate(double theta)
     {
         Vec temp = Vec(x, y);
 
@@ -232,6 +233,11 @@ void Plotter::draw_line(const Vec & delta)
     draw_line(delta._x(), delta._y());
 }
 
+void Plotter::draw_line(const Vec_d & delta)
+{
+    draw_line(delta._x(), delta._y());
+}
+
 
 void Plotter::servo_angle(int value)
 {
@@ -299,7 +305,7 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     return;
 }
 
-void Plotter::circle_seg(Vec & m, int radius, double max_angle = 2*PI, int precision = 20)
+void Plotter::circle_seg(Vec_d & m, int radius, double max_angle = 2*PI, int precision = 20)
 {
     { 
         double norm = m.norm(); //calculate norm first for efficionk
@@ -309,10 +315,11 @@ void Plotter::circle_seg(Vec & m, int radius, double max_angle = 2*PI, int preci
   double da = 1.0/precision*sign(max_angle); //make sure the way is signed
   double agl = 0; //init
 
-  Vec v = Vec(x, y) - m; 
+  Vec_d v = Vec_d(x, y) - m; 
+  Vec_d temp;
   while(abs(agl) <= abs(max_angle))
   {
-      Vec temp = v;
+      temp = v;
       draw_line(temp-v.rotate(da)); // rotate vector and subtract to get a dv
       agl += da; //keep track of angle
   }
