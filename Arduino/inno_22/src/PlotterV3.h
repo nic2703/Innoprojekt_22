@@ -33,6 +33,9 @@ public:
     void bezier_q(long, long, long, long, uint8_t);
     void bezier_c(long, long, long, long, long, long, uint8_t);
     void circle_segment(Vec &, int, double);
+    void spiral(Vec &);
+    void move();
+
 
 private:
     pin pins_x[3];
@@ -44,6 +47,7 @@ private:
     bool out_of_bounds(int, int);
     bool run_into_walls(pin[3], pin[3]);
 
+    void servo_angle();
 };
 typedef Plotter Plt;
 

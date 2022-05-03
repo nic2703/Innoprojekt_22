@@ -4,7 +4,7 @@
 
 #ifndef Servo_h
 #include <Servo.h>
-#endif // DEBUG
+#endif 
 
 #include "PlotterV3.h"
 
@@ -97,6 +97,8 @@ Plotter::Plotter()
     pinMode(_DIR_B, OUTPUT);
 
     pinMode(_SWITCH, INPUT);
+
+    servo.attach(_SERVO);
 
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
@@ -208,6 +210,11 @@ void Plotter::draw_line(long dx, long dy)
     y += dy;
 }
 
+void Plotter::servo_angle()
+{
+
+}
+
 void Plotter::draw_line(const Vec & delta)
 {
     if (delta == Vec(0, 0)) {
@@ -277,12 +284,8 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
 
 void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
 {
-/*  Vec to_rad = (midpoint - Vec(x,y)) - Vec(midpoint - Vec(x,y)) / Vec(midpoint - Vec(x,y)).norm();
-    draw_line(to_rad); */
-
     if (-0.01 < arc && arc < 0.01)
     {
-        Serial.println("That circle segment is a bit too short! Try a arc length of *not* zero");
         return;
     }
 
@@ -295,8 +298,13 @@ void Plotter::circle_segment(Vec & midpoint, int radius, double arc)
     else if (arc < 0)
     {                                       // TODO: make this go the other way
         for (int i = 0; i < arc * 10; i++) // steps in hundredths of arc length.
-        {
-            
+        {  
         }
     }
+}
+
+void Plotter::spiral(Vec & mid)
+{
+    Vec start = mid + Vec(1,1);
+
 }
