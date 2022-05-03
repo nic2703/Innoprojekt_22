@@ -48,6 +48,16 @@ namespace pmath
         double t = double(i) / prec;
         return (sq(1 - t)*x) + ((1 - t)*2*t*c1) + (sq(t)*end_x);
     }
+
+    Vector Vector::orth() const 
+    {
+        return Vector(-y, x); // using the simple version -> vector is turned by 90° anticlockwise 
+    }
+    
+    double Vector::norm() const
+    {
+        return sqrt(sq(x) + sq(y));
+    }
     
 } // namespace pmath
 
