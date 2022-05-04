@@ -1,6 +1,8 @@
 #ifndef PMTH
 #define PMTH
 
+#define C 0.5519150244935105707435627
+
 #define cube(x) ((x) * (x) * (x))                                                                                                           // cubes x
 #define speed_to_bits(s) (((s) == 0) ? 0 : (28.97 + 3.402 * (abs(s) * 58.5) - 0.1736 * sq(abs(s) * 58.5) + 0.003101 * cube(abs(s) * 58.5))) // caluculates bit value needed for bits, takes float returns float in the range [0, 1] ||| (0,1] --> [30, 255] + 0 --> 0
 #define bits_to_speed(s) (1.012e-5 * cube(s) - 6.19e-3 * sq(s) + 1.332 * s - 37.24)                                                         // bytespeed to actual irl speed
@@ -63,40 +65,35 @@ namespace pmath
 
             return *this;
         }
-        Vector &operator*=(int scalar)
+        Vector &operator*=(T scalar)
         {
             x *= scalar;
             y *= scalar;
             return *this;
         }
-        Vector &operator/=(int scalar)
+        Vector &operator/=(T scalar)
         {
             x /= scalar;
             y /= scalar;
             return *this;
         }
 
-        friend int operator*(const Vector vec1, const Vector vec2)
-        {
-            return vec1.x * vec2.x + vec1.y * vec2.y;
-        }
-
-        friend Vector operator*(int scalar, Vector vector)
+        friend Vector operator*(T scalar, Vector vector)
         {
             return Vector(vector.x * scalar, vector.y * scalar);
         }
 
-        friend Vector operator*(Vector vector, int scalar)
+        friend Vector operator*(Vector vector, T scalar)
         {
             return Vector(vector.x * scalar, vector.y * scalar);
         }
 
-        friend Vector operator/(int scalar, Vector vector)
+        friend Vector operator/(T scalar, Vector vector)
         {
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        friend Vector operator/(Vector vector, int scalar)
+        friend Vector operator/(Vector vector, T scalar)
         {
             return Vector(vector.x / scalar, vector.y / scalar);
         }

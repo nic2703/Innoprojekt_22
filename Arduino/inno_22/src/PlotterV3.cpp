@@ -312,7 +312,7 @@ void Plotter::circle_seg(Vec_d & m, int radius, double max_angle = 2*PI, int pre
         draw_line( int( (m._x()-x)*(1-radius/norm) ), int( (m._y()-y)*(1-radius/norm) ) ); //draw to the radius
     }
 
-    double da = 1.0/precision*sign(max_angle); //make sure the way is signed
+    double da = (2.0 * PI) / precision*sign(max_angle); //make sure the way is signed
     double agl = 0; //init
 
     Vec_d v = Vec_d(x, y) - m; 
@@ -324,6 +324,11 @@ void Plotter::circle_seg(Vec_d & m, int radius, double max_angle = 2*PI, int pre
         agl += da; //keep track of angle
     }
 }
+
+/* void circle_seg(long x, long y, int radius)
+{
+    bezier_c(0, radius, C*radius, radius, radius, C*radius, radius, 0, 20);
+} */
 
 /* void Plotter::spiral(Vec & mid)
 {
