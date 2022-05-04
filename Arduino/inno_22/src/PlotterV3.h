@@ -1,3 +1,13 @@
+/**
+ * @file PlotterV3.h
+ * @author  Robotica (vdamani@ethz.ch)
+ * @brief
+ * @version 4.1
+ * @date 2022-05-04
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 #ifndef PLT_H
 #define PLT_H
 
@@ -7,14 +17,14 @@
 
 typedef byte pin;
 
-#define MAX_X 100000000 //TODO: choose a value here, this is the short side
-#define MAX_Y 100000000 //TODO: Choose a value here, this is the long side
-#define MAX_SPEED_X 0.6449 //TODO: Get a max speed calculation
-#define MAX_SPEED_Y 1.547 //TODO: Get the max speed calc§ulation
+#define MAX_X 4200 // 1000 is equivalent to 50 mm, so a4 is 4200 wide
+#define MAX_Y 5940 // sqme here
+#define MAX_SPEED_X 0.6449
+#define MAX_SPEED_Y 1.547 // correction factor for speed, so 1000 as input is equivalent to 50 mm
 
-#define CORRECTION (1/2.0)  //TODO: get Correction
+#define CORRECTION (1 / 2.0)
 
-#define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW))                     // if delta is negative, go backwards, else go forwards
+#define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW)) // if delta is negative, go backwards, else go forwards
 
 void _init_servo();
 
@@ -22,7 +32,7 @@ class Plotter
 {
 public:
     Plotter();
-   
+
     bool is_active();
     void draw_line(long, long);
     void draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
@@ -32,25 +42,16 @@ public:
     void bezier_c(long, long, long, long, long, long, uint8_t precision = 40);
     void circle_seg(Vec_d &, int, double, int);
     void b_circle_seg(int);
-    void spiral(Vec &); //<--
-    void move(long, long);
-    void move(Vec &);
-
- /*    void servo_angle(int);
-    void up();
-    void down(); */
 
 private:
     pin pins_x[3];
     pin pins_y[3];
 
     long x, y;
-    int angle;
-    const bool on = true;
+    const bool on = true; // well, i mean, as soon as the object is initialised, the plotter is *technically* on
 
     bool out_of_bounds(int, int);
     bool run_into_walls(pin[3], pin[3]);
-
 };
 typedef Plotter Plt;
 

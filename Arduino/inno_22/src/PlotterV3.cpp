@@ -1,3 +1,14 @@
+/**
+ * @file PlotterV3.cpp
+ * @author Robotica (vdamani@ethz.ch)
+ * @brief 
+ * @version 4.1
+ * @date 2022-05-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #endif

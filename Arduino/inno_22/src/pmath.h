@@ -1,7 +1,18 @@
+/**
+ * @file pmath.h
+ * @author Robotica (vdamani@ethz.ch)
+ * @brief 
+ * @version 2.0
+ * @date 2022-05-04
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #ifndef PMTH
 #define PMTH
 
-#define C 0.5519150244935105707435627
+#define C 0.5519150244935105707435627 
+// source: https://spencermortensen.com/articles/bezier-circle/
 
 #define cube(x) ((x) * (x) * (x))                                                                                                           // cubes x
 #define speed_to_bits(s) (((s) == 0) ? 0 : (28.97 + 3.402 * (abs(s) * 58.5) - 0.1736 * sq(abs(s) * 58.5) + 0.003101 * cube(abs(s) * 58.5))) // caluculates bit value needed for bits, takes float returns float in the range [0, 1] ||| (0,1] --> [30, 255] + 0 --> 0
