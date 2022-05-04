@@ -2,18 +2,19 @@
 #include "Arduino.h"
 #endif
 
-#ifndef Servo_h
+/* #ifndef Servo_h
 #include <Servo.h>
-#endif 
+#endif */ 
 
 #include "PlotterV3.h"
 
 #ifndef PLT_H
 #error Plotter not defined
 #endif // !PLT_h
-#ifndef Servo_h
+
+/* #ifndef Servo_h
 #error Servo not defined
-#endif // !Servo_h
+#endif // !Servo_h */
 
 #ifndef PMTH
 #include "pmath.h"
@@ -63,8 +64,8 @@ namespace pmath
     Vector<T> Vector<T>::rotate(double theta)
     {
         T temp_x = x;
-        x = (x * cos(theta) - y * sin(theta));
-        y = (temp_x * sin(theta) + y * cos(theta));
+        x = round(x * cos(theta) - y * sin(theta));
+        y = round(temp_x * sin(theta) + y * cos(theta));
         return Vector<T>(x,y);
     }
     template<typename T>
@@ -72,16 +73,14 @@ namespace pmath
     {
         Vector<T> temp = Vector<T>(x, y);
 
-        x = (x * cos(theta) - y * sin(theta));
-        y = (temp.x * sin(theta) + y * cos(theta));
+        x = round(x * cos(theta) - y * sin(theta));
+        y = round(temp.x * sin(theta) + y * cos(theta));
 
         return temp;
     }
 
 } // namespace pmath
 
-
-Servo servo;
 
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
 static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
@@ -126,21 +125,20 @@ Plotter::Plotter()
 
     pinMode(_SWITCH, INPUT);
 
-    servo.attach(_SERVO);
-
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
-    noInterrupts();
+
+    //noInterrupts();
     /* if (run_into_walls(pins_x, pins_y)){ //Switch if necessary
         pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
         pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
     } */
-    interrupts();
+    //interrupts();
 
-    x = 0;
-    y = 0;
+    x = 0; //  186 * 7
+    y = 0; //  126 * 7
 
-    attachInterrupt(_SWITCH, emergency_stop, RISING); 
+    //attachInterrupt(digitalPinToInterrupt(2), emergency_stop, FALLING); 
 }
 
 bool Plotter::is_active(){
@@ -207,14 +205,14 @@ void Plotter::draw_line(long dx, long dy)
     }
 
     double norm = sqrt(sq(dx) + sq(dy));
-    double n_dx = (dx / norm) * CORRECTION; //--> 0
-    double n_dy = dy / norm; //--> 1
+    double n_dx = dx / norm; //-->  1/sqrt(2)
+    double n_dy = (dy / norm) * CORRECTION; //--> 1/sqrt(2)*correction
 
     bool x_geq = abs(n_dx) >= abs(n_dy); //--> false
     bool y_geq = abs(n_dy) >= abs(n_dx); //--> true
 
     set_speed(pins_x, ( (x_geq) ? 255 : int(speed_to_bits(n_dx/n_dy)) ) * sign(dx)); //--> sets speed to 0
-    set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy/n_dy)) ) * sign(dy)); //--> sets speed to -255
+    set_speed(pins_y, ( (y_geq) ? 255 : int(speed_to_bits(n_dy/n_dx)) ) * sign(dy)); //--> sets speed to -255
 
     int eta = millis() + int(abs( ( (x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y )));
 
@@ -239,36 +237,6 @@ void Plotter::draw_line(const Vec_d & delta)
 }
 
 
-void Plotter::servo_angle(int value)
-{
-    servo.write(value);
-    angle = value;
-}
-
-void Plotter::up()
-{
-    servo_angle(110);
-}
-
-void Plotter::down()
-{
-    servo_angle(170);
-}
-
-void Plotter::move(long dx, long dy)
-{
-    up();
-    draw_line(dx, dy);
-    down();
-}
-
-void Plotter::move(Vec & delta)
-{
-    up();
-    draw_line(delta);
-    down();
-}
-
 void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t precision)
 {
     if (precision <= 0 || 50 < precision) {
@@ -277,7 +245,7 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i < precision; ++i)
+    for (uint8_t i = 0; i < precision + 1; ++i)
     {
         p_x = pmath::qbez_x(start_x, c1_x, end_x, precision, i) - x;
         p_y = pmath::qbez_y(start_y, c1_y, end_y, precision, i) - y;
@@ -295,7 +263,7 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i < precision; ++i)
+    for (uint8_t i = 0; i < precision + 1; ++i)
     {
         p_x = pmath::cbez_x(start_x, c1_x, c2_x, end_x, precision, i) - x;
         p_y = pmath::cbez_y(start_y, c1_y, c2_y, end_y, precision, i) - y;
@@ -325,10 +293,12 @@ void Plotter::circle_seg(Vec_d & m, int radius, double max_angle = 2*PI, int pre
     }
 }
 
-/* void circle_seg(long x, long y, int radius)
+void Plotter::b_circle_seg(int radius)
 {
-    bezier_c(0, radius, C*radius, radius, radius, C*radius, radius, 0, 20);
-} */
+    x = 0;
+    y = radius;
+    bezier_c(C*radius, radius, radius, C*radius, radius, 0, 20);
+} 
 
 /* void Plotter::spiral(Vec & mid)
 {
