@@ -32,6 +32,7 @@ class Plotter
 {
 public:
     Plotter();
+    Plotter(long, long);
 
     bool is_active();
     void draw_line(long, long);

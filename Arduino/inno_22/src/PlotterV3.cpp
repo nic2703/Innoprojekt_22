@@ -151,6 +151,30 @@ Plotter::Plotter()
 
     //attachInterrupt(digitalPinToInterrupt(2), emergency_stop, FALLING); 
 }
+Plotter::Plotter(long in_x, long in_y): x(in_x), y(in_y)
+{
+    Serial.begin(9600);
+    pinMode(_BRAKE_A, OUTPUT);
+    pinMode(_BRAKE_B, OUTPUT);
+    pinMode(_SPEED_A, OUTPUT);
+    pinMode(_SPEED_B, OUTPUT);
+    pinMode(_DIR_A, OUTPUT);
+    pinMode(_DIR_B, OUTPUT);
+
+    pinMode(_SWITCH, INPUT);
+
+    pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
+    pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+
+    //noInterrupts();
+    /* if (run_into_walls(pins_x, pins_y)){ //Switch if necessary
+        pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
+        pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
+    } */
+    //interrupts();
+
+    //attachInterrupt(digitalPinToInterrupt(2), emergency_stop, FALLING); 
+}
 
 bool Plotter::is_active(){
     return on;
