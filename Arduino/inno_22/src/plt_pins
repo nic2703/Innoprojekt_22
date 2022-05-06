@@ -1,0 +1,15 @@
+#define PINS
+
+typedef enum
+{
+    _BRAKE_A = 9,
+    _BRAKE_B = 8,
+    _SPEED_A = 3,
+    _SPEED_B = 11,
+    _DIR_A = 12,
+    _DIR_B = 13,
+    _SERVO = 6,
+    _SWITCH = 2,
+    _TX = 1,
+    _RX = 0,
+} pins;
