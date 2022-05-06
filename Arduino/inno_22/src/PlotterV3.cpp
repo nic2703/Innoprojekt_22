@@ -121,7 +121,7 @@ static void emergency_stop()
     analogWrite(_SPEED_A, 0);
     analogWrite(_SPEED_B, 0);
 
-    abort();
+    exit(1);
 }
 
 Plotter::Plotter() 
