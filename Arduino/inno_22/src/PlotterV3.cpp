@@ -209,6 +209,7 @@ bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 
     /*Stop B*/
     set_speed(pins_y, 0);
+
     /*Start A*/
     set_speed(pins_x, -255);
 
@@ -282,6 +283,8 @@ void Plotter::draw_line(long dx, long dy)
 
     x += dx;
     y += dy;
+
+    delay(50);
 }
 
 
@@ -292,7 +295,7 @@ void Plotter::draw_line(const Vec & delta)
 
 void Plotter::draw_line(const Vec_d & delta)
 {
-    draw_line(delta._x(), delta._y());
+    draw_line(long(delta._x()), long(delta._y()));
 }
 
 
