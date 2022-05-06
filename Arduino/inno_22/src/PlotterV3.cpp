@@ -184,33 +184,57 @@ bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 {
     /*Make sure B is off*/
     set_speed(pins_y, 0);
-
     set_speed(pins_x, 255); //Run A forward
+
     /*Run until button*/
-    while (digitalRead(_SWITCH) != HIGH) {} //Do Nothing
+    while (digitalRead(_SWITCH) == HIGH) {} //Do Nothing
+
+    /*Run A back to ensure switch is not pressed*/
+    set_speed(pins_x, -255);
+
+    while (digitalRead(_SWITCH) == LOW) {}
+
     /*Stop A*/
     set_speed(pins_x, 0);
+
     /*Start B*/
     set_speed(pins_y, 255);
     /*Run until button*/
-    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
+    while (digitalRead(_SWITCH) == HIGH) {} //Do Nothing
+
+    /*Run A back to ensure switch is not pressed*/
+    set_speed(pins_y, -255);
+
+    while (digitalRead(_SWITCH) == LOW) {}
+
     /*Stop B*/
     set_speed(pins_y, 0);
     /*Start A*/
     set_speed(pins_x, -255);
 
-    int time = millis();
-    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
-    int duration_x = millis()-time;
+    uint8_t time = millis();
+    while (digitalRead(_SWITCH) == HIGH) {} //Do Nothing
+    uint8_t duration_x = millis() - time;
+
+    /*Run A back to ensure switch is not pressed*/
+    set_speed(pins_x, 255);
+
+    while (digitalRead(_SWITCH) == LOW) {}
 
     /*Stop A*/
     set_speed(pins_x, 0);
+
     /*Start B*/
     set_speed(pins_y, -255);
 
     time = millis();
-    while (digitalRead(_SWITCH) == LOW) {} //Do Nothing
-    int duration_y = millis() - time;
+    while (digitalRead(_SWITCH) == HIGH) {} //Do Nothing
+    uint8_t duration_y = millis() - time;
+
+    /*Run A back to ensure switch is not pressed*/
+    set_speed(pins_y, 255);
+
+    while (digitalRead(_SWITCH) == LOW) {}
 
     /*Stop B*/
     set_speed(pins_y, 0);
