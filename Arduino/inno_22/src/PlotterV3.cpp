@@ -126,7 +126,6 @@ static void emergency_stop()
 
 Plotter::Plotter()
 {
-
     pinMode(_BRAKE_A, OUTPUT);
     pinMode(_BRAKE_B, OUTPUT);
     pinMode(_SPEED_A, OUTPUT);
@@ -138,18 +137,6 @@ Plotter::Plotter()
     
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
-
-    noInterrupts();
-    run_into_walls(pins_x, pins_y); /*{ //Switch if necessary
-        pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
-        pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
-        MAX_SPEED_Y = 0.6449;
-        MAX_SPEED_X = 1.547; // correction factor for speed, so 1000 as input is equivalent to 50 mm
-    } */ 
-    interrupts();
-    //draw_line(100, 100);
-
-    //delay(500);
 
     x = 0; //  186 * 7
     y = 0; //  126 * 7
@@ -178,7 +165,7 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
 void Plotter::calibrate()
 {
     cli();
-    
+
     if (run_into_walls(pins_x, pins_y))
     {
         pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
