@@ -177,11 +177,15 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
 
 void Plotter::calibrate()
 {
+    cli();
+    
     if (run_into_walls(pins_x, pins_y))
     {
         pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
         pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
     }
+
+    sei();
 }
 
 bool Plotter::is_active()
