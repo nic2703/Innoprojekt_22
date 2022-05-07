@@ -20,6 +20,11 @@ typedef byte pin;
 #define MAX_X 4200 // 1000 is equivalent to 50 mm, so a4 is 4200 wide
 #define MAX_Y 5940 // sqme here
 
+#define MAX_SPEED_X 0.6449
+#define MAX_SPEED_Y 1.547 // correction factor for speed, so 1000 as input is equivalent to 50 mm
+
+#define CORRECTION (1 / 2.0)
+
 #define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW)) // if delta is negative, go backwards, else go forwards
 
 
@@ -30,6 +35,8 @@ public:
     Plotter(long, long);
 
     bool is_active();
+    void calibrate();
+
     void draw_line(long, long);
     void draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
     void draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
@@ -46,8 +53,7 @@ private:
     long x, y;
     const bool on = true; // well, i mean, as soon as the object is initialised, the plotter is *technically* on
 
-    bool out_of_bounds(int, int);
-    void run_into_walls(pin[3], pin[3]);
+    bool run_into_walls(pin[3], pin[3]);
 };
 typedef Plotter Plt;
 

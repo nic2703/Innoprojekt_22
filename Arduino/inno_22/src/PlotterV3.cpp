@@ -92,10 +92,6 @@ namespace pmath
 
 } // namespace pmath
 
-double MAX_SPEED_X = 0.6449;
-double MAX_SPEED_Y = 1.547; // correction factor for speed, so 1000 as input is equivalent to 50 mm
-
-double CORRECTION = (1 / 2.0);
 
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
 static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
@@ -175,17 +171,17 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 
-    // noInterrupts();
-    run_into_walls(pins_x, pins_y)  /* { //Switch if necessary
+
+    attachInterrupt(digitalPinToInterrupt(2), emergency_stop, FALLING);
+}
+
+void Plotter::calibrate()
+{
+    if (run_into_walls(pins_x, pins_y))
+    {
         pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
         pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
-
-        MAX_SPEED_Y = 0.6449;
-        MAX_SPEED_X = 1.547; // correction factor for speed, so 1000 as input is equivalent to 50 mm
-    }  */ ;
-
-
-    //attachInterrupt(digitalPinToInterrupt(2), emergency_stop, FALLING);
+    }
 }
 
 bool Plotter::is_active()
@@ -193,7 +189,7 @@ bool Plotter::is_active()
     return on;
 }
 
-void Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
+bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 {
     /*Make sure B is off*/
     set_speed(pins_y, 0);
@@ -257,7 +253,7 @@ void Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 
     delay(500);
 
-    return;
+    return duration_x > duration_y;
 }
 
 
@@ -283,9 +279,7 @@ void Plotter::draw_line(long dx, long dy)
 
     int eta = millis() + int(abs(((x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
 
-    while (millis() < eta)
-    {
-    }
+    while (millis() < eta) {}
 
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
