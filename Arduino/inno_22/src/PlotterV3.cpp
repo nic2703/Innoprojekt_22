@@ -166,13 +166,13 @@ void Plotter::calibrate()
 {
     cli(); // noInterrupts()
 
-    run_into_walls(pins_x, pins_y);
+    home(pins_x, pins_y); // actually go to (0, 0)
 
     sei(); // interrupts()
 }
 
 // calibration check sequence
-void Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
+void Plotter::home(pin pins_x[3], pin pins_y[3])
 {
     /*Make sure B is off*/
     set_speed(pins_y, 0);
