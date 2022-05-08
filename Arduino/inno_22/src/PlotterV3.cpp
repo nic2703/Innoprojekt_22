@@ -111,6 +111,7 @@ static void set_speed(const pin pins[3], int speed)
 // emergency stop
 static void panic()
 {
+    _NOP();
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
     digitalWrite(_BRAKE_B, HIGH);
@@ -123,7 +124,7 @@ static void panic()
 }
 
 // default constructor, will initialise to 0 0
-Plotter::Plotter()
+Plotter::Plotter() : x(0), y(0)
 {
     pinMode(_BRAKE_A, OUTPUT);
     pinMode(_BRAKE_B, OUTPUT);
@@ -136,9 +137,12 @@ Plotter::Plotter()
     
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+<<<<<<< HEAD
 
     x = 0; //  186 * 7
     y = 0; //  126 * 7
+=======
+>>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 }
 
 // constructor for custom coordinates, if required
@@ -157,9 +161,9 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 }
 
-// calibration
-void Plotter::calibrate()
+void Plotter::setup_interrupt_handler(pin irq_pin, void (*INTERRUPT)(void), int value)
 {
+<<<<<<< HEAD
 
     home(pins_x, pins_y); // actually go to (0, 0)
 
@@ -168,11 +172,16 @@ void Plotter::calibrate()
     delay(500);
     
     attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
+=======
+  attachInterrupt(digitalPinToInterrupt(irq_pin), INTERRUPT, value);
+>>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 }
 
-// calibration check sequence
+// return to home position
 void Plotter::home(pin pins_x[3], pin pins_y[3])
 {
+    noInterrupts();
+
     /*Make sure B is off*/
     set_speed(pins_y, 0);
 
@@ -207,9 +216,13 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start A*/
     set_speed(pins_x, -255);
 
+<<<<<<< HEAD
     //uint8_t time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
     //uint8_t duration_x = micros() - time;
+=======
+    while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
+>>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_x, 255);
@@ -222,9 +235,13 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start B*/
     set_speed(pins_y, -255);
 
+<<<<<<< HEAD
     //time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
     //uint8_t duration_y = micros() - time;
+=======
+    while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
+>>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_y, 255);
@@ -235,7 +252,15 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     set_speed(pins_y, 0);
     set_speed(pins_x, 0);
 
+<<<<<<< HEAD
     //delay(500);
+=======
+    interrupts();
+
+    x = y = 0;
+
+    delay(500);
+>>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 
     return;
 }
