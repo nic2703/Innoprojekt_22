@@ -59,7 +59,7 @@ void setup()
 {
     servo.attach(_SERVO);
 
-    up();
+    plot.calibrate();
 """
 
 conc = """}
