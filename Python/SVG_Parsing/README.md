@@ -1,12 +1,15 @@
 # Requirements
 
 ## exe
+
 Inkscape, added to the PATH, this can be done during installation by selecting `Add Inkscape to PATH` during installation or doing so manualy after installation.
 
 ## Python
+
 Python 3.7 or newer (idk, just a guess)
 
-The following modules: 
+The following modules:
+
 - `tqdm`
 - `svg.path`
 - `xml`
