@@ -154,7 +154,7 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 
 
-    attachInterrupt(digitalPinToInterrupt(2), panic, FALLING);
+    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
 void Plotter::calibrate()
