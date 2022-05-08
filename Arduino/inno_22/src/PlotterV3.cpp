@@ -123,7 +123,7 @@ static void panic()
 }
 
 // default constructor, will initialise to 0 0
-Plotter::Plotter()
+Plotter::Plotter() : x(0), y(0)
 {
     pinMode(_BRAKE_A, OUTPUT);
     pinMode(_BRAKE_B, OUTPUT);
@@ -136,9 +136,6 @@ Plotter::Plotter()
     
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
-
-    x = 0; //  186 * 7
-    y = 0; //  126 * 7
 }
 
 // constructor for custom coordinates, if required
