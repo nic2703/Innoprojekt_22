@@ -91,6 +91,7 @@ namespace pmath
 // hardware (speed and brakes)
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
 static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
+
 static void set_speed(const pin pins[3], int speed)
 {
     if (speed == 0)
@@ -138,8 +139,6 @@ Plotter::Plotter()
 
     x = 0; //  186 * 7
     y = 0; //  126 * 7
-
-    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
 // constructor for custom coordinates, if required
@@ -156,19 +155,19 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
 
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
-
-
-    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
 // calibration
 void Plotter::calibrate()
 {
-    cli(); // noInterrupts()
 
     home(pins_x, pins_y); // actually go to (0, 0)
 
-    sei(); // interrupts()
+    delay(500);
+    EIFR = 0x01;
+    delay(500);
+    
+    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
 // calibration check sequence
@@ -176,6 +175,8 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
 {
     /*Make sure B is off*/
     set_speed(pins_y, 0);
+
+    while (digitalRead(_SWITCH) == LOW) {}
     
     set_speed(pins_x, 255); // Run A forward
 
@@ -206,9 +207,9 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start A*/
     set_speed(pins_x, -255);
 
-    uint8_t time = millis();
+    //uint8_t time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
-    uint8_t duration_x = millis() - time;
+    //uint8_t duration_x = micros() - time;
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_x, 255);
@@ -221,9 +222,9 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start B*/
     set_speed(pins_y, -255);
 
-    time = millis();
+    //time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
-    uint8_t duration_y = millis() - time;
+    //uint8_t duration_y = micros() - time;
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_y, 255);
@@ -234,7 +235,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     set_speed(pins_y, 0);
     set_speed(pins_x, 0);
 
-    delay(500);
+    //delay(500);
 
     return;
 }

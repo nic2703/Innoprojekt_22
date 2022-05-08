@@ -41,7 +41,7 @@ void down()
     delay(15);
    }
 
-   delay(200)
+   delay(200);
 }
 
 void up()
@@ -52,7 +52,7 @@ void up()
     delay(15);
     }
 
-    delay(200)
+    delay(200);
 }
 
 void setup()
