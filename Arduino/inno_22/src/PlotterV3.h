@@ -39,7 +39,7 @@ public:
 
     void home(pin[3], pin[3]);
 
-    void setup_interrupt_handler(pin irq_pin, void (*ISR)(void), int value);
+    void calibrate();
         
     void
         draw_line(long, long),
