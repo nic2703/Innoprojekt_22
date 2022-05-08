@@ -62,7 +62,8 @@ void setup()
     plot.calibrate();
 """
 
-conc = """}
+conc = """up();
+    }
 
 void loop() {}"""
 
