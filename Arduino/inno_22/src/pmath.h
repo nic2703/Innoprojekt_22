@@ -8,10 +8,11 @@
  * @copyright Copyright (c) 2022
  * 
  */
+
 #ifndef PMTH
 #define PMTH
 
-#define C 0.5519150244935105707435627 
+#define C 0.5519150244935105707435627 // constant for creating circles with cubic beziers
 // source: https://spencermortensen.com/articles/bezier-circle/
 
 #define cube(x) ((x)*(x)*(x))                                                                                                           // cubes x
@@ -20,12 +21,12 @@
 
 #define sign(x) (((x)>0)-((x)<0)) //nice to have, return values {-1, 0, 1}
 #undef abs
-#define abs(x) ((x)*sign((x))) //better 
+#define abs(x) ((x)*sign((x))) //better (branchless)
 
 namespace pmath
 {
     template<typename T>
-    class Vector
+    class Vector // class for vectors with generics
     {
     public:
         Vector(int x_init = 0, int y_init = 0)
@@ -34,25 +35,25 @@ namespace pmath
             y = y_init;
         }
 
-        Vector(Vector &&) = default;
-        Vector(const Vector &) = default;
+        Vector(Vector &&) = default; // copy constructor
+        Vector(const Vector &) = default; // copy constructor
 
-        Vector &operator=(Vector &&) = default;
-        Vector &operator=(const Vector &) = default;
+        Vector &operator=(Vector &&) = default; // assignment operator
+        Vector &operator=(const Vector &) = default; // assignement operator to assign const vector to mutable vector
 
-        int _x() const { return x; }
-        int _y() const { return y; }
+        const int _x() const { return this->x; } // get_x
+        const int _y() const { return this->y; } // get_y
 
-        long & operator[](int i)
+        long & operator[](int i) // get (mutable)
         {
             switch (i)
             {
                 case 0: return this->x; 
                 case 1: return this->y;
         }   }
-        long operator[](int i) /*[[expects: (i >= 0 && i < 2)]]*/ const {return x * !i + y * i;}
+        long operator[](int i) /*[[expects: (i >= 0 && i < 2)]]*/ const {return x * !i + y * i;} // bracket operator but cursed
 
-
+        // generic comparison operators
         bool operator==(Vector v) const { return v.x == x && v.y == y; }
         bool operator!=(Vector v) const { return v.x != x && v.y != y; }
         bool operator<=(Vector v) { return (*this).norm() <= v.norm(); }
@@ -60,6 +61,7 @@ namespace pmath
         bool operator>=(Vector v) { return (*this).norm() >= v.norm(); }
         bool operator>(Vector v) { return (*this).norm() > v.norm(); }
 
+        // generic maths operators
         Vector operator+(Vector vector) const { return Vector(x + vector.x, y + vector.y); }
         Vector operator-(Vector vector) const { return Vector(x - vector.x, y - vector.y); }
 
@@ -121,6 +123,7 @@ namespace pmath
     };
 
 
+    // beziers
     long qbez_x(long, long, long, uint8_t, uint8_t);
     long qbez_x(long, long, long, uint8_t, uint8_t);
     long cbez_x(long, long, long, long, uint8_t, uint8_t);
@@ -128,6 +131,7 @@ namespace pmath
 
 }
 
+// to enable portability of legacy code
 typedef pmath::Vector<int> Vec;
 typedef pmath::Vector<double> Vec_d;
 
