@@ -161,19 +161,11 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
-// calibration
-void Plotter::calibrate()
-{
-    cli(); // noInterrupts()
-
-    home(pins_x, pins_y); // actually go to (0, 0)
-
-    sei(); // interrupts()
-}
-
-// calibration check sequence
+// return to home position
 void Plotter::home(pin pins_x[3], pin pins_y[3])
 {
+    noInterrupts();
+    
     /*Make sure B is off*/
     set_speed(pins_y, 0);
     
@@ -206,9 +198,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start A*/
     set_speed(pins_x, -255);
 
-    uint8_t time = millis();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
-    uint8_t duration_x = millis() - time;
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_x, 255);
@@ -221,9 +211,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start B*/
     set_speed(pins_y, -255);
 
-    time = millis();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
-    uint8_t duration_y = millis() - time;
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_y, 255);
@@ -233,6 +221,8 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Stop B*/
     set_speed(pins_y, 0);
     set_speed(pins_x, 0);
+
+    interrupts();
 
     delay(500);
 
