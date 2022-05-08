@@ -166,17 +166,13 @@ void Plotter::calibrate()
 {
     cli(); // noInterrupts()
 
-    if (run_into_walls(pins_x, pins_y))
-    {
-        pins_x[0] = _SPEED_B, pins_x[1] = _DIR_B, pins_x[2] = _BRAKE_B;
-        pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
-    }
+    run_into_walls(pins_x, pins_y);
 
     sei(); // interrupts()
 }
 
 // calibration check sequence
-bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
+void Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 {
     /*Make sure B is off*/
     set_speed(pins_y, 0);
@@ -240,7 +236,7 @@ bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 
     delay(500);
 
-    return duration_x > duration_y;
+    return;
 }
 
 bool Plotter::is_active()

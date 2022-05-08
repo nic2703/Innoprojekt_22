@@ -54,7 +54,7 @@ private:
     long x, y;
     const bool on = true; // well, i mean, as soon as the object is initialised, the plotter is *technically* on
 
-    bool run_into_walls(pin[3], pin[3]);
+    void run_into_walls(pin[3], pin[3]);
 };
 typedef Plotter Plt;
 
