@@ -29,7 +29,7 @@
 #include "errors"
 #endif // !ERRORS
 
-// maths bc i dont want a seperate maths.cpp file
+// maths bc i dont want a seperate maths.cpp file, fight me
 namespace pmath
 {
     long cbez_x(long x, long c1_x, long c2_x, long end_x, uint8_t prec, uint8_t i)
@@ -106,7 +106,7 @@ static void set_speed(const pin pins[3], int speed)
     digitalWrite(pins[2], LOW);
 }
 
-static void emergency_stop()
+static void panic()
 {
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
@@ -136,7 +136,7 @@ Plotter::Plotter()
     x = 0; //  186 * 7
     y = 0; //  126 * 7
 
-    attachInterrupt(digitalPinToInterrupt(_SWITCH), emergency_stop, FALLING);
+    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
 Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
@@ -154,12 +154,12 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 
 
-    attachInterrupt(digitalPinToInterrupt(2), emergency_stop, FALLING);
+    attachInterrupt(digitalPinToInterrupt(2), panic, FALLING);
 }
 
 void Plotter::calibrate()
 {
-    cli();
+    cli(); // noInterrupts()
 
     if (run_into_walls(pins_x, pins_y))
     {
@@ -167,12 +167,7 @@ void Plotter::calibrate()
         pins_y[0] = _SPEED_A, pins_y[1] = _DIR_A, pins_y[2] = _BRAKE_A;
     }
 
-    sei();
-}
-
-bool Plotter::is_active()
-{
-    return on;
+    sei(); // interrupts()
 }
 
 bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
@@ -242,6 +237,10 @@ bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
     return duration_x > duration_y;
 }
 
+bool Plotter::is_active()
+{
+    return on;
+}
 
 void Plotter::draw_line(long dx, long dy)
 {
