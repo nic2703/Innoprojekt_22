@@ -1,4 +1,4 @@
-## How to use:
+# How to use
 
 Place a Valid `.svg` file in the same folder as the `.exe` or `.py` file. 
 
