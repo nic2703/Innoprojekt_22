@@ -13,6 +13,8 @@ It will then prompt you to enter a scaling factor, this can be any positive floa
 The Program will take a few seconds to compute the `.ino` file that can be used to draw the specified svg using our plotter.  
 The generated `.ino` file will be called `generated_ino.ino`.
 
+Tip: If in the Arduino IDE the generated code has odd formatting (indentation), the formatting can be automatically corrected with the shortcut `Cmd + t`
+
 Both the exe and python can be run from the command line with the following flags:
 |Flag|Meaning|
 |----|-------|
