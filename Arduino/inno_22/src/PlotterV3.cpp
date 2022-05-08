@@ -110,6 +110,7 @@ static void set_speed(const pin pins[3], int speed)
 // emergency stop
 static void panic()
 {
+    _NOP();
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
     digitalWrite(_BRAKE_B, HIGH);
@@ -138,8 +139,6 @@ Plotter::Plotter()
 
     x = 0; //  186 * 7
     y = 0; //  126 * 7
-
-    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
 // constructor for custom coordinates, if required
@@ -156,16 +155,18 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
 
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+}
 
-
-    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
+void Plotter::setup_interrupt_handler(pin irq_pin, void (*INTERRUPT)(void), int value)
+{
+  attachInterrupt(digitalPinToInterrupt(irq_pin), INTERRUPT, value);
 }
 
 // return to home position
 void Plotter::home(pin pins_x[3], pin pins_y[3])
 {
     noInterrupts();
-    
+
     /*Make sure B is off*/
     set_speed(pins_y, 0);
     
@@ -223,6 +224,8 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     set_speed(pins_x, 0);
 
     interrupts();
+
+    x = y = 0;
 
     delay(500);
 
