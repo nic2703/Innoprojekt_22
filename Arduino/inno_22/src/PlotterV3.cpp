@@ -12,6 +12,7 @@
  *
  */
 
+// check that arduino ide is installed
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #endif
@@ -87,7 +88,7 @@ namespace pmath
 
 } // namespace pmath
 
-
+// hardware (speed and brakes)
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
 static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
 static void set_speed(const pin pins[3], int speed)
@@ -106,6 +107,7 @@ static void set_speed(const pin pins[3], int speed)
     digitalWrite(pins[2], LOW);
 }
 
+// emergency stop
 static void panic()
 {
     /*Engage Brakes*/
@@ -119,6 +121,7 @@ static void panic()
     exit(1);
 }
 
+// default constructor, will initialise to 0 0
 Plotter::Plotter()
 {
     pinMode(_BRAKE_A, OUTPUT);
@@ -139,6 +142,7 @@ Plotter::Plotter()
     attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
+// constructor for custom coordinates, if required
 Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
 {
     pinMode(_BRAKE_A, OUTPUT);
@@ -157,6 +161,7 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
+// calibration
 void Plotter::calibrate()
 {
     cli(); // noInterrupts()
@@ -170,6 +175,7 @@ void Plotter::calibrate()
     sei(); // interrupts()
 }
 
+// calibration check sequence
 bool Plotter::run_into_walls(pin pins_x[3], pin pins_y[3])
 {
     /*Make sure B is off*/
@@ -242,6 +248,7 @@ bool Plotter::is_active()
     return on;
 }
 
+// uses somee smart maths to draw lines
 void Plotter::draw_line(long dx, long dy)
 {
 
@@ -273,16 +280,19 @@ void Plotter::draw_line(long dx, long dy)
     y += dy;
 }
 
+// Overload for Vector<int>
 void Plotter::draw_line(const Vec &delta)
 {
     draw_line(delta._x(), delta._y());
 }
 
+// Overload for Vector<double>, WARNING: causes narrowing due to cast from type double to long
 void Plotter::draw_line(const Vec_d &delta)
 {
     draw_line(long(delta._x()), long(delta._y()));
 }
 
+// quadratic beziers
 void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t precision)
 {
     if (precision <= 0 || 50 < precision)
@@ -302,6 +312,7 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
     return;
 }
 
+//cubic beziers
 void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, long end_y, uint8_t precision)
 {
     if (precision <= 0 || 50 < precision)
@@ -321,6 +332,7 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     return;
 }
 
+// FIXME: should draw a circle segment, will draw a lemon
 void Plotter::circle_seg(Vec_d &m, int radius, double max_angle = 2 * PI, int precision = 20)
 {
     {
@@ -341,6 +353,7 @@ void Plotter::circle_seg(Vec_d &m, int radius, double max_angle = 2 * PI, int pr
     }
 }
 
+// uses beziers to draw an approxumation of a cricle-arc from (0,1) to (1,0) (clockwise, unlike in maths)
 void Plotter::b_circle_seg(int radius) 
 {
     x = 0;
