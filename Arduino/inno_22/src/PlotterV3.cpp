@@ -1,6 +1,9 @@
 /**
  * @file PlotterV3.cpp
- * @author Robotica (vdamani@ethz.ch)
+ * @authors Robotica 
+ *          (vdamani@ethz.ch)
+ *          (vkottas@ethz.ch)
+ *          (nscheuer@ethz.ch)
  * @brief
  * @version 4.1
  * @date 2022-05-04
@@ -13,19 +16,11 @@
 #include "Arduino.h"
 #endif
 
-/* #ifndef Servo_h
-#include <Servo.h>
-#endif */
-
 #include "PlotterV3.h"
 
 #ifndef PLT_H
 #error Plotter not defined
 #endif // !PLT_h
-
-/* #ifndef Servo_h
-#error Servo not defined
-#endif // !Servo_h */
 
 #ifndef PMTH
 #include "pmath.h"
@@ -347,7 +342,7 @@ void Plotter::circle_seg(Vec_d &m, int radius, double max_angle = 2 * PI, int pr
     }
 }
 
-void Plotter::b_circle_seg(int radius)
+void Plotter::b_circle_seg(int radius) 
 {
     x = 0;
     y = radius;

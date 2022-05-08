@@ -1,6 +1,9 @@
 /**
  * @file PlotterV3.h
- * @author  Robotica (vdamani@ethz.ch)
+ * @authors Robotica 
+ *          (vdamani@ethz.ch)
+ *          (vkottas@ethz.ch)
+ *          (nscheuer@ethz.ch)
  * @brief
  * @version 4.1
  * @date 2022-05-04
@@ -8,6 +11,7 @@
  * @copyright Copyright (c) 2022
  *
  */
+
 #ifndef PLT_H
 #define PLT_H
 
@@ -18,15 +22,12 @@
 typedef byte pin;
 
 #define MAX_X 4200 // 1000 is equivalent to 50 mm, so a4 is 4200 wide
-#define MAX_Y 5940 // sqme here
+#define MAX_Y 5940 // same here
 
-#define MAX_SPEED_X 0.6449
-#define MAX_SPEED_Y 1.547 // correction factor for speed, so 1000 as input is equivalent to 50 mm
+#define MAX_SPEED_X 0.6449 // correction factor for speed, so 1000 as input is equivalent to 50 mm
+#define MAX_SPEED_Y 1.547 
 
-#define CORRECTION (1 / 2.0)
-
-#define set_dir(p_dir, s) digitalWrite(p_dir, (((s) > 0) ? HIGH : LOW)) // if delta is negative, go backwards, else go forwards
-
+#define CORRECTION (1 / 2.0) // modifies diagonal lines to ensure that they are at the correct angle
 
 class Plotter
 {
@@ -39,7 +40,7 @@ public:
 
     void draw_line(long, long);
     void draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
-    void draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
+    void draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/; // XXX: will cause narrowing of vector components as it calls draw_line(long, long)
 
     void bezier_q(long, long, long, long, uint8_t precision = 40);
     void bezier_c(long, long, long, long, long, long, uint8_t precision = 40);
