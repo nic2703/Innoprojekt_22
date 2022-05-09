@@ -11,6 +11,7 @@
  * @copyright Copyright (c) 2022
  *
  */
+#pragma once
 
 #ifndef PLT_H
 #define PLT_H
