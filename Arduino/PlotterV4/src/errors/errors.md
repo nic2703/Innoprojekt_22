@@ -1,4 +1,5 @@
-# <center>Explanation of the possible error codes</center>
+# Explanation of the possible error codes
+
 | ERROR CODE| MEANING|
 |:-----------:|:--------:|
 |`0` (exit code)| The Plotter finnished drawing|
