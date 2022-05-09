@@ -17,7 +17,7 @@
 #include "Arduino.h"
 #endif
 
-#include "PlotterV3.h"
+#include "PlotterV4.h"
 
 #ifndef PLT_H
 #error Plotter not defined
@@ -137,12 +137,6 @@ Plotter::Plotter() : x(0), y(0)
     
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
-<<<<<<< HEAD
-
-    x = 0; //  186 * 7
-    y = 0; //  126 * 7
-=======
->>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 }
 
 // constructor for custom coordinates, if required
@@ -161,28 +155,35 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 }
 
-void Plotter::setup_interrupt_handler(pin irq_pin, void (*INTERRUPT)(void), int value)
+const int Plotter::pos_x() const
 {
-<<<<<<< HEAD
+    return this->x;
+}
 
-    home(pins_x, pins_y); // actually go to (0, 0)
+const int Plotter::pos_y() const
+{
+    return this->y;
+}
+
+void Plotter::calibrate()
+{
+
+    set_home(pins_x, pins_y); // actually go to (0, 0)
 
     delay(500);
     EIFR = 0x01;
     delay(500);
     
     attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
-=======
-  attachInterrupt(digitalPinToInterrupt(irq_pin), INTERRUPT, value);
->>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 }
 
 // return to home position
-void Plotter::home(pin pins_x[3], pin pins_y[3])
+void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 {
-    noInterrupts();
-
+    const int back = 70;
+    
     /*Make sure B is off*/
+    set_speed(pins_x, 0);
     set_speed(pins_y, 0);
 
     while (digitalRead(_SWITCH) == LOW) {}
@@ -193,7 +194,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_x, -255);
+    set_speed(pins_x, -back);
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -206,7 +207,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_y, -255);
+    set_speed(pins_y, -back);
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -216,16 +217,10 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start A*/
     set_speed(pins_x, -255);
 
-<<<<<<< HEAD
-    //uint8_t time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
-    //uint8_t duration_x = micros() - time;
-=======
-    while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
->>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_x, 255);
+    set_speed(pins_x, back);
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -235,34 +230,28 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     /*Start B*/
     set_speed(pins_y, -255);
 
-<<<<<<< HEAD
-    //time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
-    //uint8_t duration_y = micros() - time;
-=======
-    while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
->>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_y, 255);
+    set_speed(pins_y, back);
 
     while (digitalRead(_SWITCH) == LOW) {}
+    delay(100);
 
     /*Stop B*/
     set_speed(pins_y, 0);
     set_speed(pins_x, 0);
 
-<<<<<<< HEAD
-    //delay(500);
-=======
-    interrupts();
-
     x = y = 0;
 
     delay(500);
->>>>>>> de169b60102f41977d89e7d16e493f005ebca5ea
 
     return;
+}
+
+void Plotter::home()
+{
+    draw_line(-(x), -(y));
 }
 
 bool Plotter::is_active()
@@ -291,7 +280,7 @@ void Plotter::draw_line(long dx, long dy)
     set_speed(pins_x, ((x_geq) ? 255 : int(speed_to_bits(n_dx / n_dy))) * sign(dx)); //--> sets speed to 0
     set_speed(pins_y, ((y_geq) ? 255 : int(speed_to_bits(n_dy / n_dx))) * sign(dy)); //--> sets speed to -255
 
-    int eta = millis() + int(abs(((x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
+    unsigned long eta = millis() + int(abs(((x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
 
     while (millis() < eta) {}
 
@@ -300,6 +289,8 @@ void Plotter::draw_line(long dx, long dy)
 
     x += dx;
     y += dy;
+
+    Serial.print(x); Serial.print(", "); Serial.println(y);
 }
 
 // Overload for Vector<int>
@@ -324,7 +315,7 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i <= precision + 1; ++i)
+    for (uint8_t i = 0; i <= precision; ++i)
     {
         p_x = pmath::qbez_x(start_x, c1_x, end_x, precision, i) - x;
         p_y = pmath::qbez_y(start_y, c1_y, end_y, precision, i) - y;
@@ -344,7 +335,7 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i <= precision + 1; ++i)
+    for (uint8_t i = 0; i <= precision; ++i)
     {
         p_x = pmath::cbez_x(start_x, c1_x, c2_x, end_x, precision, i) - x;
         p_y = pmath::cbez_y(start_y, c1_y, c2_y, end_y, precision, i) - y;
