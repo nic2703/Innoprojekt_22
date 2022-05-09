@@ -170,8 +170,7 @@ void Plotter::calibrate()
 // return to home position
 void Plotter::home(pin pins_x[3], pin pins_y[3])
 {
-    noInterrupts();
-
+    
     /*Make sure B is off*/
     set_speed(pins_y, 0);
 
@@ -225,12 +224,11 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     set_speed(pins_y, 255);
 
     while (digitalRead(_SWITCH) == LOW) {}
+    delay(100);
 
     /*Stop B*/
     set_speed(pins_y, 0);
     set_speed(pins_x, 0);
-
-    interrupts();
 
     x = y = 0;
 
