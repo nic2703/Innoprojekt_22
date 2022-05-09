@@ -280,7 +280,7 @@ void Plotter::draw_line(long dx, long dy)
     set_speed(pins_x, ((x_geq) ? 255 : int(speed_to_bits(n_dx / n_dy))) * sign(dx)); //--> sets speed to 0
     set_speed(pins_y, ((y_geq) ? 255 : int(speed_to_bits(n_dy / n_dx))) * sign(dy)); //--> sets speed to -255
 
-    int eta = millis() + int(abs(((x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
+    unsigned long eta = millis() + int(abs(((x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
 
     while (millis() < eta) {}
 
@@ -289,6 +289,8 @@ void Plotter::draw_line(long dx, long dy)
 
     x += dx;
     y += dy;
+
+    Serial.print(x); Serial.print(", "); Serial.println(y);
 }
 
 // Overload for Vector<int>
