@@ -19,7 +19,7 @@ void down()
 
 void up()
 {
-  for (; agl >= 135; --agl)
+  for (; agl >= 130; --agl)
   {
     servo.write(agl);
     delay(15);
@@ -28,26 +28,72 @@ void up()
   delay(200);
 }
 
-void panic()
-{
-  plot.draw_line(0,0);
-  
-  Serial.write("Panic");
-  
-  exit(1);
-}
-
 void setup()
 {
-  Serial.begin(9600);
   servo.attach(_SERVO);
 
   up();
   plot.calibrate();
-  
-  down();
-  plot.draw_line(1000, 1000);
+
+
   up();
+  delay(200);
+  plot.draw_line(491, 84);
+  down();
+  delay(200);
+  plot.draw_line(-49, 0);
+  delay(200);
+  plot.draw_line(17, -84);
+  delay(200);
+  plot.draw_line(-411, 0);
+  delay(200);
+  plot.draw_line(-43, 217);
+  delay(200);
+  plot.draw_line(164, 0);
+  delay(200);
+  plot.draw_line(11, -56);
+  delay(200);
+  plot.draw_line(-97, 0);
+  delay(200);
+  plot.draw_line(6, -28);
+  delay(200);
+  plot.draw_line(97, 0);
+  delay(200);
+  plot.draw_line(10, -49);
+  delay(200);
+  plot.draw_line(-97, 0);
+  delay(200);
+  plot.draw_line(6, -28);
+  delay(200);
+  plot.draw_line(154, 0);
+  delay(200);
+  plot.draw_line(-32, 161);
+  delay(200);
+  plot.draw_line(67, 0);
+  delay(200);
+  plot.draw_line(32, -161);
+  delay(200);
+  plot.draw_line(56, 0);
+  delay(200);
+  plot.draw_line(-32, 161);
+  delay(200);
+  plot.draw_line(67, 0);
+  delay(200);
+  plot.draw_line(17, -84);
+  delay(200);
+  plot.draw_line(49, 0);
+  delay(200);
+  plot.draw_line(-17, 84);
+  delay(200);
+  plot.draw_line(67, 0);
+  delay(200);
+  plot.draw_line(43, -217);
+  delay(200);
+  plot.draw_line(-67, 0);
+  delay(200);
+  plot.draw_line(-17, 84);
+  up();
+
 }
 
 void loop() {}

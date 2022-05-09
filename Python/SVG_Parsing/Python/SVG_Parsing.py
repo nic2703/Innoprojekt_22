@@ -58,7 +58,8 @@ void up()
 void setup()
 {
     servo.attach(_SERVO);
-
+    
+    up();
     plot.calibrate();
 """
 
