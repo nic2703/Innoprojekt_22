@@ -155,10 +155,20 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 }
 
+const int Plotter::pos_x() const
+{
+    return this->x;
+}
+
+const int Plotter::pos_y() const
+{
+    return this->y;
+}
+
 void Plotter::calibrate()
 {
 
-    home(pins_x, pins_y); // actually go to (0, 0)
+    set_home(pins_x, pins_y); // actually go to (0, 0)
 
     delay(500);
     EIFR = 0x01;
@@ -168,10 +178,12 @@ void Plotter::calibrate()
 }
 
 // return to home position
-void Plotter::home(pin pins_x[3], pin pins_y[3])
+void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 {
+    const int back = 70;
     
     /*Make sure B is off*/
+    set_speed(pins_x, 0);
     set_speed(pins_y, 0);
 
     while (digitalRead(_SWITCH) == LOW) {}
@@ -182,7 +194,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_x, -255);
+    set_speed(pins_x, -back);
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -195,7 +207,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_y, -255);
+    set_speed(pins_y, -back);
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -208,7 +220,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_x, 255);
+    set_speed(pins_x, back);
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -221,7 +233,7 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
     /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_y, 255);
+    set_speed(pins_y, back);
 
     while (digitalRead(_SWITCH) == LOW) {}
     delay(100);
@@ -235,6 +247,11 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     delay(500);
 
     return;
+}
+
+void Plotter::home()
+{
+    draw_line(-(x), -(y));
 }
 
 bool Plotter::is_active()
@@ -296,7 +313,7 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i <= precision + 1; ++i)
+    for (uint8_t i = 0; i <= precision; ++i)
     {
         p_x = pmath::qbez_x(start_x, c1_x, end_x, precision, i) - x;
         p_y = pmath::qbez_y(start_y, c1_y, end_y, precision, i) - y;
@@ -316,7 +333,7 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i <= precision + 1; ++i)
+    for (uint8_t i = 0; i <= precision; ++i)
     {
         p_x = pmath::cbez_x(start_x, c1_x, c2_x, end_x, precision, i) - x;
         p_y = pmath::cbez_y(start_y, c1_y, c2_y, end_y, precision, i) - y;

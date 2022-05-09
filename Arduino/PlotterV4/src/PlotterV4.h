@@ -38,9 +38,11 @@ public:
 
     bool is_active(); 
 
-    void home(pin[3], pin[3]);
+    const int pos_x() const;
+    const int pos_y() const;
 
     void calibrate();
+    void home();
         
     void
         draw_line(long, long),
@@ -60,6 +62,7 @@ private:
     long x, y;
     const bool on = true; // well, i mean, as soon as the object is initialised, the plotter is *technically* on
 
+    void set_home(pin[3], pin[3]);
 };
 typedef Plotter Plt;
 
