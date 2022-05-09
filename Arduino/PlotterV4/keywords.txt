@@ -4,12 +4,10 @@
 pin    KEYWORD1
 error_t KEYWORD1
 
-
 # Methods and Functions (KEYWORD2)
 draw_line   KEYWORD2
 bezier_c    KEYWORD2
 bezier_q    KEYWORD2
-
 calibrate   KEYWORD2
 home    KEYWORD2
 is_active KEYWORD2
@@ -31,9 +29,7 @@ _SERVO  LITERAL1
 _SWITCH LITERAL1
 _TX LITERAL1
 _RX LITERAL1
-
 MAX_X   LITERAL1
 MAX_Y   LITERAL1
-
 MAX_SPEED_X LITERAL1
 MAX_SPEED_Y LITERAL1
