@@ -11,12 +11,11 @@
  * @copyright Copyright (c) 2022
  *
  */
-#pragma once
 
 #ifndef PLT_H
 #define PLT_H
 
-#include "pmath"
+#include "pmath.h"
 #include "errors"
 #include "plt_pins"
 
@@ -25,28 +24,32 @@ typedef byte pin;
 #define MAX_X 4200 // 1000 is equivalent to 50 mm, so a4 is 4200 wide
 #define MAX_Y 5940 // same here
 
-#define MAX_SPEED_X 0.68 // correction factor for speed, so 1000 as input is equivalent to 50 mm
-#define MAX_SPEED_Y 1.76
+#define MAX_SPEED_X 0.6449 // correction factor for speed, so 1000 as input is equivalent to 50 mm
+#define MAX_SPEED_Y 1.547 
 
-#define CORRECTION (1 / 4.9) // modifies diagonal lines to ensure that they are at the correct angle
+#define MAX_SPEED 1.547 //ADDED THIS // XXX
+#define CORRECTION (1.547 / 0.6449) // modifies diagonal lines to ensure that they are at the correct angle
+//^WAS 1/2.0 before^
 
 class Plotter
 {
 public:
-    Plotter();
-    Plotter(long, long);
+    Plotter(void);
+    Plotter(long, long) [[depracacted("Initialisation values are overwritten after calibration")]];
 
-    bool is_active(); 
+    bool is_active(void) const;
 
-    const int pos_x() const;
-    const int pos_y() const;
+    void
+        home(void),
+        calibrate(void);
 
-    void calibrate();
-    void home();
-        
+    const int
+        pos_x(void) const,
+        pos_y(void) const;
+
     void
         draw_line(long, long),
-        draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/,
+        draw_line(const Vec &), /*[[deprecated("Use draw_line(long, long) instead.")]]*/
         draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/; // XXX: will cause narrowing of vector components as it calls draw_line(long, long)
 
     void
