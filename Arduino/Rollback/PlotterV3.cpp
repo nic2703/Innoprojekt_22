@@ -161,7 +161,7 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
 void Plotter::calibrate()
 {
 
-    home(pins_x, pins_y); // actually go to (0, 0)
+    set_home(pins_x, pins_y); // actually go to (0, 0)
 
     delay(500);
     EIFR = 0x01;
@@ -171,7 +171,7 @@ void Plotter::calibrate()
 }
 
 // calibration check sequence
-void Plotter::home(pin pins_x[3], pin pins_y[3])
+void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 {
     /*Make sure B is off*/
     set_speed(pins_y, 0);
@@ -241,6 +241,11 @@ void Plotter::home(pin pins_x[3], pin pins_y[3])
     return;
 }
 
+void Plotter::home() const
+{
+    draw_line((100 - x), (100 - y));
+}
+
 bool Plotter::is_active()
 {
     return on;
@@ -249,7 +254,14 @@ bool Plotter::is_active()
 // uses somee smart maths to draw lines
 void Plotter::draw_line(long dx, long dy)
 {
-
+/*
+//FIXME:
+update Vojta: 
+convert deltas to doubles (d_dx, d_dy),
+correction factor an one of (d_dx, d_dy),
+norm with corrected deltas,
+MAX_SPEED_X / Y are now one MAX_SPEED and adjusted accordingly
+*/
     if (dx == 0 && dy == 0)
     {
         set_speed(pins_x, 0);

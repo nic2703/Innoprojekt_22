@@ -33,10 +33,12 @@ class Plotter
 {
 public:
     Plotter();
-    Plotter(long, long);
+    Plotter(long, long) [[depracacted("Initialisation values are overwritten after calibration")]];
 
     bool is_active();
     void calibrate();
+
+    void home() const;
 
     void draw_line(long, long);
     void draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
@@ -54,7 +56,7 @@ private:
     long x, y;
     const bool on = true; // well, i mean, as soon as the object is initialised, the plotter is *technically* on
 
-    void home(pin[3], pin[3]);
+    void set_home(pin[3], pin[3]);
 };
 typedef Plotter Plt;
 
