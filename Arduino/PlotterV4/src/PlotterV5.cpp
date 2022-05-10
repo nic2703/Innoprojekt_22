@@ -271,14 +271,6 @@ bool Plotter::is_active() const
 // uses some smart maths to draw lines
 void Plotter::draw_line(long dx, long dy)
 {
-/*
-//FIXME:
-update Vojta: 
-convert deltas to doubles (d_dx, d_dy),
-correction factor an one of (d_dx, d_dy),
-norm with corrected deltas,
-MAX_SPEED_X / Y are now one MAX_SPEED and adjusted accordingly
-*/
     if (dx == 0 && dy == 0)
     {
         set_speed(pins_x, 0);
@@ -292,9 +284,6 @@ MAX_SPEED_X / Y are now one MAX_SPEED and adjusted accordingly
     double norm = sqrt(sq(d_dx) + sq(d_dy));
     double n_dx = d_dx / norm;                //-->  1/sqrt(2)
     double n_dy = d_dy / norm; //--> 1/sqrt(2)*correction
-
-
-    //--------------CORRECTED TILL HERE
 
     bool x_geq = abs(n_dx) >= abs(n_dy); //--> false
     bool y_geq = abs(n_dy) >= abs(n_dx); //--> true
