@@ -15,7 +15,7 @@
 #ifndef PLT_H
 #define PLT_H
 
-#include "pmath.h"
+#include "pmath"
 #include "errors"
 #include "plt_pins"
 
@@ -35,28 +35,24 @@ class Plotter
 {
 public:
     Plotter(void);
-    Plotter(long, long) [[depracacted("Initialisation values are overwritten after calibration")]];
+    Plotter(long, long) /*[[depracacted("Initialisation values are overwritten after calibration")]]*/;
 
     bool is_active(void) const;
 
-    void
-        home(void),
-        calibrate(void);
+    const int pos_x() const;
+    const int pos_y() const;
 
-    const int
-        pos_x(void) const,
-        pos_y(void) const;
-
-    void
-        draw_line(long, long),
-        draw_line(const Vec &), /*[[deprecated("Use draw_line(long, long) instead.")]]*/
-        draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/; // XXX: will cause narrowing of vector components as it calls draw_line(long, long)
-
-    void
-        bezier_q(long, long, long, long, uint8_t precision = 40),
-        bezier_c(long, long, long, long, long, long, uint8_t precision = 40),
-        circle_seg(Vec_d &, int, double, int),
-        b_circle_seg(int);
+    void home(void);
+    void calibrate(void);
+    
+    void draw_line(long, long);
+    void draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
+    void draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/; // XXX: will cause narrowing of vector components as it calls draw_line(long, long)
+    
+    void bezier_q(long, long, long, long, uint8_t precision = 40);
+    void bezier_c(long, long, long, long, long, long, uint8_t precision = 40);
+    void circle_seg(Vec_d &, int, double, int);
+    void b_circle_seg(int);
 
 private:
     pin pins_x[3];
@@ -67,6 +63,7 @@ private:
 
     void set_home(pin[3], pin[3]);
 };
+
 typedef Plotter Plt;
 
 #endif // !PLT_H

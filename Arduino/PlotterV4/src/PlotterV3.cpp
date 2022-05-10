@@ -62,11 +62,13 @@ namespace pmath
     {
         return Vector<T>(-y, x); // using the simple version -> vector is turned by 90° anticlockwise
     }
+
     template <typename T>
     double Vector<T>::norm() const
     {
         return sqrt(sq(x) + sq(y));
     }
+
     template <typename T>
     Vector<T> Vector<T>::rotate(double theta)
     {
@@ -75,6 +77,7 @@ namespace pmath
         y = round(temp_x * sin(theta) + y * cos(theta));
         return Vector<T>(x, y);
     }
+
     template <typename T>
     Vector<T> Vector<T>::post_rotate(double theta)
     {
@@ -157,6 +160,7 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 }
 
+
 const int Plotter::pos_x() const
 {
     return this->x;
@@ -166,6 +170,8 @@ const int Plotter::pos_y() const
 {
     return this->y;
 }
+
+
 
 // calibration
 void Plotter::calibrate()
