@@ -17,7 +17,7 @@
 #include "Arduino.h"
 #endif
 
-#include "PlotterV4.h"
+#include "PlotterV3.h"
 
 #ifndef PLT_H
 #error Plotter not defined
@@ -62,11 +62,13 @@ namespace pmath
     {
         return Vector<T>(-y, x); // using the simple version -> vector is turned by 90° anticlockwise
     }
+
     template <typename T>
     double Vector<T>::norm() const
     {
         return sqrt(sq(x) + sq(y));
     }
+
     template <typename T>
     Vector<T> Vector<T>::rotate(double theta)
     {
@@ -75,6 +77,7 @@ namespace pmath
         y = round(temp_x * sin(theta) + y * cos(theta));
         return Vector<T>(x, y);
     }
+
     template <typename T>
     Vector<T> Vector<T>::post_rotate(double theta)
     {
@@ -111,7 +114,6 @@ static void set_speed(const pin pins[3], int speed)
 // emergency stop
 static void panic()
 {
-    _NOP();
     /*Engage Brakes*/
     digitalWrite(_BRAKE_A, HIGH);
     digitalWrite(_BRAKE_B, HIGH);
@@ -137,6 +139,9 @@ Plotter::Plotter() : x(0), y(0)
     
     pins_x[0] = _SPEED_A, pins_x[1] = _DIR_A, pins_x[2] = _BRAKE_A;
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
+
+    // x = 0; //  186 * 7
+    // y = 0; //  126 * 7
 }
 
 // constructor for custom coordinates, if required
@@ -155,6 +160,7 @@ Plotter::Plotter(long in_x, long in_y) : x(in_x), y(in_y)
     pins_y[0] = _SPEED_B, pins_y[1] = _DIR_B, pins_y[2] = _BRAKE_B;
 }
 
+
 const int Plotter::pos_x() const
 {
     return this->x;
@@ -165,6 +171,9 @@ const int Plotter::pos_y() const
     return this->y;
 }
 
+
+
+// calibration
 void Plotter::calibrate()
 {
 
@@ -177,13 +186,11 @@ void Plotter::calibrate()
     attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
 }
 
-// return to home position
+// calibration check sequence
 void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 {
     const int back = 70;
-    
     /*Make sure B is off*/
-    set_speed(pins_x, 0);
     set_speed(pins_y, 0);
 
     while (digitalRead(_SWITCH) == LOW) {}
@@ -217,7 +224,9 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
     /*Start A*/
     set_speed(pins_x, -255);
 
+    //uint8_t time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
+    //uint8_t duration_x = micros() - time;
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_x, back);
@@ -230,7 +239,9 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
     /*Start B*/
     set_speed(pins_y, -255);
 
+    //time = micros();
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
+    //uint8_t duration_y = micros() - time;
 
     /*Run A back to ensure switch is not pressed*/
     set_speed(pins_y, back);
@@ -242,27 +253,32 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
     set_speed(pins_y, 0);
     set_speed(pins_x, 0);
 
-    x = y = 0;
-
-    delay(500);
+    //delay(500);
 
     return;
 }
 
 void Plotter::home()
 {
-    draw_line(-(x), -(y));
+    draw_line((100 - x), (100 - y));
 }
 
-bool Plotter::is_active()
+bool Plotter::is_active() const
 {
     return on;
 }
 
-// uses somee smart maths to draw lines
+// uses some smart maths to draw lines
 void Plotter::draw_line(long dx, long dy)
 {
-
+/*
+//FIXME:
+update Vojta: 
+convert deltas to doubles (d_dx, d_dy),
+correction factor an one of (d_dx, d_dy),
+norm with corrected deltas,
+MAX_SPEED_X / Y are now one MAX_SPEED and adjusted accordingly
+*/
     if (dx == 0 && dy == 0)
     {
         set_speed(pins_x, 0);
@@ -270,9 +286,15 @@ void Plotter::draw_line(long dx, long dy)
         return;
     }
 
-    double norm = sqrt(sq(dx) + sq(dy));
-    double n_dx = dx / norm;                //-->  1/sqrt(2)
-    double n_dy = (dy / norm) * CORRECTION; //--> 1/sqrt(2)*correction
+    double d_dx = double(dx) * CORRECTION;
+    double d_dy = double(dy);
+
+    double norm = sqrt(sq(d_dx) + sq(d_dy));
+    double n_dx = d_dx / norm;                //-->  1/sqrt(2)
+    double n_dy = d_dy / norm; //--> 1/sqrt(2)*correction
+
+
+    //--------------CORRECTED TILL HERE
 
     bool x_geq = abs(n_dx) >= abs(n_dy); //--> false
     bool y_geq = abs(n_dy) >= abs(n_dx); //--> true
@@ -280,7 +302,7 @@ void Plotter::draw_line(long dx, long dy)
     set_speed(pins_x, ((x_geq) ? 255 : int(speed_to_bits(n_dx / n_dy))) * sign(dx)); //--> sets speed to 0
     set_speed(pins_y, ((y_geq) ? 255 : int(speed_to_bits(n_dy / n_dx))) * sign(dy)); //--> sets speed to -255
 
-    unsigned long eta = millis() + int(abs(((x_geq) ? dx / MAX_SPEED_X : dy / MAX_SPEED_Y)));
+    unsigned long eta = millis() + uint32_t(abs(((x_geq) ? d_dx / MAX_SPEED : d_dy / MAX_SPEED))); // XXX:
 
     while (millis() < eta) {}
 
@@ -289,8 +311,6 @@ void Plotter::draw_line(long dx, long dy)
 
     x += dx;
     y += dy;
-
-    Serial.print(x); Serial.print(", "); Serial.println(y);
 }
 
 // Overload for Vector<int>
