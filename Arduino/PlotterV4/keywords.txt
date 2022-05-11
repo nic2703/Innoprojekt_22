@@ -8,19 +8,19 @@
 
 Plotter	KEYWORD1	Plotter
 Vector	KEYWORD1	Vector
-pin    KEYWORD1
-error_t KEYWORD1
+pin KEYWORD1
+error_t	KEYWORD1
 
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-draw_line   KEYWORD2
-bezier_c    KEYWORD2
-bezier_q    KEYWORD2
-calibrate   KEYWORD2
-home        KEYWORD2
-is_active   KEYWORD2
+draw_line	KEYWORD2
+bezier_c	KEYWORD2
+bezier_q	KEYWORD2
+calibrate	KEYWORD2
+home	KEYWORD2
+is_active	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

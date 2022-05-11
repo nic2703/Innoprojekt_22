@@ -293,7 +293,7 @@ void Plotter::draw_line(long dx, long dy)
 
     unsigned long eta = millis() + uint32_t(abs(((x_geq) ? d_dx / MAX_SPEED : d_dy / MAX_SPEED))); // XXX:
 
-    while (millis() < eta) {}
+    while (millis() < eta) {} // delay(eta);
 
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
@@ -324,7 +324,7 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i <= precision; ++i)
+    for (uint8_t i = 0; i < precision; ++i)
     {
         p_x = pmath::qbez_x(start_x, c1_x, end_x, precision, i) - x;
         p_y = pmath::qbez_y(start_y, c1_y, end_y, precision, i) - y;
@@ -344,7 +344,7 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i <= precision; ++i)
+    for (uint8_t i = 0; i < precision; ++i)
     {
         p_x = pmath::cbez_x(start_x, c1_x, c2_x, end_x, precision, i) - x;
         p_y = pmath::cbez_y(start_y, c1_y, c2_y, end_y, precision, i) - y;
