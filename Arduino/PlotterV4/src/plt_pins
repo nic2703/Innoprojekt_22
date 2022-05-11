@@ -12,7 +12,7 @@ typedef enum
     _SWITCH = 2,
     _TX = 4, // unused
     _RX = 5, // unused
-} pins;
+} pin_t;
 
 /**
  * @brief these are all the pins that are used by the plotter library
