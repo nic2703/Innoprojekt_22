@@ -5,8 +5,8 @@
  *          (vkottas@ethz.ch)
  *          (nscheuer@ethz.ch)
  * @brief
- * @version 4.1
- * @date 2022-05-04
+ * @version 4.2.1
+ * @date 2022-05-11
  *
  * @copyright Copyright (c) 2022
  *
