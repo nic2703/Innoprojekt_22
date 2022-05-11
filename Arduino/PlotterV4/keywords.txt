@@ -6,6 +6,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 
+Plt	KEYWORD1	plot
 Plotter	KEYWORD1	Plotter
 Vector	KEYWORD1	Vector
 pin KEYWORD1
