@@ -47,7 +47,8 @@ public:
     
     void draw_line(long, long);
     void draw_line(const Vec &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/;
-    void draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/; // XXX: will cause narrowing of vector components as it calls draw_line(long, long)
+    void draw_line(const Vec_d &) /*[[deprecated("Use draw_line(long, long) instead.")]]*/; // will cause narrowing of vector components as it calls draw_line(long, long)
+    // the plotter doesnt have the precision to do doubles or floats anyway
     
     void bezier_q(long, long, long, long, uint8_t precision = 40);
     void bezier_c(long, long, long, long, long, long, uint8_t precision = 40);
