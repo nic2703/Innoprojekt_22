@@ -27,15 +27,15 @@ typedef byte pin;
 #define MAX_SPEED_X 0.6449 // correction factor for speed, so 1000 as input is equivalent to 50 mm
 #define MAX_SPEED_Y 1.547 
 
-#define MAX_SPEED 1.547 //ADDED THIS // XXX
+#define MAX_SPEED 1.547 // apparently this works too
 #define CORRECTION (1.547 / 0.6449) // modifies diagonal lines to ensure that they are at the correct angle
-//^WAS 1/2.0 before^
+//*was 1/2.0 before*
 
 class Plotter
 {
 public:
     Plotter(void);
-    Plotter(long, long) /*[[depracacted("Initialisation values are overwritten after calibration")]]*/;
+    Plotter(long, long) /*[[depracacted("Initialisation values are overwritten after calibration")]]*/; // ide ignores these anyway
 
     bool is_active(void) const;
 
