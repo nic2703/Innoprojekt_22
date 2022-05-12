@@ -12,7 +12,7 @@
  *
  */
 
-// check that arduino ide is installed
+// check that arduino IDE is installed
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
 #endif
@@ -73,8 +73,8 @@ namespace pmath
     Vector<T> Vector<T>::rotate(double theta)
     {
         T temp_x = x;
-        x = round(x * cos(theta) - y * sin(theta));
-        y = round(temp_x * sin(theta) + y * cos(theta));
+        this -> x = round(x * cos(theta) - y * sin(theta));
+        this -> y = round(temp_x * sin(theta) + y * cos(theta));
         return Vector<T>(x, y);
     }
 
@@ -83,8 +83,8 @@ namespace pmath
     {
         Vector<T> temp = Vector<T>(x, y);
 
-        x = round(x * cos(theta) - y * sin(theta));
-        y = round(temp.x * sin(theta) + y * cos(theta));
+        this -> x = round(x * cos(theta) - y * sin(theta));
+        this -> y = round(temp.x * sin(theta) + y * cos(theta));
 
         return temp;
     }
@@ -182,15 +182,19 @@ void Plotter::calibrate()
     delay(500);
     EIFR = 0x01;
     delay(500);
+
+    this -> x = 0;
+    this -> y = 0;
     
-    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING);
+    attachInterrupt(digitalPinToInterrupt(_SWITCH), panic, FALLING); // making sure that if the carriage runs into walls , it will abort
 }
 
 // calibration check sequence
 void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 {
-    const int back = 70;
+    const int BACK = 100; // backwards speed for bouncing off limit switches
     /*Make sure B is off*/
+    set_speed(pins_x, 0);
     set_speed(pins_y, 0);
 
     while (digitalRead(_SWITCH) == LOW) {}
@@ -200,8 +204,8 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
     /*Run until button*/
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
-    /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_x, -back);
+    /*Run A BACK to ensure switch is not pressed*/
+    set_speed(pins_x, -(BACK));
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -213,8 +217,8 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
     /*Run until button*/
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
 
-    /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_y, -back);
+    /*Run A BACK to ensure switch is not pressed*/
+    set_speed(pins_y, -(BACK));
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -228,8 +232,8 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
     //uint8_t duration_x = micros() - time;
 
-    /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_x, back);
+    /*Run A BACK to ensure switch is not pressed*/
+    set_speed(pins_x, BACK);
 
     while (digitalRead(_SWITCH) == LOW) {}
 
@@ -243,15 +247,16 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
     //uint8_t duration_y = micros() - time;
 
-    /*Run A back to ensure switch is not pressed*/
-    set_speed(pins_y, back);
+    /*Run A BACK to ensure switch is not pressed*/
+    set_speed(pins_y, BACK);
 
     while (digitalRead(_SWITCH) == LOW) {}
-    delay(100);
+
 
     /*Stop B*/
     set_speed(pins_y, 0);
     set_speed(pins_x, 0);
+    delay(100);
 
     //delay(500);
 
@@ -260,12 +265,12 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 
 void Plotter::home()
 {
-    draw_line((100 - x), (100 - y));
+    draw_line((100 - x), -y); // idk why assymetry, but this works
 }
 
-bool Plotter::is_active() const
+bool Plotter::is_active() const // imma be honest, this is kinda a joke lol
 {
-    return on;
+    return on; // well obvs
 }
 
 // uses some smart maths to draw lines
@@ -288,12 +293,12 @@ void Plotter::draw_line(long dx, long dy)
     bool x_geq = abs(n_dx) >= abs(n_dy); //--> false
     bool y_geq = abs(n_dy) >= abs(n_dx); //--> true
 
-    set_speed(pins_x, ((x_geq) ? 255 : int(speed_to_bits(n_dx / n_dy))) * sign(dx)); //--> sets speed to 0
-    set_speed(pins_y, ((y_geq) ? 255 : int(speed_to_bits(n_dy / n_dx))) * sign(dy)); //--> sets speed to -255
+    set_speed(pins_x, ((x_geq) ? 255 : speed_to_bits(n_dx / n_dy)) * sign(dx)); //--> sets speed to 0
+    set_speed(pins_y, ((y_geq) ? 255 : speed_to_bits(n_dy / n_dx)) * sign(dy)); //--> sets speed to -255
 
-    unsigned long eta = millis() + uint32_t(abs(((x_geq) ? d_dx / MAX_SPEED : d_dy / MAX_SPEED))); // XXX:
+    unsigned long eta = uint32_t(abs(((x_geq) ? d_dx / MAX_SPEED : d_dy / MAX_SPEED))); // apparently this works
 
-    while (millis() < eta) {} // delay(eta);
+    delay(eta);
 
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
@@ -308,7 +313,7 @@ void Plotter::draw_line(const Vec &delta)
     draw_line(delta._x(), delta._y());
 }
 
-// Overload for Vector<double>, WARNING: causes narrowing due to cast from type double to long
+// Overload for Vector<double>, WARNING: causes narrowing due to cast from type double to long, not that that makes a real difference here, but its generally unsafe
 void Plotter::draw_line(const Vec_d &delta)
 {
     draw_line(long(delta._x()), long(delta._y()));
@@ -321,16 +326,17 @@ void Plotter::bezier_q(long c1_x, long c1_y, long end_x, long end_y, uint8_t pre
     {
         return;
     }
-    long start_x = x, start_y = y;
+    const long start_x = x, start_y = y;
     long p_x, p_y;
 
-    for (uint8_t i = 0; i < precision; ++i)
+    for (uint8_t i = 0; i <= precision; ++i) // why we go to precision + 1 idk
     {
         p_x = pmath::qbez_x(start_x, c1_x, end_x, precision, i) - x;
         p_y = pmath::qbez_y(start_y, c1_y, end_y, precision, i) - y;
 
         draw_line(p_x, p_y);
     }
+    draw_line(end_x - x, end_y - y);
     return;
 }
 
@@ -341,16 +347,17 @@ void Plotter::bezier_c(long c1_x, long c1_y, long c2_x, long c2_y, long end_x, l
     {
         return;
     }
-    long start_x = x, start_y = y;
+    const long start_x = x, start_y = y; 
     long p_x, p_y;
 
-    for (uint8_t i = 0; i < precision; ++i)
+    for (uint8_t i = 0; i <= precision; ++i)
     {
         p_x = pmath::cbez_x(start_x, c1_x, c2_x, end_x, precision, i) - x;
         p_y = pmath::cbez_y(start_y, c1_y, c2_y, end_y, precision, i) - y;
 
         draw_line(p_x, p_y);
     }
+    draw_line(end_x - x, end_y - y);
     return;
 }
 
@@ -374,12 +381,13 @@ void Plotter::circle_seg(Vec_d &m, int radius, double max_angle = 2 * PI, int pr
         agl += da;                      // keep track of angle
     }
 }
+// difference in y and x accuracy makes this hard anyway, but idk what exactly is wrong with this implementation
 
 // uses beziers to draw an approxumation of a cricle-arc from (0,1) to (1,0) (clockwise, unlike in maths)
 void Plotter::b_circle_seg(int radius) 
 {
     x = 0;
-    y = radius;
+    y = radius; // the constant C is stolen from a random article on the internet, forgot thr link tho
     bezier_c(C * radius, radius, radius, C * radius, radius, 0, 20);
 }
 
