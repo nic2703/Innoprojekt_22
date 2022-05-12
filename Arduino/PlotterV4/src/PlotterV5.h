@@ -65,6 +65,7 @@ private:
     void set_home(pin[3], pin[3]);
 };
 
+// so that we can use legacy versions of the plotter drivers
 typedef Plotter Plt;
 
 #endif // !PLT_H
