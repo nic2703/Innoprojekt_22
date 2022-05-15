@@ -9,6 +9,10 @@
  * 
  */
 
+#ifdef NAN
+// not a number is apparently supported for Arduino
+#endif
+
 #ifndef PMTH
 #define PMTH
 
@@ -106,7 +110,7 @@ namespace pmath
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        friend Vector operator/(Vector vector, T scalar)
+        friend Vector operator/(Vector vector, T scalar) //TODO: safe division by 0? return NAN... 
         {
             return Vector(vector.x / scalar, vector.y / scalar);
         }
