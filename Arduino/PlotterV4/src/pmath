@@ -45,7 +45,7 @@ namespace pmath
         Vector &operator=(Vector &&) = default; // assignment operator
         Vector &operator=(const Vector &) = default; // assignement operator to assign const vector to mutable vector
 
-        struct Result
+        struct Result // attempt to fix undefined behaviour by implementing rust-style checked or wrapping arithmetic
         {
             Vector<T> result;
             bool failed;        
