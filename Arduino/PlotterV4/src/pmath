@@ -45,6 +45,12 @@ namespace pmath
         Vector &operator=(Vector &&) = default; // assignment operator
         Vector &operator=(const Vector &) = default; // assignement operator to assign const vector to mutable vector
 
+        struct Result
+        {
+            Vector<T> result;
+            bool failed;        
+        };
+
         const int _x() const { return this->x; } // get_x
         const int _y() const { return this->y; } // get_y
 
@@ -88,7 +94,7 @@ namespace pmath
             y *= scalar;
             return *this;
         }
-        Vector &operator/=(T scalar)
+        Vector &operator/=(T scalar) // use results?
         {
             x /= scalar;
             y /= scalar;
@@ -105,12 +111,12 @@ namespace pmath
             return Vector(vector.x * scalar, vector.y * scalar);
         }
 
-        friend Vector operator/(T scalar, Vector vector)
+        friend Vector operator/(T scalar, Vector vector) // use results?
         {
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        friend Vector operator/(Vector vector, T scalar) //TODO: safe division by 0? return NAN... 
+        friend Vector operator/(Vector vector, T scalar) //TODO: safe division by 0? return NAN... or results?
         {
             return Vector(vector.x / scalar, vector.y / scalar);
         }
@@ -121,13 +127,6 @@ namespace pmath
 
         Vector rotate(double);
         Vector post_rotate(double);
-
-        template<typename M>
-        struct Result
-        {
-            Vector<M> succ;
-            bool failed;        
-        };
 
     private:
         T x, y;
