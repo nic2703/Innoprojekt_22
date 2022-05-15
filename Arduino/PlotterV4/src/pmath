@@ -28,13 +28,7 @@
 #define abs(x) ((x)*sign((x))) //better (branchless)
 
 namespace pmath
-{
-    template<typename M>
-    struct Result
-    {
-        /* data */
-    };
-    
+{    
     template<typename T>
     class Vector // class for vectors with generics
     {
@@ -127,6 +121,13 @@ namespace pmath
 
         Vector rotate(double);
         Vector post_rotate(double);
+
+        template<typename M>
+        struct Result
+        {
+            Vector<M> succ;
+            bool failed;        
+        };
 
     private:
         T x, y;

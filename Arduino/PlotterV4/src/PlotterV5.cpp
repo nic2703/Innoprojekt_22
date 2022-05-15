@@ -192,7 +192,7 @@ void Plotter::calibrate()
 // calibration check sequence
 void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 {
-    const int BACK = 100; // backwards speed for bouncing off limit switches
+    volatile const int BACK = 100; // backwards speed for bouncing off limit switches
     /*Make sure B is off*/
     set_speed(pins_x, 0);
     set_speed(pins_y, 0);
@@ -203,6 +203,7 @@ void Plotter::set_home(pin pins_x[3], pin pins_y[3])
 
     /*Run until button*/
     while (digitalRead(_SWITCH) == HIGH) {} // Do Nothing
+    delay(10);// try debounce
 
     /*Run A BACK to ensure switch is not pressed*/
     set_speed(pins_x, -(BACK));
