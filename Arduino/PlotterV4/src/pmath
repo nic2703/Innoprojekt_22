@@ -114,7 +114,7 @@ namespace pmath
             return Vector(vector.x * scalar, vector.y * scalar);
         }
 
-        friend Vector operator/(T scalar, Vector vector) // use results?
+        friend Vector operator/(T scalar, Vector vector) // FIXME: wtf is this meant to be?
         {
             return Vector(vector.x / scalar, vector.y / scalar);
         }
