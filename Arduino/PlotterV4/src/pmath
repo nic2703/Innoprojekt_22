@@ -29,6 +29,12 @@
 
 namespace pmath
 {
+    template<typename M>
+    struct Result
+    {
+        /* data */
+    };
+    
     template<typename T>
     class Vector // class for vectors with generics
     {
