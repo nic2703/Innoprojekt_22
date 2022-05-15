@@ -133,9 +133,12 @@ namespace pmath
         Vector rotate(double);
         Vector post_rotate(double);
 
+        #ifndef ARDUINO_ARCH_AVR
         /*void epsilon_v() {
             if ((std::numeric_limits<T>::max() - a  ) < b) {}
         }*/ // shame this is unsupprted on AVR
+        #endif // AVR
+
 
     private:
         T x, y;
