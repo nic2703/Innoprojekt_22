@@ -119,9 +119,11 @@ namespace pmath
             return Vector(vector.x / scalar, vector.y / scalar);
         }
 
-        friend Vector operator/(Vector vector, T scalar) //TODO: safe division by 0? return NAN... or results?
+        friend Result operator/(Vector vector, T scalar) //TODO: safe division by 0? return NAN... or results? 
         {
-            return Vector(vector.x / scalar, vector.y / scalar);
+            if (scalar != 0)
+            return Result((vector.x / scalar, vector.y / scalar), true); // idk, this seems to compile
+            return Result(Vector<T>(), false);
         }
 
         double norm() const;
