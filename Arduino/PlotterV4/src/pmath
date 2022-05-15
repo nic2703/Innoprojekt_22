@@ -81,6 +81,7 @@ namespace pmath
             y += vector.y;
             return *this;
         }
+
         Vector &operator-=(Vector vector)
         {
             x -= vector.x;
@@ -88,12 +89,14 @@ namespace pmath
 
             return *this;
         }
+
         Vector &operator*=(T scalar)
         {
             x *= scalar;
             y *= scalar;
             return *this;
         }
+
         Vector &operator/=(T scalar) // use results?
         {
             x /= scalar;
@@ -127,6 +130,10 @@ namespace pmath
 
         Vector rotate(double);
         Vector post_rotate(double);
+
+        /*void epsilon_v() {
+            if ((std::numeric_limits<T>::max() - a  ) < b) {}
+        }*/ // shame this is unsupprted on AVR
 
     private:
         T x, y;
