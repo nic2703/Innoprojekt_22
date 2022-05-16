@@ -133,13 +133,6 @@ namespace pmath
         Vector rotate(double);
         Vector post_rotate(double);
 
-        #ifndef ARDUINO_ARCH_AVR
-        /*void epsilon_v() {
-            if ((std::numeric_limits<T>::max() - a  ) < b) {}
-        }*/ // shame this is unsupprted on AVR
-        #endif // AVR
-
-
     private:
         T x, y;
     };
@@ -150,6 +143,13 @@ namespace pmath
     long qbez_x(long, long, long, uint8_t, uint8_t);
     long cbez_x(long, long, long, long, uint8_t, uint8_t);
     long cbez_y(long, long, long, long, uint8_t, uint8_t);
+
+    #ifndef ARDUINO_ARCH_AVR
+    template<typename T>
+    void overflow_check() {
+        if ((std::numeric_limits<T>::max() - a  ) < b) {}
+    } // shame this is unsupprted on AVR
+    #endif // AVR
 
 }
 
