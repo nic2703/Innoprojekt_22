@@ -3,7 +3,8 @@ import socket
 STRING_LENGTH_LIMIT = 1000
 #python constants who dis?
 
-ADDRESS = "98:da:60:01:ab:e0" #define address
+ADDRESS = "98:da:60:03:ad:5f" #define address
+#robotica address: 98:da:60:03:ad:5f
 #Vikis address: 98:da:60:01:ab:3c
 #Vojtas address: 98:da:60:01:ab:e0
 #better way would be to scan for addresses, look into that if possible
@@ -19,5 +20,3 @@ while True:
 
     MSG = input("Message:  ")+"\r\n" #get message, make sure that it skips to the next line (gud for serialport formatting)
     sock.send(MSG.encode()) #.encode() method ona string converts it to bytes
-
-#sock.sendfile() #needs investigation
