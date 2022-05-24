@@ -61,11 +61,11 @@ namespace pmath
                 case 0: return this->x; 
                 case 1: return this->y;
         }   }
-        long operator[](int i) /*[[expects: (i >= 0 && i < 2)]]*/ const {return x * !i + y * i;} // bracket operator but cursed
+        long operator[](uint8_t i) /*[[expects: (i >= 0 && i < 2)]]*/ const {return x * !i + y * bool(i);} // bracket operator but cursed
 
         // generic comparison operators
-        bool operator==(Vector v) const { return v.x == x && v.y == y; }
-        bool operator!=(Vector v) const { return v.x != x && v.y != y; }
+        bool operator==(Vector v) const { return v.x == x && v.y == y; } // eq
+        bool operator!=(Vector v) const { return !(*this==v); } // neq
         bool operator<=(Vector v) { return (*this).norm() <= v.norm(); }
         bool operator<(Vector v) { return (*this).norm() < v.norm(); }
         bool operator>=(Vector v) { return (*this).norm() >= v.norm(); }
@@ -99,9 +99,11 @@ namespace pmath
 
         Vector &operator/=(T scalar) // use results?
         {
-            x /= scalar;
-            y /= scalar;
-            return *this;
+            if (scalar != 0) {
+                x /= scalar;
+                y /= scalar;
+            }
+            return *this; // division by 0 is bad, but at least it is defined
         }
 
         friend Vector operator*(T scalar, Vector vector)
@@ -114,9 +116,10 @@ namespace pmath
             return Vector(vector.x * scalar, vector.y * scalar);
         }
 
-        friend Vector operator/(T scalar, Vector vector) // FIXME: wtf is this meant to be?
+        friend Vector operator/(T scalar, Vector vector)  // FIXME: wtf is this meant to be?
         {
-            return Vector(vector.x / scalar, vector.y / scalar);
+            //#warning DO NOT USE THIS
+            return Vector(vector.x / scalar, vector.y / scalar); // i will not fix this
         }
 
         friend Result operator/(Vector vector, T scalar) //TODO: safe division by 0? return NAN... or results? 
@@ -146,7 +149,7 @@ namespace pmath
 
     #ifndef ARDUINO_ARCH_AVR
     template<typename T>
-    void overflow_check() {
+    void overflow_check(T a, T b) {
         if ((std::numeric_limits<T>::max() - a  ) < b) {}
     } // shame this is unsupprted on AVR
     #endif // AVR
