@@ -31,11 +31,23 @@ typedef byte pin;
 #define CORRECTION (1.547 / 0.6449) // modifies diagonal lines to ensure that they are at the correct angle
 //*was 1/2.0 before*
 
+cla
+
 class Plotter
 {
 public:
     Plotter(void);
     Plotter(long, long) /*[[depracacted("Initialisation values are overwritten after calibration")]]*/; // ide ignores these anyway
+
+    /**
+     * ensures that no plotter objects can be copied or moved
+     */
+    
+    Plotter(const Plotter &) {}
+    Plotter(Plotter &&) {}
+    Plotter &operator=(Plotter &&) {}
+    Plotter &operator=(const Plotter &) {}
+    ~Plotter() = default; // default destructor, since no dynamic memory is allocated
 
     bool is_active(void) const;
 
