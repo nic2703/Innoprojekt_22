@@ -39,10 +39,10 @@ namespace pmath
             y = y_init;
         }
 
-        Vector(Vector &&) = default; // copy constructor
+        Vector(Vector &&) = default; // move constructor
         Vector(const Vector &) = default; // copy constructor
 
-        Vector &operator=(Vector &&) = default; // assignment operator
+        Vector &operator=(Vector &&) = default; // assignment operator (move)
         Vector &operator=(const Vector &) = default; // assignement operator to assign const vector to mutable vector
 
         struct Result // attempt to fix undefined behaviour by implementing rust-style checked or wrapping arithmetic

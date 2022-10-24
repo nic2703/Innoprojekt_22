@@ -31,7 +31,6 @@ typedef byte pin;
 #define CORRECTION (1.547 / 0.6449) // modifies diagonal lines to ensure that they are at the correct angle
 //*was 1/2.0 before*
 
-cla
 
 class Plotter
 {

@@ -95,6 +95,7 @@ namespace pmath
 static inline void set_speed(const pin motor, int speed) { analogWrite(motor, speed); }
 static inline void set_brakes(const pin motor, int state) { digitalWrite(motor, state); }
 
+
 static void set_speed(const pin pins[3], int speed)
 {
     if (speed == 0)
