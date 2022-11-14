@@ -3,7 +3,7 @@
 1. In the arduino sketchbook folder, there is a sub-directory called `libraries`
 2. Create a folder in the `libraries`directory called `robotica_Inno22`
 
-files should run fine if `robotica_Inno22.h`is included
+files should run fine if `filename` is included
 
 !! ATTENTION !!
 -----------------------------------------
