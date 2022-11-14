@@ -30,7 +30,7 @@
 #include "errors"
 #endif // !ERRORS
 
-// maths bc i dont want a seperate maths.cpp file, fight me
+// maths bc i dont want a seperate maths.cpp file, fight me // -- hello this is future me. it would seem i failed in that regard as i did end up making a pmath file lol
 namespace pmath
 {
     long cbez_x(long x, long c1_x, long c2_x, long end_x, uint8_t prec, uint8_t i)
