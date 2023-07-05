@@ -1,6 +1,6 @@
 #define ERRORS
 
-typedef enum {
+typedef enum class {
     NOT_AN_ERROR,
     SHOTDOWN_INIT_FAILED, 
     SHUTDOWN_EMERGENCY,
