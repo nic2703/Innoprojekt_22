@@ -1,11 +1,11 @@
 #define ERRORS
 
-typedef enum class {
+typedef enum class error_t{
     NOT_AN_ERROR,
     SHOTDOWN_INIT_FAILED, 
     SHUTDOWN_EMERGENCY,
     SHUTDOWN_OOB,
     SHUTDOWN_OOPS 
-} error_t;
+};
 
 // If we were to include error handling, this would be useful
