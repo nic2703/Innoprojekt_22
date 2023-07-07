@@ -3,7 +3,6 @@
  * @authors Robotica 
  *          (vdamani@ethz.ch)
  *          (vkottas@ethz.ch)
- *          (nscheuer@ethz.ch)
  * @brief
  * @version 4.2.1
  * @date 2022-05-11
