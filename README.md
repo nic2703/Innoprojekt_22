@@ -22,6 +22,7 @@ The drivers as provided are an accurate enough control system for simple drawing
 _THIS PROJECT WILL BE UNDER SLOW DEVELOPMENT AS THE OFFICIAL COMPETITION CONCLUDED IN 2022_
 
 As it stands at the moment, the roadmap and planned features are as follows
+
 - Upgrade motors to servo or stepper
 - Update the Bluetooth connection protocol and allow for non-hardcoded plots to be drawn
 - Implement simple PID control (if necessary)
